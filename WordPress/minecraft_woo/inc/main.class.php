@@ -15,8 +15,8 @@ if ( ! class_exists( 'Woo_Minecraft' ) ) {
 			global $woocommerce;
 
 			$items = $woocommerce->cart->cart_contents;
-			if ( ! has_commands( $items ) ) {
-				return;
+			if ( ! has_commands( $items ) || ! function_exists( 'woocommerce_form_field' ) ) {
+				return false;
 			}
 
 			?>
@@ -26,8 +26,7 @@ if ( ! class_exists( 'Woo_Minecraft' ) ) {
 				'class'       => array(),
 				'label'       => 'Player ID:',
 				'placeholder' => 'Required Field',
-			),
-				$c->get_value( 'player_id' ) );
+			), $c->get_value( 'player_id' ) );
 			?></div><?php
 		}
 
@@ -35,31 +34,40 @@ if ( ! class_exists( 'Woo_Minecraft' ) ) {
 
 			$json = array();
 
-			$method = @$_REQUEST['woo_minecraft'];
+			$method = isset( $_REQUEST['woo_minecraft'] ) ? $_REQUEST['woo_minecraft'] : false;
 			if ( empty( $method ) ) {
-				return;
+				$json = array(
+					'status' => 'error',
+					'msg' => 'Invalid method type',
+				);
 			}
 
-			$key = $_REQUEST['key'];
+			$key = isset( $_REQUEST['key'] ) ? $_REQUEST['key'] : false;
 			if ( empty( $key ) ) {
-				$json['status'] = "error";
-				$json['msg']    = "Malformed key.";
+				$json = array(
+					'status'=> "error",
+					'msg'=> "Malformed key.",
+				);
 			}
 
 			$key_db = get_option( 'wm_key' );
 			if ( empty( $key_db ) ) {
-				$json['status'] = "error";
-				$json['msg']    = "Website key nonexistant.";
+				$json = array(
+					'status' => "error",
+					'msg'    => "Website key unavailable.",
+				);
 			}
 
 			if ( $key_db != $key ) {
-				$json['status'] = "error";
-				$json['msg']    = "Keys don't match.";
-				$json['web']    = $key;
-				$json['db']     = $key_db;
+				$json = array(
+					'status' => "error",
+					'msg'    => "Keys don't match.",
+					'web'    => $key,
+					'db'     => $key_db,
+				);
 			}
 
-			if ( isset( $json['status'] ) ) {
+			if ( ! empty( $json ) ) {
 				echo json_encode( $json );
 				die;
 			}
