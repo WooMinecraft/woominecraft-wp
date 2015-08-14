@@ -4,11 +4,11 @@ if(!class_exists('Woo_Minecraft')){
 	class Woo_Minecraft{
 				
 		function Woo_Minecraft(){
-			add_action('woocommerce_checkout_process', array(&$this, 'check_player'));
-			add_action('woocommerce_order_status_completed', array(&$this, 'finalize_order'));
-			add_action('woocommerce_before_checkout_billing_form', array(&$this, 'anotes'));
-			add_action('woocommerce_thankyou', array(&$this, 'thanks'));
-			add_action('plugins_loaded', array(&$this, 'checkJSON'));
+			add_action( 'woocommerce_checkout_process', array( $this, 'check_player') );
+			add_action( 'woocommerce_order_status_completed', array( $this, 'finalize_order') );
+			add_action( 'woocommerce_before_checkout_billing_form', array( $this, 'anotes') );
+			add_action( 'woocommerce_thankyou', array( $this, 'thanks') );
+			add_action( 'plugins_loaded', array( $this, 'checkJSON') );
 		}
 		
 		function anotes($c){
