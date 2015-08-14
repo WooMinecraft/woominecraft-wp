@@ -76,6 +76,7 @@ if ( ! class_exists( 'Woo_Minecraft' ) ) {
 
 				$query = $wpdb->prepare( "UPDATE {$wpdb->prefix}woo_minecraft SET delivered = %d WHERE id IN(%s)", 1, $ids );
 				$rs    = $wpdb->query( $query );
+				// @TODO: should be more logical here, instead of returning a string, keep with the standard JSON return string
 				if ( false === $rs ) {
 					// Error
 					echo $wpdb->last_error;
