@@ -35,13 +35,6 @@ if ( ! class_exists( 'Woo_Minecraft' ) ) {
 			$json = array();
 
 			$method = isset( $_REQUEST['woo_minecraft'] ) ? $_REQUEST['woo_minecraft'] : false;
-			if ( empty( $method ) ) {
-				$json = array(
-					'status' => 'error',
-					'msg' => 'Invalid method type',
-				);
-			}
-
 			$key = isset( $_REQUEST['key'] ) ? $_REQUEST['key'] : false;
 			if ( empty( $key ) ) {
 				$json = array(
