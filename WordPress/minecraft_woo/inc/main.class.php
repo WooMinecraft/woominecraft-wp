@@ -69,12 +69,12 @@ if ( ! class_exists( 'Woo_Minecraft' ) ) {
 
 			if ( $method == "update" ) {
 				$ids = $_REQUEST['players'];
+
 				if ( empty( $ids ) ) {
-					$return;
+					return;
 				}
 
-//				$ids = $_REQUEST['players'];
-				$query = "UPDATE `" . $wpdb->prefix . "woo_minecraft` SET `delivered`=1 WHERE `id` IN($ids)";
+				$query = $wpdb->prepare( "UPDATE {$wpdb->prefix}woo_minecraft SET delivered = %d WHERE id IN(%s)", 1, $ids );
 				$rs    = $wpdb->query( $query );
 				if ( false === $rs ) {
 					// Error
@@ -94,7 +94,8 @@ if ( ! class_exists( 'Woo_Minecraft' ) ) {
 						$namesArr[ $k ] = '"' . strtolower( $v ) . '"';
 					}
 					$namesArr = implode( ',', $namesArr );
-					$results  = $wpdb->get_results( "SELECT * FROM `" . $wpdb->prefix . "woo_minecraft` WHERE  `delivered`=0 AND  `player_name` IN ($namesArr)" );
+					$prepared = $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}woo_minecraft WHERE delivered = %d AND player_name IN (%s)", 0, $namesArr );
+					$results  = $wpdb->get_results( $prepared );
 					if ( empty( $results ) ) {
 						$json['status'] = "empty";
 					} else {
