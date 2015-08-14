@@ -111,6 +111,12 @@ if ( ! class_exists( 'Woo_Minecraft' ) ) {
 					}
 				}
 				echo json_encode( $json );
+			} else {
+				// Bandaid for debugging the java side of things
+				echo json_encode( array(
+					'status' => 'error',
+					'msg' => 'Either method was not set, or names was empty/not set.'
+				) );
 			}
 			die;
 		}
