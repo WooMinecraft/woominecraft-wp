@@ -30,6 +30,12 @@ if ( ! class_exists( 'Woo_Minecraft' ) ) {
 			?></div><?php
 		}
 
+		/**
+		 * Sends JSON API data to the MC Java application
+		 *
+		 * @TODO: Switch json data to use wp_send_json_ related methods instead of encoding and dieing AFTER everything is done.
+		 * @link: https://codex.wordpress.org/Function_Reference/wp_send_json
+		 */
 		function checkJSON() {
 
 			$json = array();
