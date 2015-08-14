@@ -85,7 +85,7 @@ if ( ! class_exists( 'Woo_Minecraft' ) ) {
 				} else {
 					echo "true";
 				}
-			} else {
+			} else if ( false !== $method && isset( $_REQUEST['names'] ) ) {
 				$namesArr = explode( ',', $_REQUEST['names'] );
 				if ( empty( $namesArr ) ) {
 					$json['status'] = "false";
