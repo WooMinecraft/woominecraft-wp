@@ -1,7 +1,7 @@
 # WooMinecraft
 ![](http://i.gyazo.com/ba51b7e45aa809d514c051266d0fbe6f.png)
 
-A WordPress WooMinecraft plugin designed to work in conjunciton with the MineCraft WooMinecraft plugin for Bukkit/Spigot.
+A WordPress WooMinecraft plugin designed to work in conjunciton with the [MineCraft WooMinecraft plugin for Bukkit/Spigot](https://github.com/WooMinecraft/WooMinecraft).
 
 This Repository is a sub-module to the main JavaPlugin located [here](https://github.com/WooMinecraft/WooMinecraft)  All issues related to the WordPress portion of the plugin should go here.
 
