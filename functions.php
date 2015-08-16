@@ -73,6 +73,14 @@ class Woo_Minecraft {
 	protected static $single_instance = null;
 
 	/**
+	 * Instance of the WCM_Admin class
+	 *
+	 * @var WCM_Admin
+	 * @since 0.1.0
+	 */
+	public $admin = null;
+
+	/**
 	 * Sets up our plugin
 	 *
 	 * @since  0.1.0
@@ -99,6 +107,8 @@ class Woo_Minecraft {
 		add_action( 'woocommerce_thankyou', array( $this, 'thanks' ) );
 		add_action( 'plugins_loaded', array( $this, 'checkJSON' ) );
 		add_action( 'init', array( $this, 'init' ) );
+
+		$this->admin->hooks();
 	}
 
 
@@ -334,7 +344,7 @@ class Woo_Minecraft {
 	 * @since 0.1.0
 	 */
 	public function plugin_classes() {
-
+		$this->admin = new WCM_Admin();
 	}
 
 	/**

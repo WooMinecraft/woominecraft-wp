@@ -1,7 +1,10 @@
 <?php
 class WCM_Admin {
 	public function __construct(){
-		add_action('admin_enqueue_scripts', array(&$this, 'scripts'));
+	}
+
+	public function hooks(){
+	    add_action('admin_enqueue_scripts', array(&$this, 'scripts'));
 
 		add_action('woocommerce_checkout_update_order_meta', array(&$this, 'update_order_meta'));
 		add_action('woocommerce_admin_order_data_after_billing_address',array(&$this, 'display_player_name_in_order_meta'));
