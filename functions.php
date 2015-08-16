@@ -102,6 +102,12 @@ class Woo_Minecraft {
 	}
 
 
+	/**
+	 * Adds a field to the checkout form, requiring the user to enter their Minecraft Name
+	 * @param object $c WooCommerce Cart Object
+	 *
+	 * @return bool  False on failure, true otherwise.
+	 */
 	public function anotes( $c ) {
 		global $woocommerce;
 
@@ -119,6 +125,8 @@ class Woo_Minecraft {
 			'placeholder' => __( 'Required Field', 'wmc' ),
 		), $c->get_value( 'player_id' ) );
 		?></div><?php
+
+		return true;
 	}
 
 	/**
@@ -126,29 +134,26 @@ class Woo_Minecraft {
 	 */
 	public function checkJSON() {
 
-		$json = array();
-
 		$method = isset( $_REQUEST['woo_minecraft'] ) ? $_REQUEST['woo_minecraft'] : false;
 		$key    = isset( $_REQUEST['key'] ) ? $_REQUEST['key'] : false;
 		if ( empty( $key ) ) {
-			$json = array(
-				'status' => "error",
-				'msg'    => "Malformed key.",
+			wp_send_json_error( array(
+				'msg'    => __( "Malformed key", 'wmc' ),
 				'code'   => 1,
-			);
+			) );
 		}
 
 		$key_db = get_option( 'wm_key' );
 		if ( empty( $key_db ) ) {
 			wp_send_json_error( array(
-				'msg'  => "Website key unavailable.",
+				'msg'  => __( 'Website key unavailable', 'wmc' ),
 				'code' => 2,
 			) );
 		}
 
 		if ( $key_db != $key ) {
 			wp_send_json_error( array(
-				'msg'  => __( "Keys do not match", 'wmc' ),
+				'msg'  => __( 'Keys do not match', 'wmc' ),
 				'web'  => $key,
 				'db'   => $key_db,
 				'code' => 3,
