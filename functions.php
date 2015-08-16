@@ -83,7 +83,6 @@ class Woo_Minecraft {
 		$this->path     = plugin_dir_path( __FILE__ );
 
 		$this->plugin_classes();
-		$this->hooks();
 	}
 
 	/**
@@ -225,6 +224,11 @@ class Woo_Minecraft {
 		}
 	}
 
+	/**
+	 * Checks if Minecraft Username is valid
+	 *
+	 * @return void
+	 */
 	public function check_player() {
 		global $woocommerce;
 
