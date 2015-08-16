@@ -67,7 +67,7 @@ class Woo_Minecraft {
 	/**
 	 * Singleton instance of plugin
 	 *
-	 * @var WDS_Client_Plugin_Name
+	 * @var Woo_Minecraft
 	 * @since  0.1.0
 	 */
 	protected static $single_instance = null;
