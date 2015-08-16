@@ -221,7 +221,7 @@ class Woo_Minecraft {
 	}
 
 	public function check_player() {
-		global $woocommerce, $order;
+		global $woocommerce;
 
 		$playerID = stripslashes_deep( $_POST['player_id'] );
 
