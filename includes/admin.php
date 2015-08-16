@@ -4,23 +4,23 @@ class WCM_Admin {
 	}
 
 	public function hooks(){
-	    add_action('admin_enqueue_scripts', array(&$this, 'scripts'));
+	    add_action('admin_enqueue_scripts', array( $this, 'scripts'));
 
-		add_action('woocommerce_checkout_update_order_meta', array(&$this, 'update_order_meta'));
-		add_action('woocommerce_admin_order_data_after_billing_address',array(&$this, 'display_player_name_in_order_meta'));
-		add_action('woocommerce_product_options_general_product_data', array(&$this,'add_g_field'));
-		add_action('woocommerce_process_product_meta', array(&$this,'save_g_field'));
+		add_action('woocommerce_checkout_update_order_meta', array( $this, 'update_order_meta'));
+		add_action('woocommerce_admin_order_data_after_billing_address',array( $this, 'display_player_name_in_order_meta'));
+		add_action('woocommerce_product_options_general_product_data', array( $this,'add_g_field'));
+		add_action('woocommerce_process_product_meta', array( $this,'save_g_field'));
 
-		add_action('woocommerce_product_after_variable_attributes', array(&$this, 'add_v_field'), 10, 2);
-		add_action('woocommerce_product_after_variable_attributes_js', array(&$this, 'add_v_field_js'));
-		add_action('woocommerce_process_product_meta_variable', array(&$this, 'variable_fields_process'));
+		add_action('woocommerce_product_after_variable_attributes', array( $this, 'add_v_field'), 10, 2);
+		add_action('woocommerce_product_after_variable_attributes_js', array( $this, 'add_v_field_js'));
+		add_action('woocommerce_process_product_meta_variable', array( $this, 'variable_fields_process'));
 
-		add_action('woocommerce_order_status_changed', array(&$this, 'delete_sql_data'), 10, 3);
+		add_action('woocommerce_order_status_changed', array( $this, 'delete_sql_data'), 10, 3);
 
-		//add_action( 'woocommerce_order_item_line_item_html', array(&$this, 'line_item'), 10, 2);
+		//add_action( 'woocommerce_order_item_line_item_html', array( $this, 'line_item'), 10, 2);
 
-		add_action('admin_menu', array(&$this, 'setupAdminMenu'));
-		add_action('admin_init', array(&$this, 'admininit'));
+		add_action('admin_menu', array( $this, 'setupAdminMenu'));
+		add_action('admin_init', array( $this, 'admininit'));
 	}
 
 	public function add_g_field(){
@@ -205,7 +205,7 @@ class WCM_Admin {
 	}
 
 	public function setupAdminMenu(){
-		add_options_page('Woo Minecraft', 'Woo Minecraft', 'manage_options', 'woominecraft', array(&$this, 'setupAdminPage'));
+		add_options_page('Woo Minecraft', 'Woo Minecraft', 'manage_options', 'woominecraft', array( $this, 'setupAdminPage'));
 	}
 
 	public function admininit(){
