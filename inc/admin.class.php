@@ -1,6 +1,6 @@
 <?php
 class Woo_Minecraft_Admin {
-	function Woo_Minecraft_Admin(){
+	public function __construct(){
 		add_action('admin_enqueue_scripts', array(&$this, 'scripts'));
 
 		add_action('woocommerce_checkout_update_order_meta', array(&$this, 'update_order_meta'));
@@ -20,7 +20,7 @@ class Woo_Minecraft_Admin {
 		add_action('admin_init', array(&$this, 'admininit'));
 	}
 
-	function add_g_field(){
+	public function add_g_field(){
 		global $post;
 		$meta = get_post_meta($post->ID, 'minecraft_woo_g', true);
 
@@ -49,7 +49,7 @@ class Woo_Minecraft_Admin {
     <?php
 	}
 
-	function add_v_field($l, $v){
+	public function add_v_field($l, $v){
 		global $woocommerce;
 		$meta = get_post_meta($v['variation_post_id'], 'minecraft_woo_v', true);
 		?>
@@ -79,7 +79,7 @@ class Woo_Minecraft_Admin {
         <?php
 	}
 
-	function add_v_field_js(){
+	public function add_v_field_js(){
 		global $woocommerce;
 		?>
         <tr><td>\
@@ -100,7 +100,7 @@ class Woo_Minecraft_Admin {
         <?php
 	}
 
-	function delete_sql_data($order_id, $curstatus, $newstatus){
+	public function delete_sql_data($order_id, $curstatus, $newstatus){
 		if($curstatus != 'completed') return;
 		global $wpdb;
 
@@ -116,7 +116,7 @@ class Woo_Minecraft_Admin {
 	}
 
 
-	function display_player_name_in_order_meta($order){
+	public function display_player_name_in_order_meta($order){
 		$playerID = get_post_meta($order->id, 'player_id', true) or "N/A";
 		wp_nonce_field("woominecraft", "woo_minecraft_nonce");
 		?>
@@ -128,7 +128,7 @@ class Woo_Minecraft_Admin {
         <?php endif;
 	}
 
-	function install(){
+	public function install(){
 		global $wp_version, $wpdb;
 		if(version_compare($wp_version, '3.0', '<')){
 			die('<div class="error"><strong>ERROR: </strong> Plugin requires WordPress v3.1 or higher.</div>');
@@ -150,7 +150,7 @@ class Woo_Minecraft_Admin {
 		dbDelta($table);
 	}
 
-	function line_item($item_id, $item){
+	public function line_item($item_id, $item){
 		global $post;
 		$meta_v = get_post_meta($item['variation_id'], 'minecraft_woo_v');
 		print_r($item['variation_id']);
@@ -165,14 +165,14 @@ class Woo_Minecraft_Admin {
 
 	}
 
-	function save_g_field($postid){
+	public function save_g_field($postid){
 		$field = $_POST['minecraft_woo']['general'];
 		if(isset($field) && !empty($field)){
 			update_post_meta($postid, 'minecraft_woo_g', array_filter($_POST['minecraft_woo']['general']));
 		}
 	}
 
-	function scripts(){
+	public function scripts(){
 		wp_register_script('woo_minecraft_js', plugins_url('jquery.woo.js',dirname(__FILE__) ), array('jquery'), '1.0', true);
 		wp_register_style('woo_minecraft_css', plugins_url('style.css', dirname(__FILE__)), false, '1.0');
 		wp_enqueue_script('woo_minecraft_js');
@@ -180,7 +180,7 @@ class Woo_Minecraft_Admin {
 	}
 
 
-	function setupAdminPage(){
+	public function setupAdminPage(){
 		?>
             <div class="wrap">
                 <h2>Woo Minecraft Options</h2>
@@ -201,26 +201,26 @@ class Woo_Minecraft_Admin {
         <?php
 	}
 
-	function setupAdminMenu(){
+	public function setupAdminMenu(){
 		add_options_page('Woo Minecraft', 'Woo Minecraft', 'manage_options', 'woominecraft', array(&$this, 'setupAdminPage'));
 	}
 
-	function admininit(){
+	public function admininit(){
 		register_setting('woo_minecraft', 'wm_key');
 //			register_setting("");
 	}
 
-	function uninstall(){
+	public function uninstall(){
 		global $wpdb;
 		$query = "DROP TABLE IF EXISTS ".$wpdb->prefix."woo_minecraft";
 		$wpdb->query($query);
 	}
 
-	function update_order_meta($order_id){
+	public function update_order_meta($order_id){
 		if($_POST['player_id']) update_post_meta($order_id, 'player_id', esc_attr($_POST['player_id']));
 	}
 
-	function variable_fields_process($post_id){
+	public function variable_fields_process($post_id){
 		$variable_sku = $_POST['variable_sku'];
 		$variable_post_id = $_POST['variable_post_id'];
 		$woo_minecraft = $_POST['minecraft_woo']['variable'];
