@@ -201,7 +201,7 @@ class WCM_Admin {
         $output .= '    </table>';
         $output .= get_submit_button();
         $output .= '    </form>';
-        $output .= '/div>';
+        $output .= '</div>';
         echo $output;
 	}
 
