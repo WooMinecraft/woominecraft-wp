@@ -229,14 +229,14 @@ class Woo_Minecraft {
 		global $woocommerce;
 
 		if ( ! $woocommerce instanceof WooCommerce ) {
-			return false;
+			return;
 		}
 
 		$playerID = stripslashes_deep( $_POST['player_id'] );
 
 		$items = $woocommerce->cart->cart_contents;
 		if ( ! has_commands( $items ) ) {
-			return false;
+			return;
 		}
 
 		if ( empty( $_POST['player_id'] ) ) {
