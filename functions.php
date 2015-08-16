@@ -26,6 +26,7 @@ function wmc_autoload_classes( $class_name ) {
 	) );
 
 	Woo_Minecraft::include_file( $filename );
+
 	return true;
 }
 
@@ -131,26 +132,26 @@ class Woo_Minecraft {
 		$json = array();
 
 		$method = isset( $_REQUEST['woo_minecraft'] ) ? $_REQUEST['woo_minecraft'] : false;
-		$key = isset( $_REQUEST['key'] ) ? $_REQUEST['key'] : false;
+		$key    = isset( $_REQUEST['key'] ) ? $_REQUEST['key'] : false;
 		if ( empty( $key ) ) {
 			$json = array(
-				'status'=> "error",
-				'msg'=> "Malformed key.",
+				'status' => "error",
+				'msg'    => "Malformed key.",
 			);
 		}
 
 		$key_db = get_option( 'wm_key' );
 		if ( empty( $key_db ) ) {
 			wp_send_json_error( array(
-				'msg'    => "Website key unavailable.",
+				'msg' => "Website key unavailable.",
 			) );
 		}
 
 		if ( $key_db != $key ) {
 			wp_send_json_error( array(
-				'msg'    => __( "Keys do not match", 'wmc' ),
-				'web'    => $key,
-				'db'     => $key_db,
+				'msg' => __( "Keys do not match", 'wmc' ),
+				'web' => $key,
+				'db'  => $key_db,
 			) );
 		}
 
@@ -198,7 +199,7 @@ class Woo_Minecraft {
 				$results  = $wpdb->get_results( $prepared );
 				if ( empty( $results ) ) {
 					wp_send_json_error( array(
-						'msg' => sprintf( __( "No results for the following players: %s", 'wcm' ), $namesArr ),
+						'msg'    => sprintf( __( "No results for the following players: %s", 'wcm' ), $namesArr ),
 						'status' => 'empty',
 					) );
 				} else {
@@ -316,14 +317,17 @@ class Woo_Minecraft {
 	 * Include a file from the includes directory
 	 *
 	 * @since  0.1.0
-	 * @param  string  $filename Name of the file to be included
+	 *
+	 * @param  string $filename Name of the file to be included
+	 *
 	 * @return bool    Result of include call.
 	 */
 	public static function include_file( $filename ) {
-		$file = self::dir( 'includes/'. $filename .'.php' );
+		$file = self::dir( 'includes/' . $filename . '.php' );
 		if ( file_exists( $file ) ) {
 			return include_once( $file );
 		}
+
 		return false;
 	}
 
@@ -331,12 +335,15 @@ class Woo_Minecraft {
 	 * This plugin's directory
 	 *
 	 * @since  0.1.0
+	 *
 	 * @param  string $path (optional) appended path
+	 *
 	 * @return string       Directory and path
 	 */
 	public static function dir( $path = '' ) {
 		static $dir;
 		$dir = $dir ? $dir : trailingslashit( dirname( __FILE__ ) );
+
 		return $dir . $path;
 	}
 
@@ -344,12 +351,15 @@ class Woo_Minecraft {
 	 * This plugin's url
 	 *
 	 * @since  0.1.0
+	 *
 	 * @param  string $path (optional) appended path
+	 *
 	 * @return string       URL and path
 	 */
 	public static function url( $path = '' ) {
 		static $url;
 		$url = $url ? $url : trailingslashit( plugin_dir_url( __FILE__ ) );
+
 		return $url . $path;
 	}
 
@@ -371,7 +381,9 @@ class Woo_Minecraft {
 	 * Magic getter for our object.
 	 *
 	 * @since  0.1.0
+	 *
 	 * @param string $field
+	 *
 	 * @throws Exception Throws an exception if the field is invalid.
 	 * @return mixed
 	 */
@@ -384,10 +396,11 @@ class Woo_Minecraft {
 			case 'path':
 				return $this->$field;
 			default:
-				throw new Exception( 'Invalid '. __CLASS__ .' property: ' . $field );
+				throw new Exception( 'Invalid ' . __CLASS__ . ' property: ' . $field );
 		}
 	}
 }
+
 $GLOBALS['Woo_Minecraft'] = new Woo_Minecraft();
 $GLOBALS['Woo_Minecraft']->hooks();
 
@@ -395,6 +408,7 @@ $GLOBALS['Woo_Minecraft']->hooks();
  * Has Commands
  *
  * @param $data
+ *
  * @TODO: Move this to helper file
  * @return bool
  */
