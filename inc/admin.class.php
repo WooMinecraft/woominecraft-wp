@@ -101,7 +101,7 @@ class Woo_Minecraft_Admin {
 	}
 
 	public function delete_sql_data($order_id, $curstatus, $newstatus){
-		if($curstatus != 'completed') return;
+		if($curstatus != 'completed') {return;}
 		global $wpdb;
 
 		$orderData = new WC_Order($order_id);
@@ -109,7 +109,7 @@ class Woo_Minecraft_Admin {
 		$tmpArray = array();
 		$playername = get_post_meta($order_id, 'player_id', true);
 		$result = $wpdb->delete($wpdb->prefix."woo_minecraft", array('orderid'=>$order_id), array('%d'));
-		if(FALSE===$result){
+		if(false===$result){
 			wp_die($wpdb->last_error);
 		}
 
@@ -165,10 +165,10 @@ class Woo_Minecraft_Admin {
 
 	}
 
-	public function save_g_field($postid){
+	public function save_g_field( $postid ){
 		$field = $_POST['minecraft_woo']['general'];
 		if(isset($field) && !empty($field)){
-			update_post_meta($postid, 'minecraft_woo_g', array_filter($_POST['minecraft_woo']['general']));
+			update_post_meta( $postid, 'minecraft_woo_g', array_filter( $_POST['minecraft_woo']['general'] ) );
 		}
 	}
 
@@ -217,7 +217,7 @@ class Woo_Minecraft_Admin {
 	}
 
 	public function update_order_meta($order_id){
-		if($_POST['player_id']) update_post_meta($order_id, 'player_id', esc_attr($_POST['player_id']));
+		if($_POST['player_id']) {update_post_meta($order_id, 'player_id', esc_attr($_POST['player_id']));}
 	}
 
 	public function variable_fields_process($post_id){
