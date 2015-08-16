@@ -231,15 +231,15 @@ class Woo_Minecraft {
 		}
 
 		if ( empty( $_POST['player_id'] ) ) {
-			$woocommerce->add_error( 'Player ID must not be left empty.' );
+			$woocommerce->add_error( __( 'Player ID must not be left empty.', 'wcm' ) );
 		} else {
 			$mcacct = wp_remote_get( 'http://www.minecraft.net/haspaid.jsp?user=' . rawurlencode( $playerID ), array( 'timeout' => 5 ) );
 			$mcacct = $mcacct['body'];
 			if ( $mcacct != 'true' ) {
 				if ( $mcacct == 'false' ) {
-					$woocommerce->add_error( 'Invalid Minecraft Account' );
+					$woocommerce->add_error( __( 'Invalid Minecraft Account', 'wcm' ) );
 				} else {
-					$woocommerce->add_error( 'Cannot communicate with Minecraft.net  Servers may be down.' );
+					$woocommerce->add_error( __( 'Cannot communicate with Minecraft.net  Servers may be down.', 'wcm' ) );
 				}
 			}
 		}
@@ -299,9 +299,9 @@ class Woo_Minecraft {
 		$playername = get_post_meta( $id, 'player_id', true );
 		if ( ! empty( $playername ) ) {
 			?>
-			<div class="woo_minecraft"><h4>Minecraft Details</h4>
+			<div class="woo_minecraft"><h4><?php _e( 'Minecraft Details', 'wcm' ); ?></h4>
 
-			<p><strong>Username: </strong><?php $playername ?></p></div><?php
+			<p><strong><?php _e( 'Username:', 'wcm' ); ?></strong><?php echo $playername ?></p></div><?php
 		}
 	}
 
