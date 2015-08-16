@@ -256,7 +256,7 @@ class Woo_Minecraft {
 		$items     = $orderData->get_items();
 //			wp_die(print_r($items, true));
 		$tmpArray   = array();
-		$playername = get_post_meta( $order_id, 'player_id', true );
+		$player_name = get_post_meta( $order_id, 'player_id', true );
 		foreach ( $items as $item ) {
 			// Insert into database table
 			$x     = array();
@@ -269,7 +269,7 @@ class Woo_Minecraft {
 							'postid'      => $item['product_id'],
 							'command'     => $command,
 							'orderid'     => $order_id,
-							'player_name' => $playername
+							'player_name' => $player_name
 						);
 						array_push( $tmpArray, $x );
 					}
@@ -283,7 +283,7 @@ class Woo_Minecraft {
 							'postid'      => $item['variation_id'],
 							'command'     => $command,
 							'orderid'     => $order_id,
-							'player_name' => $playername
+							'player_name' => $player_name
 						);
 						array_push( $tmpArray, $x1 );
 					}
@@ -299,12 +299,12 @@ class Woo_Minecraft {
 	}
 
 	public function thanks( $id ) {
-		$playername = get_post_meta( $id, 'player_id', true );
-		if ( ! empty( $playername ) ) {
+		$player_name = get_post_meta( $id, 'player_id', true );
+		if ( ! empty( $player_name ) ) {
 			?>
 			<div class="woo_minecraft"><h4><?php _e( 'Minecraft Details', 'wcm' ); ?></h4>
 
-			<p><strong><?php _e( 'Username:', 'wcm' ); ?></strong><?php echo $playername ?></p></div><?php
+			<p><strong><?php _e( 'Username:', 'wcm' ); ?></strong><?php echo $player_name ?></p></div><?php
 		}
 	}
 
