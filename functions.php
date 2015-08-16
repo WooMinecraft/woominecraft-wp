@@ -259,8 +259,7 @@ class Woo_Minecraft {
 
 		$orderData = new WC_Order( $order_id );
 		$items     = $orderData->get_items();
-//			wp_die(print_r($items, true));
-		$tmpArray   = array();
+		$tmpArray  = array();
 		$player_name = get_post_meta( $order_id, 'player_id', true );
 		foreach ( $items as $item ) {
 			// Insert into database table
