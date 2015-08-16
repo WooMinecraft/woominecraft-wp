@@ -184,24 +184,25 @@ class WCM_Admin {
 
 
 	public function setupAdminPage(){
-		?>
-            <div class="wrap">
-                <h2>Woo Minecraft Options</h2>
-                <form method="post" action="options.php">
-                <?php settings_fields('woo_minecraft'); ?>
-                <table class="form-table wide-fat">
-                    <tbody>
-                        <tr>
-                            <th><label for="wm_key">Game Key</label></th>
-                            <td><input type="text" name="wm_key" id="wm_key" value="<?php echo get_option('wm_key'); ?>"/>
-                                <p class="description">Type /woo register in-game as op to get your key.</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <?php submit_button(); ?>
-                </form>
-            </div>
-        <?php
+        $output  = '<div class="wrap">';
+        $output .= '    <h2>Woo Minecraft Options</h2>';
+        $output .= '    <form method="post" action="options.php">';
+        ob_start();
+        settings_fields( 'woo_minecraft' );
+        $output .= ob_get_clean();
+        $output .= '    <table class="form-table wide-fat">';
+        $output .= '        <tbody>';
+        $output .= '            <tr>';
+        $output .= '                <th><label for="wm_key">Game Key</label></th>';
+        $output .= '                <td><input type="text" name="wm_key" id="wm_key" value="' . get_option('wm_key') . '"/>';
+        $output .= '                    <p class="description">Type /woo register in-game as op to get your key.</td>';
+        $output .= '            </tr>';
+        $output .= '        </tbody>';
+        $output .= '    </table>';
+        $output .= get_submit_button();
+        $output .= '    </form>';
+        $output .= '/div>';
+        echo $output;
 	}
 
 	public function setupAdminMenu(){
