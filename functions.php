@@ -220,9 +220,6 @@ class Woo_Minecraft {
 		}
 	}
 
-	public function updateDonations( $ids ) {
-	}
-
 	public function check_player() {
 		global $woocommerce, $order;
 
