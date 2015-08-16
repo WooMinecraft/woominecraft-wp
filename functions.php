@@ -123,9 +123,6 @@ class Woo_Minecraft {
 
 	/**
 	 * Sends JSON API data to the MC Java application
-	 *
-	 * @TODO: Switch json data to use wp_send_json_ related methods instead of encoding and dieing AFTER everything is done.
-	 * @link: https://codex.wordpress.org/Function_Reference/wp_send_json
 	 */
 	public function checkJSON() {
 
@@ -137,21 +134,24 @@ class Woo_Minecraft {
 			$json = array(
 				'status' => "error",
 				'msg'    => "Malformed key.",
+				'code'   => 1,
 			);
 		}
 
 		$key_db = get_option( 'wm_key' );
 		if ( empty( $key_db ) ) {
 			wp_send_json_error( array(
-				'msg' => "Website key unavailable.",
+				'msg'  => "Website key unavailable.",
+				'code' => 2,
 			) );
 		}
 
 		if ( $key_db != $key ) {
 			wp_send_json_error( array(
-				'msg' => __( "Keys do not match", 'wmc' ),
-				'web' => $key,
-				'db'  => $key_db,
+				'msg'  => __( "Keys do not match", 'wmc' ),
+				'web'  => $key,
+				'db'   => $key_db,
+				'code' => 3,
 			) );
 		}
 
@@ -162,7 +162,8 @@ class Woo_Minecraft {
 
 			if ( empty( $ids ) ) {
 				wp_send_json_error( array(
-					'msg' => __( 'No IDs for update request.', 'wmc' ),
+					'msg'  => __( 'No IDs for update request.', 'wmc' ),
+					'code' => 4,
 				) );
 			}
 
@@ -172,12 +173,14 @@ class Woo_Minecraft {
 			if ( false === $rs ) {
 				// Error
 				wp_send_json_error( array(
-					'msg' => sprintf( __( 'Error in DB query, received: "%s"', 'wcm' ), $wpdb->last_error ),
+					'msg'  => sprintf( __( 'Error in DB query, received: "%s"', 'wcm' ), $wpdb->last_error ),
+					'code' => 5,
 				) );
 			} elseif ( 1 > $rs ) {
 				// No results
 				wp_send_json_error( array(
-					'msg' => __( 'Player does not exist or may not be registered.', 'wcm' ),
+					'msg'  => __( 'Player does not exist or may not be registered.', 'wcm' ),
+					'code' => 6,
 				) );
 			} else {
 				wp_send_json_success( array(
@@ -200,6 +203,7 @@ class Woo_Minecraft {
 					wp_send_json_error( array(
 						'msg'    => sprintf( __( "No results for the following players: %s", 'wcm' ), $namesArr ),
 						'status' => 'empty',
+						'code'   => 6,
 					) );
 				} else {
 					wp_send_json_success( array(
@@ -210,7 +214,8 @@ class Woo_Minecraft {
 		} else {
 			// Bandaid for debugging the java side of things
 			wp_send_json_error( array(
-				'msg' => __( "Method or Names parameter was not set.", 'wcm' ),
+				'msg'  => __( "Method or Names parameter was not set.", 'wcm' ),
+				'code' => 7,
 			) );
 		}
 	}
