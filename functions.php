@@ -264,11 +264,10 @@ class Woo_Minecraft {
 		$player_name = get_post_meta( $order_id, 'player_id', true );
 		foreach ( $items as $item ) {
 			// Insert into database table
-			$metag = get_post_meta( $item['product_id'], 'minecraft_woo_g', true );
-			$metav = get_post_meta( $item['variation_id'], 'minecraft_woo_v', true );
-			if ( ! empty( $metag ) ) {
+			$product = get_post_meta( $item['product_id'], 'minecraft_woo_g', true );
+			if ( ! empty( $product ) ) {
 				for ( $n = 0; $n < $item['qty']; $n ++ ) {
-					foreach ( $metag as $command ) {
+					foreach ( $product as $command ) {
 						$x = array(
 							'postid'      => $item['product_id'],
 							'command'     => $command,
@@ -280,9 +279,11 @@ class Woo_Minecraft {
 				}
 			}
 
-			if ( ! empty( $metav ) ) {
+
+			$product_variation = get_post_meta( $item['variation_id'], 'minecraft_woo_v', true );
+			if ( ! empty( $product_variation ) ) {
 				for ( $n = 0; $n < $item['qty']; $n ++ ) {
-					foreach ( $metav as $command ) {
+					foreach ( $product_variation as $command ) {
 						$x1 = array(
 							'postid'      => $item['variation_id'],
 							'command'     => $command,
