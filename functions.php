@@ -235,15 +235,15 @@ class Woo_Minecraft {
 		}
 
 		if ( empty( $_POST['player_id'] ) ) {
-			$woocommerce->add_error( __( 'Player ID must not be left empty.', 'wcm' ) );
+			wc_add_notice( __( 'Player ID must not be left empty.', 'wcm' ), 'error' );
 		} else {
 			$minecraft_account = wp_remote_get( 'http://www.minecraft.net/haspaid.jsp?user=' . rawurlencode( $playerID ), array( 'timeout' => 5 ) );
 			$response = wp_remote_retrieve_body( $minecraft_account );
 			if ( $response != 'true' ) {
 				if ( $response == 'false' ) {
-					$woocommerce->add_error( __( 'Invalid Minecraft Account', 'wcm' ) );
+					wc_add_notice( __( 'Invalid Minecraft Account', 'wcm' ), 'error' );
 				} else {
-					$woocommerce->add_error( __( 'Cannot communicate with Minecraft.net  Servers may be down.', 'wcm' ) );
+					wc_add_notice( __( 'Cannot communicate with Minecraft.net  Servers may be down.', 'wcm' ), 'error' );
 				}
 			}
 		}
