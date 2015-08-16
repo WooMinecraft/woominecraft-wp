@@ -20,7 +20,7 @@ function wmc_autoload_classes( $class_name ) {
 	}
 
 	$filename = strtolower( str_ireplace(
-		array( 'WDSCPN_', '_' ),
+		array( 'WCM_', '_' ),
 		array( '', '-' ),
 		$class_name
 	) );
