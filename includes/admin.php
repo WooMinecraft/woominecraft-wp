@@ -1,4 +1,9 @@
 <?php
+/**
+ * Class WCM_Admin
+ *
+ * @TODO: Clean up all THIS junk!
+ */
 class WCM_Admin {
 	public function __construct(){
 	}
