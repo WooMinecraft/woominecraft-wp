@@ -29,6 +29,7 @@ function wmc_autoload_classes( $class_name ) {
 
 	return true;
 }
+spl_autoload_register( 'wmc_autoload_classes' );
 
 class Woo_Minecraft {
 
@@ -103,7 +104,7 @@ class Woo_Minecraft {
 	public function hooks() {
 		add_action( 'woocommerce_checkout_process', array( $this, 'check_player' ) );
 		add_action( 'woocommerce_order_status_completed', array( $this, 'finalize_order' ) );
-		add_action( 'woocommerce_before_checkout_billing_form', array( $this, 'additioal_checkout_field' ) );
+		add_action( 'woocommerce_before_checkout_billing_form', array( $this, 'additional_checkout_field' ) );
 		add_action( 'woocommerce_thankyou', array( $this, 'thanks' ) );
 		add_action( 'plugins_loaded', array( $this, 'checkJSON' ) );
 		add_action( 'init', array( $this, 'init' ) );
@@ -129,7 +130,7 @@ class Woo_Minecraft {
 	 *
 	 * @return bool  False on failure, true otherwise.
 	 */
-	public function additioal_checkout_field( $cart ) {
+	public function additional_checkout_field( $cart ) {
 		global $woocommerce;
 
 		$items = $woocommerce->cart->cart_contents;
