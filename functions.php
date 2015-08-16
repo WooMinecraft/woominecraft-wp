@@ -156,15 +156,12 @@ class Woo_Minecraft {
 	 */
 	public function checkJSON() {
 
-		$method = isset( $_REQUEST['woo_minecraft'] ) ? $_REQUEST['woo_minecraft'] : false;
 		$key    = isset( $_REQUEST['key'] ) ? $_REQUEST['key'] : false;
 		if ( empty( $key ) ) {
-			wp_send_json_error( array(
-				'msg'    => __( "Malformed key", 'wmc' ),
-				'code'   => 1,
-			) );
+			return false;
 		}
 
+		$method = isset( $_REQUEST['woo_minecraft'] ) ? $_REQUEST['woo_minecraft'] : false;
 		$key_db = get_option( 'wm_key' );
 		if ( empty( $key_db ) ) {
 			wp_send_json_error( array(
