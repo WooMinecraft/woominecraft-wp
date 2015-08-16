@@ -264,7 +264,6 @@ class Woo_Minecraft {
 		$player_name = get_post_meta( $order_id, 'player_id', true );
 		foreach ( $items as $item ) {
 			// Insert into database table
-			$x     = array();
 			$metag = get_post_meta( $item['product_id'], 'minecraft_woo_g', true );
 			$metav = get_post_meta( $item['variation_id'], 'minecraft_woo_v', true );
 			if ( ! empty( $metag ) ) {
