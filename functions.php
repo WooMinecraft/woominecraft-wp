@@ -77,7 +77,7 @@ class Woo_Minecraft {
 	 *
 	 * @since  0.1.0
 	 */
-	protected function __construct() {
+	public function __construct() {
 		$this->basename = plugin_basename( __FILE__ );
 		$this->url      = plugin_dir_url( __FILE__ );
 		$this->path     = plugin_dir_path( __FILE__ );
