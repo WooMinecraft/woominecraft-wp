@@ -109,9 +109,7 @@ class Woo_Minecraft {
 	 * @return null
 	 */
 	public function init() {
-		if ( $this->check_requirements() ) {
-			load_plugin_textdomain( 'wcm', false, dirname( $this->basename ) . '/languages/' );
-		}
+		load_plugin_textdomain( 'wcm', false, dirname( $this->basename ) . '/languages/' );
 	}
 
 
