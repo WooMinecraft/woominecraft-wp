@@ -98,6 +98,20 @@ class Woo_Minecraft {
 		add_action( 'woocommerce_before_checkout_billing_form', array( $this, 'anotes' ) );
 		add_action( 'woocommerce_thankyou', array( $this, 'thanks' ) );
 		add_action( 'plugins_loaded', array( $this, 'checkJSON' ) );
+		add_action( 'init', array( $this, 'init' ) );
+	}
+
+
+	/**
+	 * Init hooks
+	 *
+	 * @since  0.1.0
+	 * @return null
+	 */
+	public function init() {
+		if ( $this->check_requirements() ) {
+			load_plugin_textdomain( 'wcm', false, dirname( $this->basename ) . '/languages/' );
+		}
 	}
 
 
