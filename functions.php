@@ -292,7 +292,6 @@ class Woo_Minecraft {
 				$wpdb->insert( $wpdb->prefix . "woo_minecraft", $row, array( '%d', '%s', '%d', '%s' ) );
 			}
 		}
-		//wp_die($wpdb->last_query);
 	}
 
 	public function thanks( $id ) {
