@@ -278,7 +278,7 @@ class Woo_Minecraft {
 			$minecraft_account = wp_remote_post( 'https://api.mojang.com/profiles/minecraft', $post_config );
 
 			if ( 200 != wp_remote_retrieve_response_code( $minecraft_account ) ) {
-				return $mc_json;
+				return false;
 			}
 
 			$mc_json = json_decode( wp_remote_retrieve_body( $minecraft_account ) );
