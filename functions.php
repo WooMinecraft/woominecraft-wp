@@ -107,7 +107,7 @@ class Woo_Minecraft {
 		add_action( 'woocommerce_order_status_completed', array( $this, 'finalize_order' ) );
 		add_action( 'woocommerce_before_checkout_billing_form', array( $this, 'additional_checkout_field' ) );
 		add_action( 'woocommerce_thankyou', array( $this, 'thanks' ) );
-		add_action( 'plugins_loaded', array( $this, 'checkJSON' ) );
+		add_action( 'plugins_loaded', array( $this, 'check_json' ) );
 		add_action( 'init', array( $this, 'init' ) );
 
 		$this->admin->hooks();
@@ -137,6 +137,7 @@ class Woo_Minecraft {
 
 		$items = $woocommerce->cart->cart_contents;
 		if ( ! has_commands( $items ) || ! function_exists( 'woocommerce_form_field' ) ) {
+			error_log( 'No commands or formfield does not exist' );
 			return false;
 		}
 
@@ -145,7 +146,7 @@ class Woo_Minecraft {
 		woocommerce_form_field( 'player_id', array(
 			'type'        => 'text',
 			'class'       => array(),
-			'label'       => __( 'Player ID:', 'wmc' ),
+			'label'       => __( 'Player ID ( Minecraft Username ):', 'wmc' ),
 			'placeholder' => __( 'Required Field', 'wmc' ),
 		), $cart->get_value( 'player_id' ) );
 		?></div><?php
@@ -156,7 +157,7 @@ class Woo_Minecraft {
 	/**
 	 * Sends JSON API data to the MC Java application
 	 */
-	public function checkJSON() {
+	public function check_json() {
 
 		$key = isset( $_REQUEST['key'] ) ? $_REQUEST['key'] : false;
 		if ( empty( $key ) ) {
