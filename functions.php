@@ -184,7 +184,7 @@ class Woo_Minecraft {
 
 		global $wpdb;
 
-		if ( "update" == $method ) {
+		if ( 'update' == $method ) {
 			$ids = $_REQUEST['players'];
 
 			if ( empty( $ids ) ) {
@@ -217,7 +217,7 @@ class Woo_Minecraft {
 		} else if ( false !== $method && isset( $_REQUEST['names'] ) ) {
 			$namesArr = explode( ',', $_REQUEST['names'] );
 			if ( empty( $namesArr ) ) {
-				$json['status'] = "false";
+				$json['status'] = 'false';
 			} else {
 				foreach ( $namesArr as $k => $v ) {
 					$namesArr[ $k ] = '"' . strtolower( $v ) . '"';
@@ -228,7 +228,7 @@ class Woo_Minecraft {
 				$results  = $wpdb->get_results( $prepared );
 				if ( empty( $results ) ) {
 					wp_send_json_error( array(
-						'msg'    => sprintf( __( "No results for the following players: %s", 'wcm' ), $namesArr ),
+						'msg'    => sprintf( __( 'No results for the following players: %s', 'wcm' ), $namesArr ),
 						'status' => 'empty',
 						'code'   => 6,
 					) );
@@ -241,7 +241,7 @@ class Woo_Minecraft {
 		} else {
 			// Bandaid for debugging the java side of things
 			wp_send_json_error( array(
-				'msg'  => __( "Method or Names parameter was not set.", 'wcm' ),
+				'msg'  => __( 'Method or Names parameter was not set.', 'wcm' ),
 				'code' => 7,
 			) );
 		}
@@ -269,14 +269,41 @@ class Woo_Minecraft {
 		if ( empty( $_POST['player_id'] ) ) {
 			wc_add_notice( __( 'Player ID must not be left empty.', 'wcm' ), 'error' );
 		} else {
-			$minecraft_account = wp_remote_get( 'http://www.minecraft.net/haspaid.jsp?user=' . rawurlencode( $playerID ), array( 'timeout' => 5 ) );
-			$response          = wp_remote_retrieve_body( $minecraft_account );
-			if ( 'true' !== $response ) {
-				if ( 'false' == $response ) {
-					wc_add_notice( __( 'Invalid Minecraft Account', 'wcm' ), 'error' );
-				} else {
-					wc_add_notice( __( 'Cannot communicate with Minecraft.net  Servers may be down.', 'wcm' ), 'error' );
-				}
+//			$minecraft_account = wp_remote_get( 'http://www.minecraft.net/haspaid.jsp?user=' . rawurlencode( $playerID ), array( 'timeout' => 5 ) );
+
+			// Grab JSON data
+			$minecraft_account = wp_remote_post( 'https://api.mojang.com/profiles/minecraft', array(
+				'body'    => json_encode( array( rawurlencode( $playerID ) ) ),
+				'method'  => 'POST',
+				'headers' => array(
+					'content-type' => 'application/json',
+				),
+			) );
+
+			if ( 200 != wp_remote_retrieve_response_code( $minecraft_account ) ) {
+				wc_add_notice( __( 'There was an error with your request, please try again later.', 'wcm' ) );
+				return;
+			}
+
+			$mc_json = json_decode( wp_remote_retrieve_body( $minecraft_account ) );
+			if ( ! isset( $mc_json[0] ) ) {
+				wc_add_notice( __( 'There was an error with your request, please try again later.', 'wcm' ) );
+				return;
+			} else {
+				$mc_json = $mc_json[0];
+			}
+
+			// Object is as follows
+			//{
+			//	"id": "0d252b7218b648bfb86c2ae476954d32",
+			//	"name": "maksimkurb",
+			//	"legacy": true,
+			//	"demo": true
+			//}
+
+			if ( isset( $mc_json->demo ) ) {
+				wc_add_notice( __( 'We do not allow unpaid-accounts to make donations, sorry!', 'wcm' ) );
+				return;
 			}
 		}
 	}
