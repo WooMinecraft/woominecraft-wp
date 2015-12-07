@@ -248,6 +248,53 @@ class Woo_Minecraft {
 	}
 
 	/**
+	 * Caches the results of the mojang API based on player ID
+	 * @param String $playerID Minecraft Username
+	 *
+	 * Object is as follows
+	 * {
+	 * 	"id": "0d252b7218b648bfb86c2ae476954d32",
+	 * 	"name": "CasESensatIveUserName",
+	 * 	"legacy": true,
+	 * 	"demo": true
+	 * }
+	 *
+	 * @return bool|object False on failure, Object on success
+	 */
+	public function mojang_player_cache( $playerID ) {
+
+		$key           = md5( 'minecraft_player_' . $playerID );
+		$cached_player = wp_cache_get( $key, 'wcm' );
+		$mc_json       = false;
+
+		if ( false == $cached_player ) {
+
+			$post_config = apply_filters( 'mojang_profile_api_post_args', array(
+				'body'    => json_encode( array( rawurlencode( $playerID ) ) ),
+				'method'  => 'POST',
+				'headers' => array( 'content-type' => 'application/json' ),
+			) );
+
+			$minecraft_account = wp_remote_post( 'https://api.mojang.com/profiles/minecraft', $post_config );
+
+			if ( 200 != wp_remote_retrieve_response_code( $minecraft_account ) ) {
+				return $mc_json;
+			}
+
+			$mc_json = json_decode( wp_remote_retrieve_body( $minecraft_account ) );
+			if ( ! isset( $mc_json[0] ) ) {
+				return $mc_json;
+			} else {
+				$mc_json = $mc_json[0];
+			}
+
+			wp_cache_set( $key, $mc_json, 'wcm', 1 * HOUR_IN_SECONDS );
+		}
+
+		return $mc_json;
+	}
+
+	/**
 	 * Checks if Minecraft Username is valid
 	 *
 	 * @return void
@@ -259,52 +306,27 @@ class Woo_Minecraft {
 			return;
 		}
 
-		$playerID = stripslashes_deep( $_POST['player_id'] );
+		$playerID = isset( $_POST['player_id'] ) ? esc_attr( $_POST['player_id'] ) : false;
+		$items    = $woocommerce->cart->cart_contents;
 
-		$items = $woocommerce->cart->cart_contents;
 		if ( ! has_commands( $items ) ) {
 			return;
 		}
 
-		if ( empty( $_POST['player_id'] ) ) {
-			wc_add_notice( __( 'Player ID must not be left empty.', 'wcm' ), 'error' );
-		} else {
-//			$minecraft_account = wp_remote_get( 'http://www.minecraft.net/haspaid.jsp?user=' . rawurlencode( $playerID ), array( 'timeout' => 5 ) );
+		if ( ! $playerID ) {
+			wc_add_notice( __( 'You MUST provide a Minecraft username.', 'ucm' ), 'error' );
+			return;
+		}
 
-			// Grab JSON data
-			$minecraft_account = wp_remote_post( 'https://api.mojang.com/profiles/minecraft', array(
-				'body'    => json_encode( array( rawurlencode( $playerID ) ) ),
-				'method'  => 'POST',
-				'headers' => array(
-					'content-type' => 'application/json',
-				),
-			) );
+		// Grab JSON data
+		$mc_json = $this->mojang_player_cache( $playerID );
+		if ( ! $mc_json ) {
+			wc_add_notice( __( 'There was an error with the Mojang API, please try again later.', 'wcm' ) );
+		}
 
-			if ( 200 != wp_remote_retrieve_response_code( $minecraft_account ) ) {
-				wc_add_notice( __( 'There was an error with your request, please try again later.', 'wcm' ) );
-				return;
-			}
-
-			$mc_json = json_decode( wp_remote_retrieve_body( $minecraft_account ) );
-			if ( ! isset( $mc_json[0] ) ) {
-				wc_add_notice( __( 'There was an error with your request, please try again later.', 'wcm' ) );
-				return;
-			} else {
-				$mc_json = $mc_json[0];
-			}
-
-			// Object is as follows
-			//{
-			//	"id": "0d252b7218b648bfb86c2ae476954d32",
-			//	"name": "maksimkurb",
-			//	"legacy": true,
-			//	"demo": true
-			//}
-
-			if ( isset( $mc_json->demo ) ) {
-				wc_add_notice( __( 'We do not allow unpaid-accounts to make donations, sorry!', 'wcm' ) );
-				return;
-			}
+		if ( isset( $mc_json->demo ) ) {
+			wc_add_notice( __( 'We do not allow unpaid-accounts to make donations, sorry!', 'wcm' ) );
+			return;
 		}
 	}
 
