@@ -283,7 +283,7 @@ class Woo_Minecraft {
 
 			$mc_json = json_decode( wp_remote_retrieve_body( $minecraft_account ) );
 			if ( ! isset( $mc_json[0] ) ) {
-				return $mc_json;
+				return false;
 			} else {
 				$mc_json = $mc_json[0];
 			}
