@@ -161,7 +161,10 @@ class Woo_Minecraft {
 
 		$key = isset( $_REQUEST['key'] ) ? $_REQUEST['key'] : false;
 		if ( empty( $key ) ) {
-			return false;
+			wp_send_json_error( array(
+				'msg'  => __( 'Cannot communicate with database, key not provided.', 'wmc' ),
+				'code' => 1,
+			) );
 		}
 
 		$method = isset( $_REQUEST['woo_minecraft'] ) ? $_REQUEST['woo_minecraft'] : false;
