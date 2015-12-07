@@ -86,7 +86,7 @@ class Woo_Minecraft {
 	 *
 	 * @since  0.1.0
 	 */
-	public function __construct() {
+	protected function __construct() {
 		$this->basename = plugin_basename( __FILE__ );
 		$this->url      = plugin_dir_url( __FILE__ );
 		$this->path     = plugin_dir_path( __FILE__ );
@@ -433,8 +433,11 @@ class Woo_Minecraft {
 	}
 }
 
-$GLOBALS['Woo_Minecraft'] = new Woo_Minecraft();
-$GLOBALS['Woo_Minecraft']->hooks();
+function Woo_Minecraft() {
+	return Woo_Minecraft::get_instance();
+}
+
+add_action( 'plugins_loaded', array( Woo_Minecraft(), 'hooks' ) );
 
 /**
  * Has Commands
