@@ -184,7 +184,7 @@ class Woo_Minecraft {
 
 		global $wpdb;
 
-		if ( $method == "update" ) {
+		if ( "update" == $method ) {
 			$ids = $_REQUEST['players'];
 
 			if ( empty( $ids ) ) {
