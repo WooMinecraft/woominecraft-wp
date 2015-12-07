@@ -29,6 +29,7 @@ function wmc_autoload_classes( $class_name ) {
 
 	return true;
 }
+
 spl_autoload_register( 'wmc_autoload_classes' );
 
 class Woo_Minecraft {
@@ -126,6 +127,7 @@ class Woo_Minecraft {
 
 	/**
 	 * Adds a field to the checkout form, requiring the user to enter their Minecraft Name
+	 *
 	 * @param object $cart WooCommerce Cart Object
 	 *
 	 * @return bool  False on failure, true otherwise.
@@ -156,7 +158,7 @@ class Woo_Minecraft {
 	 */
 	public function checkJSON() {
 
-		$key    = isset( $_REQUEST['key'] ) ? $_REQUEST['key'] : false;
+		$key = isset( $_REQUEST['key'] ) ? $_REQUEST['key'] : false;
 		if ( empty( $key ) ) {
 			return false;
 		}
@@ -267,9 +269,9 @@ class Woo_Minecraft {
 			wc_add_notice( __( 'Player ID must not be left empty.', 'wcm' ), 'error' );
 		} else {
 			$minecraft_account = wp_remote_get( 'http://www.minecraft.net/haspaid.jsp?user=' . rawurlencode( $playerID ), array( 'timeout' => 5 ) );
-			$response = wp_remote_retrieve_body( $minecraft_account );
-			if ( $response != 'true' ) {
-				if ( $response == 'false' ) {
+			$response          = wp_remote_retrieve_body( $minecraft_account );
+			if ( 'true' !== $response ) {
+				if ( 'false' == $response ) {
 					wc_add_notice( __( 'Invalid Minecraft Account', 'wcm' ), 'error' );
 				} else {
 					wc_add_notice( __( 'Cannot communicate with Minecraft.net  Servers may be down.', 'wcm' ), 'error' );
@@ -281,9 +283,9 @@ class Woo_Minecraft {
 	public function finalize_order( $order_id ) {
 		global $wpdb;
 
-		$orderData = new WC_Order( $order_id );
-		$items     = $orderData->get_items();
-		$tmpArray  = array();
+		$orderData   = new WC_Order( $order_id );
+		$items       = $orderData->get_items();
+		$tmpArray    = array();
 		$player_name = get_post_meta( $order_id, 'player_id', true );
 		foreach ( $items as $item ) {
 			// Insert into database table
@@ -295,7 +297,7 @@ class Woo_Minecraft {
 							'postid'      => $item['product_id'],
 							'command'     => $command,
 							'orderid'     => $order_id,
-							'player_name' => $player_name
+							'player_name' => $player_name,
 						);
 						array_push( $tmpArray, $x );
 					}
@@ -311,7 +313,7 @@ class Woo_Minecraft {
 							'postid'      => $item['variation_id'],
 							'command'     => $command,
 							'orderid'     => $order_id,
-							'player_name' => $player_name
+							'player_name' => $player_name,
 						);
 						array_push( $tmpArray, $x1 );
 					}
@@ -321,7 +323,7 @@ class Woo_Minecraft {
 
 		if ( ! empty( $tmpArray ) ) {
 			foreach ( $tmpArray as $row ) {
-				$wpdb->insert( $wpdb->prefix . "woo_minecraft", $row, array( '%d', '%s', '%d', '%s' ) );
+				$wpdb->insert( $wpdb->prefix . 'woo_minecraft', $row, array( '%d', '%s', '%d', '%s' ) );
 			}
 		}
 	}
