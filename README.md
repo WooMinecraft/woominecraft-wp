@@ -4,7 +4,7 @@
 **Plugin Name:** Minecraft WooCommerce   
 **Plugin URI:** [http://plugish.com/plugins/minecraft_woo](http://plugish.com/plugins/minecraft_woo)      
 **Author:** Jerry Wood   
-**Version:** 0.2.1   
+**Version:** 1.0.0   
 **License:** GPLv2   
 **Author URI:** [http://plugish.com](http://plugish.com)   
 
