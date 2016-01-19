@@ -137,7 +137,6 @@ class Woo_Minecraft {
 
 		$items = $woocommerce->cart->cart_contents;
 		if ( ! has_commands( $items ) || ! function_exists( 'woocommerce_form_field' ) ) {
-			error_log( 'No commands or formfield does not exist' );
 			return false;
 		}
 
@@ -199,14 +198,14 @@ class Woo_Minecraft {
 
 			// Sets the item as delivered
 			$query = $wpdb->prepare( "UPDATE {$wpdb->prefix}woo_minecraft SET delivered = %d WHERE id IN(%s)", 1, $ids );
-			$rs    = $wpdb->query( $query );
-			if ( false === $rs ) {
+			$results    = $wpdb->query( $query );
+			if ( false === $results ) {
 				// Error
 				wp_send_json_error( array(
 					'msg'  => sprintf( __( 'Error in DB query, received: "%s"', 'wcm' ), $wpdb->last_error ),
 					'code' => 5,
 				) );
-			} elseif ( 1 > $rs ) {
+			} elseif ( 1 > $results ) {
 				// No results
 				wp_send_json_error( array(
 					'msg'  => __( 'Player does not exist or may not be registered.', 'wcm' ),
@@ -266,11 +265,10 @@ class Woo_Minecraft {
 	 */
 	public function mojang_player_cache( $playerID ) {
 
-		$key           = md5( 'minecraft_player_' . $playerID );
-		$cached_player = wp_cache_get( $key, 'wcm' );
-		$mc_json       = false;
+		$key     = md5( 'minecraft_player_' . $playerID );
+		$mc_json = wp_cache_get( $key, 'wcm' );
 
-		if ( false == $cached_player ) {
+		if ( false == $mc_json ) {
 
 			$post_config = apply_filters( 'mojang_profile_api_post_args', array(
 				'body'    => json_encode( array( rawurlencode( $playerID ) ) ),
@@ -397,7 +395,7 @@ class Woo_Minecraft {
 	 * @since 0.1.0
 	 */
 	public function plugin_classes() {
-		$this->admin = new WCM_Admin();
+		$this->admin = new WCM_Admin( $this );
 	}
 
 	/**
@@ -518,8 +516,3 @@ function has_commands( $data ) {
 
 	return false;
 }
-
-//new Woo_Minecraft_Admin;
-//register_activation_hook( __FILE__, array( 'Woo_Minecraft_Admin', 'install' ) );
-//register_uninstall_hook( __FILE__, array( 'Woo_Minecraft_Admin', 'uninstall' ) );
-//new Woo_Minecraft;

@@ -1,0 +1,24 @@
+{
+  "name": "minecraft_woo",
+  "version": "0.0.0",
+  "description": "![](http://i.gyazo.com/ba51b7e45aa809d514c051266d0fbe6f.png)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/WooMinecraft/woominecraft-wp.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/WooMinecraft/woominecraft-wp/issues"
+  },
+  "homepage": "https://github.com/WooMinecraft/woominecraft-wp",
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^1.5.1"
+  }
+}

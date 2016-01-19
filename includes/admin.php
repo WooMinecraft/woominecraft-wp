@@ -2,6 +2,15 @@
 
 class WCM_Admin {
 
+	/**
+	 * @var Woo_Minecraft null
+	 */
+	private $plugin = null;
+
+	public function __construct( $plugin ) {
+		$this->plugin = $plugin;
+	}
+
 	public function hooks() {
 		add_action( 'admin_enqueue_scripts', array( $this, 'scripts' ) );
 
@@ -185,7 +194,8 @@ class WCM_Admin {
 	}
 
 	public function scripts() {
-		wp_register_script( 'woo_minecraft_js', plugins_url( 'jquery.woo.js', dirname( __FILE__ ) ), array( 'jquery' ), '1.0', true );
+		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+		wp_register_script( 'woo_minecraft_js', $this->plugin->url( "assets/js/jquery.woo{$min}.js" ), array( 'jquery' ), '1.0', true );
 		wp_register_style( 'woo_minecraft_css', plugins_url( 'style.css', dirname( __FILE__ ) ), false, '1.0' );
 		wp_enqueue_script( 'woo_minecraft_js' );
 		wp_enqueue_style( 'woo_minecraft_css' );
