@@ -40,7 +40,7 @@ class Woo_Minecraft {
 	 * @var  string
 	 * @since  0.1.0
 	 */
-	const VERSION = '0.1.0';
+	const VERSION = '1.0.0';
 
 	/**
 	 * URL of plugin directory
@@ -111,6 +111,14 @@ class Woo_Minecraft {
 		add_action( 'init', array( $this, 'init' ) );
 
 		$this->admin->hooks();
+	}
+
+	/**
+	 *
+	 * @return string
+	 */
+	public function get_version() {
+		return self::VERSION;
 	}
 
 

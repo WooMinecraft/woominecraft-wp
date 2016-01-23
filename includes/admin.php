@@ -151,13 +151,19 @@ class WCM_Admin {
 
 	public function install() {
 		global $wp_version, $wpdb;
+		$plugin_ver = get_option( 'wm_db_version', false );
+		$current_ver = $this->plugin->get_version();
+
+		if ( $plugin_ver == $current_ver ) {
+			return;
+		}
+
 		if ( version_compare( $wp_version, '3.0', '<' ) ) {
 			die( '<div class="error"><strong>ERROR: </strong> Plugin requires WordPress v3.1 or higher.</div>' );
 		}
 
-
-		$tName = $wpdb->prefix . "woo_minecraft";
-		$table = "CREATE TABLE IF NOT EXISTS " . $tName . " (
+		$tName = $wpdb->prefix . 'woo_minecraft';
+		$table = "CREATE TABLE IF NOT EXISTS $tName (
 			id mediumint(9) NOT NULL AUTO_INCREMENT,
 			orderid mediumint(9) NOT NULL,
 			postid mediumint(9) NOT NULL,
@@ -166,8 +172,11 @@ class WCM_Admin {
 			command VARCHAR(128) NOT NULL,
 			PRIMARY KEY  (id)
 		);";
+
 		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 		dbDelta( $table );
+
+		update_option( 'wm_db_version', $current_ver );
 	}
 
 	public function line_item( $item_id, $item ) {
@@ -233,6 +242,7 @@ class WCM_Admin {
 
 	public function admininit() {
 		register_setting( 'woo_minecraft', 'wm_key' );
+		$this->install();
 //			register_setting("");
 	}
 
