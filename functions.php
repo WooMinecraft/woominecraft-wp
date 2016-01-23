@@ -107,10 +107,70 @@ class Woo_Minecraft {
 		add_action( 'woocommerce_order_status_completed', array( $this, 'finalize_order' ) );
 		add_action( 'woocommerce_before_checkout_billing_form', array( $this, 'additional_checkout_field' ) );
 		add_action( 'woocommerce_thankyou', array( $this, 'thanks' ) );
-		add_action( 'plugins_loaded', array( $this, 'check_json' ) );
+		add_action( 'plugins_loaded', array( $this, 'json_feed' ) );
 		add_action( 'init', array( $this, 'init' ) );
 
 		$this->admin->hooks();
+	}
+
+	public function json_feed() {
+		$db_key = get_option( 'wm_key' );
+		if ( ! isset( $_REQUEST['key'] ) || $db_key !== $_REQUEST['key'] ) {
+			return;
+		}
+
+		$order_query = apply_filters( 'woo_minecraft_json_orders_args', array(
+			'posts_per_page' => '-1',
+			'post_status'    => 'wc-completed',
+			'meta_query'     => array(
+				'relation' => 'AND',
+				array(
+					'key'     => 'player_id',
+					'compare' => 'EXISTS',
+				),
+				array(
+					'key'     => 'wm_delivered',
+					'compare' => 'NOT EXISTS',
+				),
+			),
+		) );
+
+		$orders = get_posts( $order_query );
+		$output = array();
+
+		if ( ! empty( $orders ) ) {
+			foreach ( $orders as $wc_order ) {
+				if ( ! isset( $wc_order->ID ) ) {
+					continue;
+				}
+
+				$player_id = get_post_meta( $wc_order->ID, 'player_id' );
+				$order_array = $this->generate_order_json( $wc_order );
+
+				if ( ! empty( $order_array ) ) {
+					$output[ $player_id ][ $wc_order->ID ] = $order_array;
+				}
+			}
+		}
+
+	}
+
+	private function generate_order_json( $order_post ) {
+
+		if ( ! isset( $order_post->ID ) ) {
+			return array();
+		}
+
+		$order = new WC_Order( $order_post->ID );
+		$items = $order->get_items();
+
+		if ( empty( $items ) ) {
+			return array();
+		}
+
+		foreach( $items as $line_item ) {
+
+		}
 	}
 
 
@@ -197,8 +257,8 @@ class Woo_Minecraft {
 			}
 
 			// Sets the item as delivered
-			$query = $wpdb->prepare( "UPDATE {$wpdb->prefix}woo_minecraft SET delivered = %d WHERE id IN(%s)", 1, $ids );
-			$results    = $wpdb->query( $query );
+			$query   = $wpdb->prepare( "UPDATE {$wpdb->prefix}woo_minecraft SET delivered = %d WHERE id IN(%s)", 1, $ids );
+			$results = $wpdb->query( $query );
 			if ( false === $results ) {
 				// Error
 				wp_send_json_error( array(
@@ -251,14 +311,15 @@ class Woo_Minecraft {
 
 	/**
 	 * Caches the results of the mojang API based on player ID
+	 *
 	 * @param String $playerID Minecraft Username
 	 *
 	 * Object is as follows
 	 * {
-	 * 	"id": "0d252b7218b648bfb86c2ae476954d32",
-	 * 	"name": "CasESensatIveUserName",
-	 * 	"legacy": true,
-	 * 	"demo": true
+	 *    "id": "0d252b7218b648bfb86c2ae476954d32",
+	 *    "name": "CasESensatIveUserName",
+	 *    "legacy": true,
+	 *    "demo": true
 	 * }
 	 *
 	 * @return bool|object False on failure, Object on success
@@ -316,6 +377,7 @@ class Woo_Minecraft {
 
 		if ( ! $playerID ) {
 			wc_add_notice( __( 'You MUST provide a Minecraft username.', 'ucm' ), 'error' );
+
 			return;
 		}
 
@@ -327,6 +389,7 @@ class Woo_Minecraft {
 
 		if ( isset( $mc_json->demo ) ) {
 			wc_add_notice( __( 'We do not allow unpaid-accounts to make donations, sorry!', 'wcm' ) );
+
 			return;
 		}
 	}
