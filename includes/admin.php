@@ -43,11 +43,11 @@ class WCM_Admin {
 
 		<p class="form-field woo_minecraft">
 			<label for="woo_minecraft_general">Commands</label>
-			<input type="button" class="button button-primary woo_minecraft_add" name="Add" id="woo_minecraft_add" value="Add"/>
-			<input type="button" class="button woo_minecraft_reset" name="Reset" id="woo_minecraft_reset" value="Reset Fields"/>
-			<img class="help_tip" data-tip="Any commands added here, will run on top of variable commands if any. <br /><br />No leading slash is needed." src="<?php echo plugins_url( 'help.png', dirname( __FILE__ ) ); ?>" height="16" width="16"/>
+			<input type="button" class="button button-primary woo_minecraft_add" name="Add" id="woo_minecraft_add" value="<?php _e( 'Add', 'wmc' ); ?>"/>
+			<input type="button" class="button woo_minecraft_reset" name="Reset" id="woo_minecraft_reset" value="<?php _e( 'Reset Fields', 'wmc' ); ?>"/>
+			<img class="help_tip" data-tip="<?php _e( 'Any commands added here, will run on top of variable commands if any. <br /><br />No leading slash is needed.', 'wmc' ); />" src="<?php echo plugins_url( 'help.png', dirname( __FILE__ ) ); ?>" height="16" width="16"/>
 				<span class="woo_minecraft_copyme" style="display:none">
-					<input type="text" name="minecraft_woo[general][]" value="" class="short" placeholder="Use %s for player name"/>
+					<input type="text" name="minecraft_woo[general][]" value="" class="short" placeholder="<?php _e( 'Use %s for player name', 'wmc' ); ?>"/>
 					<input type="button" class="button button-small delete remove_row" value="Delete">
 				</span>
 			<?php if ( ! empty( $meta ) ) : ?>
@@ -74,11 +74,11 @@ class WCM_Admin {
 
 					<p class="form-field woo_minecraft woo_minecraft_v">
 						<label>Commands</label>
-						<input type="button" class="button button-primary woo_minecraft_add" name="Add" id="woo_minecraft_add_v" value="Add"/>
-						<input type="button" class="button woo_minecraft_reset" name="Reset" id="woo_minecraft_reset_v" value="Reset Fields"/>
-						<img class="help_tip" data-tip="Use %s for the player's name.<br /><br />No leading slash is needed." src="<?php echo plugins_url( 'help.png', dirname( __FILE__ ) ) ?>" height="16" width="16"/>
+						<input type="button" class="button button-primary woo_minecraft_add" name="Add" id="woo_minecraft_add_v" value="<?php _e( 'Add', 'wmc' ); ?>" />
+						<input type="button" class="button woo_minecraft_reset" name="Reset" id="woo_minecraft_reset_v" value="<?php _e( 'Reset Fields', 'wmc' ); ?>"/>
+						<img class="help_tip" data-tip="<?php _e( 'Use %s for the player\'s name.<br /><br />No leading slash is needed.', 'wmc' ); ?>" src="<?php echo plugins_url( 'help.png', dirname( __FILE__ ) ) ?>" height="16" width="16"/>
 				<span class="woo_minecraft_copyme" style="display:none">
-					<input type="text" name="minecraft_woo[variable][<?php echo $l; ?>][]" value="" class="short" placeholder="Use %s for player name"/>
+					<input type="text" name="minecraft_woo[variable][<?php echo $l; ?>][]" value="" class="short" placeholder="<?php _e( 'Use %s for player name', 'wmc' ); ?>" />
 					<input type="button" class="button button-small delete remove_row" value="Delete">
 				</span>
 						<?php if ( ! empty( $meta ) ) : ?>
@@ -106,11 +106,11 @@ class WCM_Admin {
 					<p class="title">Minecraft WooCommerce</p>\
 					<p class="form-field woo_minecraft woo_minecraft_v">\
 						<label>Commands</label>\
-						<input type="button" class="button button-primary woo_minecraft_add" name="Add" id="woo_minecraft_add_v" value="Add"/>\
-						<input type="button" class="button woo_minecraft_reset" name="Reset" id="woo_minecraft_reset_v" value="Reset Fields"/>\
-						<img class="help_tip" data-tip="Any commands added here, will run on top of variable commands if any. <br /><br />No leading slash is needed." src="<?php echo plugins_url( "help.png", dirname( __FILE__ ) ) ?>" height="16" width="16"/>\
+						<input type="button" class="button button-primary woo_minecraft_add" name="Add" id="woo_minecraft_add_v" value="<?php _e( 'Add', 'wmc' ); ?>"/>\
+						<input type="button" class="button woo_minecraft_reset" name="Reset" id="woo_minecraft_reset_v" value="<?php _e( 'Reset Fields', 'wmc' ); ?>"/>\
+						<img class="help_tip" data-tip="<?php _e( 'Any commands added here, will run on top of variable commands if any. <br /><br />No leading slash is needed.', 'wmc' ); ?>" src="<?php echo plugins_url( 'help.png', dirname( __FILE__ ) ) ?>" height="16" width="16"/>\
 				<span class="woo_minecraft_copyme" style="display:none">\
-					<input type="text" name="minecraft_woo[variable]['+loop+'][]" value="" class="short" placeholder="Use %s for player name"/>\
+					<input type="text" name="minecraft_woo[variable]['+loop+'][]" value="" class="short" placeholder="<?php _e( 'Use %s for player name', 'wmc' ); ?>"/>\
 					<input type="button" class="button button-small delete remove_row" value="Delete">\
 				</span>\
 					</p>\
@@ -148,7 +148,7 @@ class WCM_Admin {
 		<?php if ( 'N/A' != $playerID ) : ?>
 			<?php global $post; ?>
 			<p>
-			<input type="button" class="button button-primary" id="resendDonations" value="Resend Donations" data-id="<?php echo $playerID; ?>" data-orderid="<?php echo $post->ID; ?>"/>
+			<input type="button" class="button button-primary" id="resendDonations" value="<?php _e( 'Resend Donations', 'wmc' ); ?>" data-id="<?php echo $playerID; ?>" data-orderid="<?php echo $post->ID; ?>"/>
 		<?php endif;
 	}
 
@@ -162,7 +162,8 @@ class WCM_Admin {
 		}
 
 		if ( version_compare( $wp_version, '3.0', '<' ) ) {
-			die( '<div class="error"><strong>ERROR: </strong> Plugin requires WordPress v3.1 or higher.</div>' );
+			$i18n_error_msg = sprintf( '<div class="error"><strong>%1$s</strong> %2$s</div>', __( 'ERROR:', 'wmc' ), __( 'Plugin requires WordPress v3.1 or higher.', 'wmc' ) );
+			die( $i18n_error_msg );
 		}
 
 		$tName = $wpdb->prefix . 'woo_minecraft';
@@ -189,9 +190,10 @@ class WCM_Admin {
 		if ( ! empty( $meta_v ) ) {
 			?>
 			<span class="woominecraft resend_item">
-						<button class="button button-primary wooitemresend" data-orderid="<?php echo $post->ID ?>" data-variation="<?php echo $item['variation_id'] ?>">
-							<span>Resend Donation</span></button>
-				</span>
+					<button class="button button-primary wooitemresend" data-orderid="<?php echo $post->ID ?>" data-variation="<?php echo $item['variation_id'] ?>">
+						<span><?php _e( 'Resend Donation', 'wmc' ); ?></span>
+					</button>
+			</span>
 			<?php
 		}
 
@@ -216,7 +218,7 @@ class WCM_Admin {
 
 	public function setupAdminPage() {
 		$output = '<div class="wrap">';
-		$output .= '	<h2>Woo Minecraft Options</h2>';
+		$output .= '	<h2>'. sprintf( __( ' %s Options', 'wmc' ), 'WooMinecraft' ) .'</h2>';
 		$output .= '	<form method="post" action="options.php">';
 		ob_start();
 		settings_fields( 'woo_minecraft' );
@@ -224,9 +226,9 @@ class WCM_Admin {
 		$output .= '	<table class="form-table wide-fat">';
 		$output .= '		<tbody>';
 		$output .= '			<tr>';
-		$output .= '				<th><label for="wm_key">Game Key</label></th>';
+		$output .= '				<th><label for="wm_key">' . __( 'Game Key', 'wmc' ) . '</label></th>';
 		$output .= '				<td><input type="text" name="wm_key" id="wm_key" value="' . get_option( 'wm_key' ) . '"/>';
-		$output .= '					<p class="description">Type /woo register in-game as op to get your key.</td>';
+		$output .= '					<p class="description">' . sprintf( __( 'Type %s in-game as op to get your key.', 'wmc' ), '/woo register' ) . '</td>';
 		$output .= '			</tr>';
 		$output .= '		</tbody>';
 		$output .= '	</table>';
