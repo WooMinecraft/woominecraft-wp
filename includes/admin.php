@@ -15,7 +15,10 @@ class WCM_Admin {
 		add_action( 'admin_enqueue_scripts', array( $this, 'scripts' ) );
 
 		add_action( 'woocommerce_checkout_update_order_meta', array( $this, 'update_order_meta' ) );
-		add_action( 'woocommerce_admin_order_data_after_billing_address', array( $this, 'display_player_name_in_order_meta' ) );
+		add_action( 'woocommerce_admin_order_data_after_billing_address', array(
+			$this,
+			'display_player_name_in_order_meta'
+		) );
 		add_action( 'woocommerce_product_options_general_product_data', array( $this, 'add_g_field' ) );
 		add_action( 'woocommerce_process_product_meta', array( $this, 'save_g_field' ) );
 
@@ -42,7 +45,7 @@ class WCM_Admin {
 			<label for="woo_minecraft_general">Commands</label>
 			<input type="button" class="button button-primary woo_minecraft_add" name="Add" id="woo_minecraft_add" value="Add"/>
 			<input type="button" class="button woo_minecraft_reset" name="Reset" id="woo_minecraft_reset" value="Reset Fields"/>
-			<img class="help_tip" data-tip="Any commands added here, will run on top of variable commands if any. <br /><br />No leading slash is needed." src="<?php echo plugins_url( "help.png", dirname( __FILE__ ) ); ?>" height="16" width="16"/>
+			<img class="help_tip" data-tip="Any commands added here, will run on top of variable commands if any. <br /><br />No leading slash is needed." src="<?php echo plugins_url( 'help.png', dirname( __FILE__ ) ); ?>" height="16" width="16"/>
 				<span class="woo_minecraft_copyme" style="display:none">
 					<input type="text" name="minecraft_woo[general][]" value="" class="short" placeholder="Use %s for player name"/>
 					<input type="button" class="button button-small delete remove_row" value="Delete">
@@ -78,12 +81,12 @@ class WCM_Admin {
 					<input type="text" name="minecraft_woo[variable][<?php echo $l; ?>][]" value="" class="short" placeholder="Use %s for player name"/>
 					<input type="button" class="button button-small delete remove_row" value="Delete">
 				</span>
-						<?php if ( ! empty( $meta ) ): ?>
-							<?php foreach ( $meta as $command ): ?>
+						<?php if ( ! empty( $meta ) ) : ?>
+							<?php foreach ( $meta as $command ) : ?>
 								<span>
-							<input type="text" name="minecraft_woo[variable][<?php echo $l; ?>][]" value="<?php echo $command; ?>" class="short"/>
-							<input type="button" class="button button-small delete remove_row" value="Delete">
-						</span>
+									<input type="text" name="minecraft_woo[variable][<?php echo $l; ?>][]" value="<?php echo $command; ?>" class="short"/>
+									<input type="button" class="button button-small delete remove_row" value="Delete">
+								</span>
 							<?php endforeach; ?>
 						<?php endif; ?>
 					</p>
@@ -119,7 +122,7 @@ class WCM_Admin {
 	}
 
 	public function delete_sql_data( $order_id, $curstatus, $newstatus ) {
-		if ( $curstatus != 'completed' ) {
+		if ( 'completed' !== $curstatus ) {
 			return;
 		}
 		global $wpdb;
@@ -128,7 +131,7 @@ class WCM_Admin {
 		$items      = $orderData->get_items();
 		$tmpArray   = array();
 		$playername = get_post_meta( $order_id, 'player_id', true );
-		$result     = $wpdb->delete( $wpdb->prefix . "woo_minecraft", array( 'orderid' => $order_id ), array( '%d' ) );
+		$result     = $wpdb->delete( $wpdb->prefix . 'woo_minecraft', array( 'orderid' => $order_id ), array( '%d' ) );
 		if ( false === $result ) {
 			wp_die( $wpdb->last_error );
 		}
@@ -137,12 +140,12 @@ class WCM_Admin {
 
 
 	public function display_player_name_in_order_meta( $order ) {
-		$playerID = get_post_meta( $order->id, 'player_id', true ) or "N/A";
-		wp_nonce_field( "woominecraft", "woo_minecraft_nonce" );
+		$playerID = get_post_meta( $order->id, 'player_id', true ) or 'N/A';
+		wp_nonce_field( 'woominecraft', 'woo_minecraft_nonce' );
 		?>
 
 		<p><strong>Player Name:</strong> <?php echo $playerID; ?></p>
-		<?php if ( $playerID != "N/A" ) : ?>
+		<?php if ( 'N/A' != $playerID ) : ?>
 			<?php global $post; ?>
 			<p>
 			<input type="button" class="button button-primary" id="resendDonations" value="Resend Donations" data-id="<?php echo $playerID; ?>" data-orderid="<?php echo $post->ID; ?>"/>
@@ -151,7 +154,7 @@ class WCM_Admin {
 
 	public function install() {
 		global $wp_version, $wpdb;
-		$plugin_ver = get_option( 'wm_db_version', false );
+		$plugin_ver  = get_option( 'wm_db_version', false );
 		$current_ver = $this->plugin->get_version();
 
 		if ( $plugin_ver == $current_ver ) {
