@@ -15,10 +15,7 @@ class WCM_Admin {
 		add_action( 'admin_enqueue_scripts', array( $this, 'scripts' ) );
 
 		add_action( 'woocommerce_checkout_update_order_meta', array( $this, 'update_order_meta' ) );
-		add_action( 'woocommerce_admin_order_data_after_billing_address', array(
-			$this,
-			'display_player_name_in_order_meta'
-		) );
+		add_action( 'woocommerce_admin_order_data_after_billing_address', array( $this,	'display_player_name_in_order_meta'	) );
 		add_action( 'woocommerce_product_options_general_product_data', array( $this, 'add_g_field' ) );
 		add_action( 'woocommerce_process_product_meta', array( $this, 'save_g_field' ) );
 
@@ -30,7 +27,7 @@ class WCM_Admin {
 
 		//add_action( 'woocommerce_order_item_line_item_html', array( $this, 'line_item'), 10, 2);
 
-		add_action( 'admin_menu', array( $this, 'setupAdminMenu' ) );
+		add_action( 'admin_menu', array( $this, 'setup_admin_menu' ) );
 		add_action( 'admin_init', array( $this, 'admin_init' ) );
 	}
 
@@ -45,7 +42,7 @@ class WCM_Admin {
 			<label for="woo_minecraft_general">Commands</label>
 			<input type="button" class="button button-primary woo_minecraft_add" name="Add" id="woo_minecraft_add" value="<?php _e( 'Add', 'wmc' ); ?>"/>
 			<input type="button" class="button woo_minecraft_reset" name="Reset" id="woo_minecraft_reset" value="<?php _e( 'Reset Fields', 'wmc' ); ?>"/>
-			<img class="help_tip" data-tip="<?php _e( 'Any commands added here, will run on top of variable commands if any. <br /><br />No leading slash is needed.', 'wmc' ); />" src="<?php echo plugins_url( 'help.png', dirname( __FILE__ ) ); ?>" height="16" width="16"/>
+			<img class="help_tip" data-tip="<?php _e( 'Any commands added here, will run on top of variable commands if any. <br /><br />No leading slash is needed.', 'wmc' ); ?> />" src="<?php echo plugins_url( 'help.png', dirname( __FILE__ ) ); ?>" height="16" width="16"/>
 				<span class="woo_minecraft_copyme" style="display:none">
 					<input type="text" name="minecraft_woo[general][]" value="" class="short" placeholder="<?php _e( 'Use %s for player name', 'wmc' ); ?>"/>
 					<input type="button" class="button button-small delete remove_row" value="Delete">
@@ -196,8 +193,6 @@ class WCM_Admin {
 			</span>
 			<?php
 		}
-
-
 	}
 
 	public function save_g_field( $postid ) {
@@ -216,7 +211,7 @@ class WCM_Admin {
 	}
 
 
-	public function setupAdminPage() {
+	public function setup_admin_page() {
 		$output = '<div class="wrap">';
 		$output .= '	<h2>'. sprintf( __( ' %s Options', 'wmc' ), 'WooMinecraft' ) .'</h2>';
 		$output .= '	<form method="post" action="options.php">';
@@ -238,17 +233,13 @@ class WCM_Admin {
 		echo $output;
 	}
 
-	public function setupAdminMenu() {
-		add_options_page( 'Woo Minecraft', 'Woo Minecraft', 'manage_options', 'woominecraft', array(
-			$this,
-			'setupAdminPage'
-		) );
+	public function setup_admin_menu() {
+		add_options_page( 'Woo Minecraft', 'Woo Minecraft', 'manage_options', 'woominecraft', array( $this, 'setup_admin_page' ) );
 	}
 
 	public function admin_init() {
 		register_setting( 'woo_minecraft', 'wm_key' );
 		$this->install();
-//			register_setting("");
 	}
 
 	public function uninstall() {
