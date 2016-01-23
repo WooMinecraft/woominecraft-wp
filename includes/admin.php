@@ -31,7 +31,7 @@ class WCM_Admin {
 		//add_action( 'woocommerce_order_item_line_item_html', array( $this, 'line_item'), 10, 2);
 
 		add_action( 'admin_menu', array( $this, 'setupAdminMenu' ) );
-		add_action( 'admin_init', array( $this, 'admininit' ) );
+		add_action( 'admin_init', array( $this, 'admin_init' ) );
 	}
 
 	public function add_g_field() {
@@ -245,7 +245,7 @@ class WCM_Admin {
 		) );
 	}
 
-	public function admininit() {
+	public function admin_init() {
 		register_setting( 'woo_minecraft', 'wm_key' );
 		$this->install();
 //			register_setting("");
