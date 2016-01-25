@@ -107,7 +107,7 @@ class Woo_Minecraft {
 		add_action( 'woocommerce_order_status_completed', array( $this, 'finalize_order' ) );
 		add_action( 'woocommerce_before_checkout_billing_form', array( $this, 'additional_checkout_field' ) );
 		add_action( 'woocommerce_thankyou', array( $this, 'thanks' ) );
-		add_action( 'plugins_loaded', array( $this, 'check_json' ) );
+		add_action( 'init', array( $this, 'check_json' ) );
 		add_action( 'init', array( $this, 'init' ) );
 
 		$this->admin->hooks();
@@ -165,6 +165,12 @@ class Woo_Minecraft {
 	 * Sends JSON API data to the MC Java application
 	 */
 	public function check_json() {
+
+		error_log( print_r( $_REQUEST, 1 ) );
+
+		if ( ! isset( $_REQUEST['key'] ) ) {
+			return;
+		}
 
 		$key = isset( $_REQUEST['key'] ) ? $_REQUEST['key'] : false;
 		if ( empty( $key ) ) {
