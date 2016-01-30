@@ -165,10 +165,7 @@ class Woo_Minecraft {
 	 * Sends JSON API data to the MC Java application
 	 */
 	public function check_json() {
-
-		error_log( print_r( $_REQUEST, 1 ) );
-
-		if ( ! isset( $_REQUEST['key'] ) ) {
+		if ( ! isset( $_REQUEST['woo_minecraft'] ) ) {
 			return;
 		}
 
@@ -255,6 +252,7 @@ class Woo_Minecraft {
 				}
 			}
 		} else {
+
 			// Bandaid for debugging the java side of things
 			wp_send_json_error( array(
 				'msg'  => __( 'Method or Names parameter was not set.', 'wcm' ),
