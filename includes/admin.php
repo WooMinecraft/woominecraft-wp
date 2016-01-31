@@ -51,9 +51,9 @@ class WCM_Admin {
 			<?php if ( ! empty( $meta ) ) : ?>
 				<?php foreach ( $meta as $command ) : ?>
 					<span>
-							<input type="text" name="minecraft_woo[general][]" value="<?php echo $command; ?>" class="short"/>
-							<input type="button" class="button button-small delete remove_row" value="Delete">
-						</span>
+						<input type="text" name="minecraft_woo[general][]" value="<?php echo $command; ?>" class="short"/>
+						<input type="button" class="button button-small delete remove_row" value="<?php _e( 'Delete', 'wmc' ); ?>">
+					</span>
 				<?php endforeach; ?>
 			<?php endif; ?>
 		</p>
@@ -77,13 +77,13 @@ class WCM_Admin {
 						<img class="help_tip" data-tip="<?php _e( 'Use %s for the player\'s name.<br /><br />No leading slash is needed.', 'wmc' ); ?>" src="<?php echo plugins_url( 'help.png', dirname( __FILE__ ) ) ?>" height="16" width="16"/>
 				<span class="woo_minecraft_copyme" style="display:none">
 					<input type="text" name="minecraft_woo[variable][<?php echo $loop; ?>][]" value="" class="short" placeholder="<?php _e( 'Use %s for player name', 'wmc' ); ?>" />
-					<input type="button" class="button button-small delete remove_row" value="Delete">
+					<input type="button" class="button button-small delete remove_row" value="<?php _e( 'Delete', 'wmc' ); ?>">
 				</span>
 						<?php if ( ! empty( $meta ) ) : ?>
 							<?php foreach ( $meta as $command ) : ?>
 								<span>
 									<input type="text" name="minecraft_woo[variable][<?php echo $loop; ?>][]" value="<?php echo $command; ?>" class="short"/>
-									<input type="button" class="button button-small delete remove_row" value="Delete">
+									<input type="button" class="button button-small delete remove_row" value="<?php _e( 'Delete', 'wmc' ); ?>">
 								</span>
 							<?php endforeach; ?>
 						<?php endif; ?>
@@ -115,9 +115,7 @@ class WCM_Admin {
 	public function display_player_name_in_order_meta( $order ) {
 		$playerID = get_post_meta( $order->id, 'player_id', true ) or 'N/A';
 		wp_nonce_field( 'woominecraft', 'woo_minecraft_nonce' );
-		?>
-
-		<p><strong><?php _e( 'Player Name:', 'wmc' ); ?></strong> <?php echo $playerID; ?></p>
+		?><p><strong><?php _e( 'Player Name:', 'wmc' ); ?></strong> <?php echo $playerID; ?></p>
 		<?php if ( 'N/A' != $playerID ) : ?>
 			<?php global $post; ?>
 			<p>
@@ -171,10 +169,10 @@ class WCM_Admin {
 		}
 	}
 
-	public function save_g_field( $postid ) {
+	public function save_g_field( $post_id ) {
 		$field = $_POST['minecraft_woo']['general'];
 		if ( isset( $field ) && ! empty( $field ) ) {
-			update_post_meta( $postid, 'minecraft_woo_g', array_filter( $_POST['minecraft_woo']['general'] ) );
+			update_post_meta( $post_id, 'minecraft_woo_g', array_filter( $_POST['minecraft_woo']['general'] ) );
 		}
 	}
 
