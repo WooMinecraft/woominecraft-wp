@@ -37,10 +37,10 @@ class WCM_Admin {
 		$meta = get_post_meta( $post->ID, 'minecraft_woo_g', true );
 		?>
 		<div class="woo_minecraft">
-		<p class="title">Minecraft WooCommerce</p>
+		<p class="title"><?php _e( 'WooMinecraft', 'wmc' ); ?>></p>
 
 		<p class="form-field woo_minecraft">
-			<label for="woo_minecraft_general">Commands</label>
+			<label for="woo_minecraft_general"><?php _e( 'Commands', 'wmc' ); ?></label>
 			<input type="button" class="button button-primary woo_minecraft_add" name="Add" id="woo_minecraft_add" value="<?php _e( 'Add', 'wmc' ); ?>"/>
 			<input type="button" class="button woo_minecraft_reset" name="Reset" id="woo_minecraft_reset" value="<?php _e( 'Reset Fields', 'wmc' ); ?>"/>
 			<img class="help_tip" data-tip="<?php _e( 'Any commands added here, will run on top of variable commands if any. <br /><br />No leading slash is needed.', 'wmc' ); ?> />" src="<?php echo plugins_url( 'help.png', dirname( __FILE__ ) ); ?>" height="16" width="16"/>
