@@ -14,25 +14,27 @@ class WCM_Admin {
 	public function hooks() {
 		add_action( 'admin_enqueue_scripts', array( $this, 'scripts' ) );
 
-		add_action( 'woocommerce_checkout_update_order_meta', array( $this, 'update_order_meta' ) );
+		add_action( 'woocommerce_checkout_update_order_meta', array( $this, 'save_player_id_to_order' ) );
 		add_action( 'woocommerce_admin_order_data_after_billing_address', array( $this, 'display_player_name_in_order_meta' ) );
-		add_action( 'woocommerce_product_options_general_product_data', array( $this, 'add_g_field' ) );
+		add_action( 'woocommerce_product_options_general_product_data', array( $this, 'add_group_field' ) );
 		add_action( 'woocommerce_process_product_meta', array( $this, 'save_g_field' ) );
 
-		add_action( 'woocommerce_product_after_variable_attributes', array( $this, 'add_v_field' ), 10, 3 );
-		add_action( 'woocommerce_save_product_variation', array( $this, 'variable_fields_process' ), 10, 2 );
-		//add_action( 'woocommerce_product_after_variable_attributes_js', array( $this, 'add_v_field_js' ) );
-		//add_action( 'woocommerce_process_product_meta_variable', array( $this, 'variable_fields_process' ) );
+		add_action( 'woocommerce_product_after_variable_attributes', array( $this, 'add_variation_field' ), 10, 3 );
+		add_action( 'woocommerce_save_product_variation', array( $this, 'save_variations_meta' ), 10, 2 );
 
 		add_action( 'woocommerce_order_status_changed', array( $this, 'delete_sql_data' ), 10, 3 );
 
+		// TODO: Add per-item resend capability.
 		//add_action( 'woocommerce_order_item_line_item_html', array( $this, 'line_item'), 10, 2);
 
 		add_action( 'admin_menu', array( $this, 'setup_admin_menu' ) );
 		add_action( 'admin_init', array( $this, 'admin_init' ) );
 	}
 
-	public function add_g_field() {
+	/**
+	 * Adds WooMinecraft commands field to the general product meta-box.
+	 */
+	public function add_group_field() {
 		global $post;
 		$meta = get_post_meta( $post->ID, 'minecraft_woo_g', true );
 		?>
@@ -61,7 +63,14 @@ class WCM_Admin {
 
 	}
 
-	public function add_v_field( $loop, $variation_data, $variation ) {
+	/**
+	 * Fires for each variation section, in-turn this creates a set of 'command rows' for each variation.
+	 *
+	 * @param int     $loop
+	 * @param array   $variation_data
+	 * @param WP_Post $variation
+	 */
+	public function add_variation_field( $loop, $variation_data, $variation ) {
 		//$meta = get_post_meta( $variation_data['variation_post_id'], 'minecraft_woo_v', true );
 		$meta = array();
 		?>
@@ -94,6 +103,13 @@ class WCM_Admin {
 		<?php
 	}
 
+	/**
+	 * Fires when the order status changes.
+	 *
+	 * @param int    $order_id
+	 * @param string $current_status
+	 * @param string $new_status
+	 */
 	public function delete_sql_data( $order_id, $current_status, $new_status ) {
 		if ( 'completed' !== $current_status ) {
 			return;
@@ -111,7 +127,10 @@ class WCM_Admin {
 
 	}
 
-
+	/**
+	 * Adds the players ID to the order information screen.
+	 * @param WP_Post $order
+	 */
 	public function display_player_name_in_order_meta( $order ) {
 		$playerID = get_post_meta( $order->id, 'player_id', true ) or 'N/A';
 		wp_nonce_field( 'woominecraft', 'woo_minecraft_nonce' );
@@ -123,6 +142,9 @@ class WCM_Admin {
 		<?php endif;
 	}
 
+	/**
+	 * Runs the database installation process
+	 */
 	public function install() {
 		global $wp_version, $wpdb;
 		$plugin_ver  = get_option( 'wm_db_version', false );
@@ -154,11 +176,17 @@ class WCM_Admin {
 		update_option( 'wm_db_version', $current_ver );
 	}
 
+	/**
+	 * Adds a 'resend item' so administrators can resend single items.
+	 *
+	 * @param int     $item_id
+	 * @param WP_Post $item
+	 */
 	public function line_item( $item_id, $item ) {
 		global $post;
-		$meta_v = get_post_meta( $item['variation_id'], 'minecraft_woo_v' );
+		$post_meta = get_post_meta( $item['variation_id'], 'minecraft_woo_v' );
 		print_r( $item['variation_id'] );
-		if ( ! empty( $meta_v ) ) {
+		if ( ! empty( $post_meta ) ) {
 			?>
 			<span class="woominecraft resend_item">
 					<button class="button button-primary woominecraft_resend_donation" data-orderid="<?php echo $post->ID ?>" data-variation="<?php echo $item['variation_id'] ?>">
@@ -169,6 +197,10 @@ class WCM_Admin {
 		}
 	}
 
+	/**
+	 * Saves the general commands to post meta data.
+	 * @param int $post_id
+	 */
 	public function save_g_field( $post_id ) {
 		$field = $_POST['minecraft_woo']['general'];
 		if ( isset( $field ) && ! empty( $field ) ) {
@@ -176,6 +208,9 @@ class WCM_Admin {
 		}
 	}
 
+	/**
+	 * Sets up scripts for the administrator pages.
+	 */
 	public function scripts() {
 		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 		wp_register_script( 'woo_minecraft_js', $this->plugin->url( "assets/js/jquery.woo{$min}.js" ), array( 'jquery' ), '1.0', true );
@@ -190,7 +225,9 @@ class WCM_Admin {
 		wp_enqueue_style( 'woo_minecraft_css' );
 	}
 
-
+	/**
+	 * Generates the HTML for the settings page.
+	 */
 	public function setup_admin_page() {
 		$output = '<div class="wrap">';
 		$output .= '	<h2>'. sprintf( __( ' %s Options', 'wmc' ), 'WooMinecraft' ) .'</h2>';
@@ -213,28 +250,47 @@ class WCM_Admin {
 		echo $output;
 	}
 
+	/**
+	 * Adds the menu to the Admin menu.
+	 */
 	public function setup_admin_menu() {
 		add_options_page( 'Woo Minecraft', 'Woo Minecraft', 'manage_options', 'woominecraft', array( $this, 'setup_admin_page' ) );
 	}
 
+	/**
+	 * Registers the setting key, and installs the database.
+	 */
 	public function admin_init() {
 		register_setting( 'woo_minecraft', 'wm_key' );
 		$this->install();
 	}
 
+	/**
+	 * Drops the database if a user uninstalls the entire plugin.
+	 */
 	public function uninstall() {
 		global $wpdb;
 		$query = 'DROP TABLE IF EXISTS ' . $wpdb->prefix . 'woo_minecraft';
 		$wpdb->query( $query );
 	}
 
-	public function update_order_meta( $order_id ) {
+	/**
+	 * Saves the player ID to the order, for use later.
+	 * @param int $order_id
+	 */
+	public function save_player_id_to_order( $order_id ) {
 		if ( $_POST['player_id'] ) {
 			update_post_meta( $order_id, 'player_id', esc_attr( $_POST['player_id'] ) );
 		}
 	}
 
-	public function variable_fields_process( $post_id, $i ) {
+	/**
+	 * Saves commands to the variation meta data.
+	 *
+	 * @param int $post_id
+	 * @param int $i
+	 */
+	public function save_variations_meta( $post_id, $i ) {
 		error_log( print_r( $_POST, 1 ) );
 		/*
 		$variable_sku     = $_POST['variable_sku'];
