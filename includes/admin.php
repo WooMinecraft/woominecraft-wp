@@ -229,25 +229,7 @@ class WCM_Admin {
 	 * Generates the HTML for the settings page.
 	 */
 	public function setup_admin_page() {
-		$output = '<div class="wrap">';
-		$output .= '	<h2>'. sprintf( __( ' %s Options', 'wmc' ), 'WooMinecraft' ) .'</h2>';
-		$output .= '	<form method="post" action="options.php">';
-		ob_start();
-		settings_fields( 'woo_minecraft' );
-		$output .= ob_get_clean();
-		$output .= '	<table class="form-table wide-fat">';
-		$output .= '		<tbody>';
-		$output .= '			<tr>';
-		$output .= '				<th><label for="wm_key">' . __( 'Game Key', 'wmc' ) . '</label></th>';
-		$output .= '				<td><input type="text" name="wm_key" id="wm_key" value="' . get_option( 'wm_key' ) . '"/>';
-		$output .= '					<p class="description">' . sprintf( __( 'Type %s in-game as op to get your key.', 'wmc' ), '/woo register' ) . '</td>';
-		$output .= '			</tr>';
-		$output .= '		</tbody>';
-		$output .= '	</table>';
-		$output .= get_submit_button();
-		$output .= '	</form>';
-		$output .= '</div>';
-		echo $output;
+		include_once 'views/admin-settings.php';
 	}
 
 	/**
