@@ -15,13 +15,14 @@ class WCM_Admin {
 		add_action( 'admin_enqueue_scripts', array( $this, 'scripts' ) );
 
 		add_action( 'woocommerce_checkout_update_order_meta', array( $this, 'update_order_meta' ) );
-		add_action( 'woocommerce_admin_order_data_after_billing_address', array( $this,	'display_player_name_in_order_meta'	) );
+		add_action( 'woocommerce_admin_order_data_after_billing_address', array( $this, 'display_player_name_in_order_meta' ) );
 		add_action( 'woocommerce_product_options_general_product_data', array( $this, 'add_g_field' ) );
 		add_action( 'woocommerce_process_product_meta', array( $this, 'save_g_field' ) );
 
-		add_action( 'woocommerce_product_after_variable_attributes', array( $this, 'add_v_field' ), 10, 2 );
-		add_action( 'woocommerce_product_after_variable_attributes_js', array( $this, 'add_v_field_js' ) );
-		add_action( 'woocommerce_process_product_meta_variable', array( $this, 'variable_fields_process' ) );
+		add_action( 'woocommerce_product_after_variable_attributes', array( $this, 'add_v_field' ), 10, 3 );
+		add_action( 'woocommerce_save_product_variation', array( $this, 'variable_fields_process' ), 10, 2 );
+		//add_action( 'woocommerce_product_after_variable_attributes_js', array( $this, 'add_v_field_js' ) );
+		//add_action( 'woocommerce_process_product_meta_variable', array( $this, 'variable_fields_process' ) );
 
 		add_action( 'woocommerce_order_status_changed', array( $this, 'delete_sql_data' ), 10, 3 );
 
@@ -60,28 +61,31 @@ class WCM_Admin {
 
 	}
 
-	public function add_v_field( $l, $v ) {
+	public function add_v_field( $loop, $variation_data, $variation ) {
 		global $woocommerce;
-		$meta = get_post_meta( $v['variation_post_id'], 'minecraft_woo_v', true );
+//		$meta = get_post_meta( $variation_data['variation_post_id'], 'minecraft_woo_v', true );
+
+		error_log( print_r( $variation, 1 ) );
+		$meta = array();
 		?>
 		<tr>
 			<td>
 				<div class="woo_minecraft_v">
-					<p class="title">Minecraft WooCommerce</p>
+					<p class="title"><?php _e( 'WooMinecraft', 'wmc' ); ?>></p>
 
 					<p class="form-field woo_minecraft woo_minecraft_v">
-						<label>Commands</label>
+						<label><?php _e( 'Commands', 'wmc' ); ?></label>
 						<input type="button" class="button button-primary woo_minecraft_add" name="Add" id="woo_minecraft_add_v" value="<?php _e( 'Add', 'wmc' ); ?>" />
 						<input type="button" class="button woo_minecraft_reset" name="Reset" id="woo_minecraft_reset_v" value="<?php _e( 'Reset Fields', 'wmc' ); ?>"/>
 						<img class="help_tip" data-tip="<?php _e( 'Use %s for the player\'s name.<br /><br />No leading slash is needed.', 'wmc' ); ?>" src="<?php echo plugins_url( 'help.png', dirname( __FILE__ ) ) ?>" height="16" width="16"/>
 				<span class="woo_minecraft_copyme" style="display:none">
-					<input type="text" name="minecraft_woo[variable][<?php echo $l; ?>][]" value="" class="short" placeholder="<?php _e( 'Use %s for player name', 'wmc' ); ?>" />
+					<input type="text" name="minecraft_woo[variable][<?php echo $loop; ?>][]" value="" class="short" placeholder="<?php _e( 'Use %s for player name', 'wmc' ); ?>" />
 					<input type="button" class="button button-small delete remove_row" value="Delete">
 				</span>
 						<?php if ( ! empty( $meta ) ) : ?>
 							<?php foreach ( $meta as $command ) : ?>
 								<span>
-									<input type="text" name="minecraft_woo[variable][<?php echo $l; ?>][]" value="<?php echo $command; ?>" class="short"/>
+									<input type="text" name="minecraft_woo[variable][<?php echo $loop; ?>][]" value="<?php echo $command; ?>" class="short"/>
 									<input type="button" class="button button-small delete remove_row" value="Delete">
 								</span>
 							<?php endforeach; ?>
@@ -93,33 +97,8 @@ class WCM_Admin {
 		<?php
 	}
 
-	// Yet another test
-	public function add_v_field_js() {
-		global $woocommerce;
-		?>
-		<tr>
-			<td>\
-				<div class="woo_minecraft_v">\
-					<p class="title">Minecraft WooCommerce</p>\
-					<p class="form-field woo_minecraft woo_minecraft_v">\
-						<label>Commands</label>\
-						<input type="button" class="button button-primary woo_minecraft_add" name="Add" id="woo_minecraft_add_v" value="<?php _e( 'Add', 'wmc' ); ?>"/>\
-						<input type="button" class="button woo_minecraft_reset" name="Reset" id="woo_minecraft_reset_v" value="<?php _e( 'Reset Fields', 'wmc' ); ?>"/>\
-						<img class="help_tip" data-tip="<?php _e( 'Any commands added here, will run on top of variable commands if any. <br /><br />No leading slash is needed.', 'wmc' ); ?>" src="<?php echo plugins_url( 'help.png', dirname( __FILE__ ) ) ?>" height="16" width="16"/>\
-				<span class="woo_minecraft_copyme" style="display:none">\
-					<input type="text" name="minecraft_woo[variable]['+loop+'][]" value="" class="short" placeholder="<?php _e( 'Use %s for player name', 'wmc' ); ?>"/>\
-					<input type="button" class="button button-small delete remove_row" value="Delete">\
-				</span>\
-					</p>\
-				</div>
-				\
-			</td>
-		</tr>\
-		<?php
-	}
-
-	public function delete_sql_data( $order_id, $curstatus, $newstatus ) {
-		if ( 'completed' !== $curstatus ) {
+	public function delete_sql_data( $order_id, $current_status, $new_status ) {
+		if ( 'completed' !== $current_status ) {
 			return;
 		}
 		global $wpdb;
@@ -206,6 +185,12 @@ class WCM_Admin {
 		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 		wp_register_script( 'woo_minecraft_js', $this->plugin->url( "assets/js/jquery.woo{$min}.js" ), array( 'jquery' ), '1.0', true );
 		wp_register_style( 'woo_minecraft_css', plugins_url( 'style.css', dirname( __FILE__ ) ), false, '1.0' );
+
+		wp_localize_script( 'woo_minecraft_js', 'woominecraft', array(
+			'script_debug' => defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? true : false,
+			'confirm' => __( 'This will delete ALL commands, are you sure? This cannot be undone.', 'wmc' ),
+		) );
+
 		wp_enqueue_script( 'woo_minecraft_js' );
 		wp_enqueue_style( 'woo_minecraft_css' );
 	}
@@ -254,7 +239,9 @@ class WCM_Admin {
 		}
 	}
 
-	public function variable_fields_process( $post_id ) {
+	public function variable_fields_process( $post_id, $i ) {
+		error_log( print_r( $_POST, 1 ) );
+		/*
 		$variable_sku     = $_POST['variable_sku'];
 		$variable_post_id = $_POST['variable_post_id'];
 		$woo_minecraft    = $_POST['minecraft_woo']['variable'];
@@ -264,5 +251,6 @@ class WCM_Admin {
 				update_post_meta( $variation_id, 'minecraft_woo_v', array_filter( $woo_minecraft[ $i ] ) );
 			}
 		}
+		*/
 	}
 }
