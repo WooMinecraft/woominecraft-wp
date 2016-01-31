@@ -24,7 +24,7 @@ window.WooMinecraft = ( function( window, document, $ ) {
 	 */
 	app.add_command = function( evt ) {
 		evt.preventDefault();
-		var current_block = $( this ).parent('.form-fields' );  // Update to grab the parent
+		var current_block = $( this ).closest( '.form-fields' );  // Update to grab the parent
 		var cloned = current_block.find( '.woo_minecraft_copyme' ).clone().removeClass( 'woo_minecraft_copyme' ).removeAttr( 'style' );
 		current_block.append( cloned );
 	};
