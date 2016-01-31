@@ -287,11 +287,26 @@ class WCM_Admin {
 	/**
 	 * Saves commands to the variation meta data.
 	 *
-	 * @param int $post_id
+	 * @param int $variation_post_id
 	 * @param int $i
 	 */
-	public function save_variations_meta( $post_id, $i ) {
+	public function save_variations_meta( $variation_post_id, $i ) {
+		error_log( print_r( array( $variation_post_id, $i ), 1 ) );
 		error_log( print_r( $_POST, 1 ) );
+
+		// TODO: $i should correspond to the key of [variable] see below
+//		[minecraft_woo] => Array
+//		(
+//			[variable] => Array
+//			(
+//				[0] => Array
+//				(
+//					[0] =>
+//						[1] => 5423523
+//                        )
+//
+//                )
+//		)
 		/*
 		$variable_sku     = $_POST['variable_sku'];
 		$variable_post_id = $_POST['variable_post_id'];
