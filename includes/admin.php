@@ -62,16 +62,13 @@ class WCM_Admin {
 	}
 
 	public function add_v_field( $loop, $variation_data, $variation ) {
-		global $woocommerce;
-//		$meta = get_post_meta( $variation_data['variation_post_id'], 'minecraft_woo_v', true );
-
-		error_log( print_r( $variation, 1 ) );
+		//$meta = get_post_meta( $variation_data['variation_post_id'], 'minecraft_woo_v', true );
 		$meta = array();
 		?>
 		<tr>
 			<td>
 				<div class="woo_minecraft_v">
-					<p class="title"><?php _e( 'WooMinecraft', 'wmc' ); ?>></p>
+					<p class="title"><?php _e( 'WooMinecraft', 'wmc' ); ?></p>
 
 					<p class="form-field woo_minecraft woo_minecraft_v">
 						<label><?php _e( 'Commands', 'wmc' ); ?></label>
@@ -103,10 +100,10 @@ class WCM_Admin {
 		}
 		global $wpdb;
 
-		$orderData  = new WC_Order( $order_id );
-		$items      = $orderData->get_items();
-		$tmpArray   = array();
-		$playername = get_post_meta( $order_id, 'player_id', true );
+		//$orderData  = new WC_Order( $order_id );
+		//$items      = $orderData->get_items();
+		//$tmpArray   = array();
+		//$playername = get_post_meta( $order_id, 'player_id', true );
 		$result     = $wpdb->delete( $wpdb->prefix . 'woo_minecraft', array( 'orderid' => $order_id ), array( '%d' ) );
 		if ( false === $result ) {
 			wp_die( $wpdb->last_error );
@@ -120,7 +117,7 @@ class WCM_Admin {
 		wp_nonce_field( 'woominecraft', 'woo_minecraft_nonce' );
 		?>
 
-		<p><strong>Player Name:</strong> <?php echo $playerID; ?></p>
+		<p><strong><?php _e( 'Player Name:', 'wmc' ); ?></strong> <?php echo $playerID; ?></p>
 		<?php if ( 'N/A' != $playerID ) : ?>
 			<?php global $post; ?>
 			<p>
@@ -166,7 +163,7 @@ class WCM_Admin {
 		if ( ! empty( $meta_v ) ) {
 			?>
 			<span class="woominecraft resend_item">
-					<button class="button button-primary wooitemresend" data-orderid="<?php echo $post->ID ?>" data-variation="<?php echo $item['variation_id'] ?>">
+					<button class="button button-primary woominecraft_resend_donation" data-orderid="<?php echo $post->ID ?>" data-variation="<?php echo $item['variation_id'] ?>">
 						<span><?php _e( 'Resend Donation', 'wmc' ); ?></span>
 					</button>
 			</span>
