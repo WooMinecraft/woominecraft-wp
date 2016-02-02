@@ -50,7 +50,8 @@ window.WooMinecraft = ( function( window, document, $ ) {
 
 		var confirmation = confirm( app.l10n.confirm );
 		if ( confirmation ) {
-			$( this ).parent().find( 'span' ).not( '.woo_minecraft_copyme' ).fadeOut( 200, function() {
+			// Finds the closest parent and removes all commands from within
+			$( this ).closest('.form-fields').find( 'span' ).not( '.woo_minecraft_copyme, .woocommerce-help-tip' ).fadeOut( 200, function() {
 				$( this ).remove();
 			} );
 		}
