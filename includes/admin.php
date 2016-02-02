@@ -48,8 +48,12 @@ class WCM_Admin {
 	 * @param WP_Post $variation
 	 */
 	public function add_variation_field( $loop, $variation_data, $variation ) {
-		//$meta = get_post_meta( $variation_data['variation_post_id'], 'minecraft_woo_v', true );
-		$meta = array();
+
+		if ( ! $variation instanceof WP_Post ) {
+			return;
+		}
+
+		$meta = get_post_meta( $variation->ID, 'minecraft_woo_v', true );
 		include_once 'views/variable-commands.php';
 	}
 
