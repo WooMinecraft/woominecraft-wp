@@ -7,3 +7,8 @@ div.woo_minecraft input.delete {
   vertical-align: top;
   text-shadow: none;
 }
+
+div.woo_minecraft .form-fields > span {
+  display: block;
+  margin: 1em .5em;
+}
