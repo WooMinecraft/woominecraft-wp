@@ -20,7 +20,7 @@ class WCM_Admin {
 		add_action( 'woocommerce_process_product_meta', array( $this, 'save_product_commands' ) );
 
 		add_action( 'woocommerce_product_after_variable_attributes', array( $this, 'add_variation_field' ), 10, 3 );
-		add_action( 'woocommerce_save_product_variation', array( $this, 'save_variations_meta' ), 10 );
+		add_action( 'woocommerce_save_product_variation', array( $this, 'save_product_commands' ), 10 );
 
 		add_action( 'woocommerce_order_status_changed', array( $this, 'delete_sql_data' ), 10, 3 );
 
@@ -42,7 +42,7 @@ class WCM_Admin {
 		}
 
 		$meta = get_post_meta( $post->ID, 'minecraft_woo', true );
-		include_once 'views/group-commands.php';
+		include_once 'views/commands.php';
 	}
 
 	/**
@@ -50,16 +50,16 @@ class WCM_Admin {
 	 *
 	 * @param int     $loop
 	 * @param array   $variation_data
-	 * @param WP_Post $variation
+	 * @param WP_Post $post
 	 */
-	public function add_variation_field( $loop, $variation_data, $variation ) {
+	public function add_variation_field( $loop, $variation_data, $post ) {
 
-		if ( ! $variation instanceof WP_Post || ! isset( $variation->ID ) ) {
+		if ( ! $post instanceof WP_Post || ! isset( $post->ID ) ) {
 			return;
 		}
 
-		$meta = get_post_meta( $variation->ID, 'minecraft_woo', true );
-		include_once 'views/variable-commands.php';
+		$meta = get_post_meta( $post->ID, 'minecraft_woo', true );
+		include_once 'views/commands.php';
 	}
 
 	/**
@@ -208,9 +208,8 @@ class WCM_Admin {
 
 	/**
 	 * Saves the general commands to post meta data.
-	 * @param int $post_id
 	 */
-	public function save_product_commands( $post_id ) {
+	public function save_product_commands() {
 
 		if ( ! isset( $_POST['minecraft_woo'] ) ) {
 			return;
@@ -219,21 +218,6 @@ class WCM_Admin {
 		$variations = $_POST['minecraft_woo'];
 		foreach ( $variations as $id => $commands ) {
 			update_post_meta( $id, 'minecraft_woo', array_filter( $commands ) );
-		}
-	}
-
-	/**
-	 * Saves commands to the variation meta data.
-	 */
-	public function save_variations_meta() {
-
-		if ( ! isset( $_POST['minecraft_woo'] ) ) {
-			return;
-		}
-
-		$variations = $_POST['minecraft_woo'];
-		foreach ( $variations as $post_id => $commands ) {
-			update_post_meta( $post_id, 'minecraft_woo', array_filter( $commands ) );
 		}
 	}
 }
