@@ -13,6 +13,6 @@
 			</tr>
 			</tbody>
 		</table>
-		<?php get_submit_button(); ?>
+		<?php echo get_submit_button(); ?>
 	</form>
 </div>
