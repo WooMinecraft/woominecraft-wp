@@ -17,10 +17,10 @@ class WCM_Admin {
 		add_action( 'woocommerce_checkout_update_order_meta', array( $this, 'save_player_id_to_order' ) );
 		add_action( 'woocommerce_admin_order_data_after_billing_address', array( $this, 'display_player_name_in_order_meta' ) );
 		add_action( 'woocommerce_product_options_general_product_data', array( $this, 'add_group_field' ) );
-		add_action( 'woocommerce_process_product_meta', array( $this, 'save_g_field' ) );
+		add_action( 'woocommerce_process_product_meta', array( $this, 'save_product_commands' ) );
 
 		add_action( 'woocommerce_product_after_variable_attributes', array( $this, 'add_variation_field' ), 10, 3 );
-		add_action( 'woocommerce_save_product_variation', array( $this, 'save_variations_meta' ), 10, 2 );
+		add_action( 'woocommerce_save_product_variation', array( $this, 'save_variations_meta' ), 10 );
 
 		add_action( 'woocommerce_order_status_changed', array( $this, 'delete_sql_data' ), 10, 3 );
 
@@ -36,7 +36,12 @@ class WCM_Admin {
 	 */
 	public function add_group_field() {
 		global $post;
-		$meta = get_post_meta( $post->ID, 'minecraft_woo_g', true );
+
+		if ( ! isset( $post->ID ) || ! $post instanceof WP_Post ) {
+			return;
+		}
+
+		$meta = get_post_meta( $post->ID, 'minecraft_woo', true );
 		include_once 'views/group-commands.php';
 	}
 
@@ -49,11 +54,11 @@ class WCM_Admin {
 	 */
 	public function add_variation_field( $loop, $variation_data, $variation ) {
 
-		if ( ! $variation instanceof WP_Post ) {
+		if ( ! $variation instanceof WP_Post || ! isset( $variation->ID ) ) {
 			return;
 		}
 
-		$meta = get_post_meta( $variation->ID, 'minecraft_woo_v', true );
+		$meta = get_post_meta( $variation->ID, 'minecraft_woo', true );
 		include_once 'views/variable-commands.php';
 	}
 
@@ -144,17 +149,6 @@ class WCM_Admin {
 	}
 
 	/**
-	 * Saves the general commands to post meta data.
-	 * @param int $post_id
-	 */
-	public function save_g_field( $post_id ) {
-		$field = $_POST['minecraft_woo']['general'];
-		if ( isset( $field ) && ! empty( $field ) ) {
-			update_post_meta( $post_id, 'minecraft_woo_g', array_filter( $_POST['minecraft_woo']['general'] ) );
-		}
-	}
-
-	/**
 	 * Sets up scripts for the administrator pages.
 	 */
 	public function scripts() {
@@ -213,38 +207,35 @@ class WCM_Admin {
 	}
 
 	/**
-	 * Saves commands to the variation meta data.
-	 *
-	 * @param int $variation_post_id
-	 * @param int $i
+	 * Saves the general commands to post meta data.
+	 * @param int $post_id
 	 */
-	public function save_variations_meta( $variation_post_id, $i ) {
-//		error_log( print_r( array( $variation_post_id, $i ), 1 ) );
-//		error_log( print_r( $_POST, 1 ) );
+	public function save_product_commands( $post_id ) {
 
-		// TODO: $i should correspond to the key of [variable] see below
-//		[minecraft_woo] => Array
-//		(
-//			[variable] => Array
-//			(
-//				[0] => Array
-//				(
-//					[0] =>
-//						[1] => 5423523
-//                        )
-//
-//                )
-//		)
-		/*
-		$variable_sku     = $_POST['variable_sku'];
-		$variable_post_id = $_POST['variable_post_id'];
-		$woo_minecraft    = $_POST['minecraft_woo']['variable'];
-		for ( $i = 0; $i < sizeof( $variable_sku ); $i ++ ) {
-			$variation_id = (int) $variable_post_id[ $i ];
-			if ( isset( $woo_minecraft[ $i ] ) ) {
-				update_post_meta( $variation_id, 'minecraft_woo_v', array_filter( $woo_minecraft[ $i ] ) );
-			}
+		if ( ! isset( $_POST['minecraft_woo'] ) ) {
+			return;
 		}
-		*/
+
+		error_log( print_r( $_POST, 1 ) );
+
+		$variations = $_POST['minecraft_woo'];
+		foreach ( $variations as $id => $commands ) {
+			update_post_meta( $id, 'minecraft_woo', array_filter( $commands ) );
+		}
+	}
+
+	/**
+	 * Saves commands to the variation meta data.
+	 */
+	public function save_variations_meta() {
+
+		if ( ! isset( $_POST['minecraft_woo'] ) ) {
+			return;
+		}
+
+		$variations = $_POST['minecraft_woo'];
+		foreach ( $variations as $post_id => $commands ) {
+			update_post_meta( $post_id, 'minecraft_woo', array_filter( $commands ) );
+		}
 	}
 }

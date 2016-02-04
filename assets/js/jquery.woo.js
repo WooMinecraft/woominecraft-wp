@@ -53,6 +53,10 @@ window.WooMinecraft = ( function( window, document, $ ) {
 			// Finds the closest parent and removes all commands from within
 			$( this ).closest('.form-fields').find( 'span' ).not( '.woo_minecraft_copyme, .woocommerce-help-tip' ).fadeOut( 200, function() {
 				$( this ).remove();
+
+				// This is very inefficient, but WooCommerce does this, so why not?
+				//noinspection JSJQueryEfficiency
+				$( '#variable_product_options .woocommerce_variations :input' ).trigger( 'change' );
 			} );
 		}
 	};
