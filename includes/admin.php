@@ -216,8 +216,6 @@ class WCM_Admin {
 			return;
 		}
 
-		error_log( print_r( $_POST, 1 ) );
-
 		$variations = $_POST['minecraft_woo'];
 		foreach ( $variations as $id => $commands ) {
 			update_post_meta( $id, 'minecraft_woo', array_filter( $commands ) );
