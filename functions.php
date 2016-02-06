@@ -165,9 +165,11 @@ class Woo_Minecraft {
 	 * Sends JSON API data to the MC Java application
 	 */
 	public function check_json() {
+
 		if ( ! isset( $_REQUEST['woo_minecraft'] ) ) {
 			return;
 		}
+
 
 		$key = isset( $_REQUEST['key'] ) ? $_REQUEST['key'] : false;
 		if ( empty( $key ) ) {
@@ -232,12 +234,9 @@ class Woo_Minecraft {
 			if ( empty( $namesArr ) ) {
 				$json['status'] = 'false';
 			} else {
-				foreach ( $namesArr as $k => $v ) {
-					$namesArr[ $k ] = '"' . strtolower( $v ) . '"';
-				}
-				$namesArr = implode( ',', $namesArr );
 				// Select only un-delivered items.
-				$prepared = $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}woo_minecraft WHERE delivered = %d AND player_name IN (%s)", 0, $namesArr );
+				$prepared = $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}woo_minecraft WHERE delivered = %d AND player_name IN ([IN])", 0 );
+				$prepared = $this->prepare_in( $prepared, $namesArr );
 				$results  = $wpdb->get_results( $prepared );
 				if ( empty( $results ) ) {
 					wp_send_json_error( array(
@@ -252,13 +251,27 @@ class Woo_Minecraft {
 				}
 			}
 		} else {
-
 			// Bandaid for debugging the java side of things
 			wp_send_json_error( array(
 				'msg'  => __( 'Method or Names parameter was not set.', 'wcm' ),
 				'code' => 7,
 			) );
 		}
+	}
+
+	function prepare_in( $sql, $vals ) {
+		global $wpdb;
+		$not_in_count = substr_count( $sql, '[IN]' );
+		if ( 0 < $not_in_count ) {
+			$args = array( str_replace( '[IN]', implode( ', ', array_fill( 0, count( $vals ), '%s' ) ), str_replace( '%', '%%', $sql ) ) );
+			// This will populate ALL the [IN]'s with the $vals, assuming you have more than one [IN] in the sql
+			for ( $i = 0; $i < substr_count( $sql, '[IN]' ); $i ++ ) {
+				$args = array_merge( $args, $vals );
+			}
+			$sql = call_user_func_array( array( $wpdb, 'prepare' ), array_merge( $args ) );
+		}
+
+		return $sql;
 	}
 
 	/**
