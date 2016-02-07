@@ -34,8 +34,17 @@ class WCM_Admin {
 	}
 
 	public function ajax_handler() {
-		error_log( print_r( $_POST, 1 ) );
-		wp_send_json_success();
+		$player_id = isset( $_POST['player_id'] ) ? esc_attr( $_POST['player_id'] ) : false;
+		$order_id = isset( $_POST['order_id'] ) ? intval( $_POST['order_id'] ) : false;
+
+		if ( $player_id && $order_id ) {
+			$result = $this->plugin->set_non_delivered_for_player( $player_id, $order_id );
+			if ( $result > 0 ) {
+				wp_send_json_success();
+			}
+		}
+
+		wp_send_json_error( array( 'msg' => __( 'Cannot reset deliveries for order.', 'wmc' ) ) );
 	}
 
 	/**
@@ -166,9 +175,11 @@ class WCM_Admin {
 		wp_register_style( 'woo_minecraft_css', plugins_url( 'style.css', dirname( __FILE__ ) ), array( 'woocommerce_admin_styles' ), '1.0' );
 
 		$script_data = array(
-			'script_debug' => defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? true : false,
-			'confirm' => __( 'This will delete ALL commands, are you sure? This cannot be undone.', 'wmc' ),
+			'script_debug'     => defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? true : false,
+			'confirm'          => __( 'This will delete ALL commands, are you sure? This cannot be undone.', 'wmc' ),
 			'donations_resent' => __( 'All donations for this order have been resent', 'wmc' ),
+			'resend'           => __( 'Resend Donations', 'wmc' ),
+			'please_wait'      => __( 'Please wait...', 'wmc' ),
 		);
 
 		if ( 'post.php' == $hook ) {
@@ -178,8 +189,6 @@ class WCM_Admin {
 				$script_data['player_id'] = get_post_meta( $post->ID, 'player_id', true );
 			}
 		}
-
-		error_log( print_r( $script_data, 1 ) );
 
 		wp_localize_script( 'woo_minecraft_js', 'woominecraft', $script_data );
 

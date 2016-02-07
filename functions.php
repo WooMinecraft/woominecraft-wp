@@ -83,6 +83,11 @@ class Woo_Minecraft {
 	public $admin = null;
 
 	/**
+	 * @var string The db table name
+	 */
+	private $table = 'woo_minecraft';
+
+	/**
 	 * Sets up our plugin
 	 *
 	 * @since  0.1.0
@@ -255,6 +260,23 @@ class Woo_Minecraft {
 	}
 
 	/**
+	 * Sets the items for a specific player to non-delivered.
+	 *
+	 * @param string $player_id
+	 *
+	 * @return false|int
+	 */
+	public function set_non_delivered_for_player( $player_id, $order_id = 0 ) {
+		global $wpdb;
+		$sql_query = $wpdb->prepare( "UPDATE {$wpdb->prefix}{$this->table} SET delivered = %d WHERE player_name = %s", 0, $player_id );
+
+		if ( ! empty( $order_id ) ) {
+			$sql_query .= $wpdb->prepare( ' AND orderid = %d', $order_id );
+		}
+		return $wpdb->query( $sql_query );
+	}
+
+	/**
 	 * Sets orders to delivered in the database.
 	 *
 	 * @param array $row_ids
@@ -264,9 +286,9 @@ class Woo_Minecraft {
 	public function update_deliveries_for_players( $row_ids ) {
 		global $wpdb;
 		// Sets the item as delivered
-		$query = $wpdb->prepare( "UPDATE {$wpdb->prefix}woo_minecraft SET delivered = %d WHERE id IN ([IN])", 1 );
-		$query = $this->prepare_in( $query, $row_ids, true );
-		return $wpdb->query( $query );
+		$sql_query = $wpdb->prepare( "UPDATE {$wpdb->prefix}{$this->table} SET delivered = %d WHERE id IN ([IN])", 1 );
+		$sql_query = $this->prepare_in( $sql_query, $row_ids, true );
+		return $wpdb->query( $sql_query );
 	}
 
 	/**
@@ -279,7 +301,7 @@ class Woo_Minecraft {
 	public function get_non_delivered( $player_names ) {
 		global $wpdb;
 		// Select only un-delivered items.
-		$prepared = $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}woo_minecraft WHERE delivered = %d AND player_name IN ([IN])", 0 );
+		$prepared = $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}{$this->table} WHERE delivered = %d AND player_name IN ([IN])", 0 );
 		$prepared = $this->prepare_in( $prepared, $player_names );
 		return $wpdb->get_results( $prepared );
 	}

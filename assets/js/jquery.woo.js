@@ -16,13 +16,19 @@ window.WooMinecraft = ( function( window, document, $ ) {
 		app.$body.on( 'click', '.woo_minecraft_add', app.add_command );
 		app.$body.on( 'click', '.remove_row', app.remove_command );
 		app.$body.on( 'click', '.woo_minecraft_reset', app.reset_form );
-		app.$resend_donations.on( 'click', app.resend_donations );
+
+		if ( app.l10n.player_id ) {
+			app.$resend_donations.on( 'click', app.resend_donations );
+		} else {
+			app.$resend_donations.prop( 'disabled', true );
+		}
 
 	};
 
 	app.resend_donations = function( evt ) {
 		evt.preventDefault();
 
+		app.$resend_donations.prop( 'disabled', true );
 		$.ajax( {
 			url:      ajaxurl,
 			data:     {
@@ -41,6 +47,9 @@ window.WooMinecraft = ( function( window, document, $ ) {
 			// TODO: Make a prettier dialog, instead of this crap.
 			alert( app.l10n.donations_resent );
 		}
+
+
+		app.$resend_donations.prop( 'disabled', false );
 	};
 
 	/**
