@@ -209,9 +209,7 @@ class Woo_Minecraft {
 				) );
 			}
 
-			// Sets the item as delivered
-			$query = $wpdb->prepare( "UPDATE {$wpdb->prefix}woo_minecraft SET delivered = %d WHERE id IN(%s)", 1, $ids );
-			$results    = $wpdb->query( $query );
+			$results = $this->update_deliveries_for_players( $ids );
 			if ( false === $results ) {
 				// Error
 				wp_send_json_error( array(
@@ -234,10 +232,7 @@ class Woo_Minecraft {
 			if ( empty( $namesArr ) ) {
 				$json['status'] = 'false';
 			} else {
-				// Select only un-delivered items.
-				$prepared = $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}woo_minecraft WHERE delivered = %d AND player_name IN ([IN])", 0 );
-				$prepared = $this->prepare_in( $prepared, $namesArr );
-				$results  = $wpdb->get_results( $prepared );
+				$results = $this->get_non_delivered( $namesArr );
 				if ( empty( $results ) ) {
 					wp_send_json_error( array(
 						'msg'    => sprintf( __( 'No results for the following players: %s', 'wcm' ), $namesArr ),
@@ -259,11 +254,43 @@ class Woo_Minecraft {
 		}
 	}
 
-	function prepare_in( $sql, $vals ) {
+	/**
+	 * Sets orders to delivered in the database.
+	 *
+	 * @param array $row_ids
+	 *
+	 * @return false|int
+	 */
+	public function update_deliveries_for_players( $row_ids ) {
+		global $wpdb;
+		// Sets the item as delivered
+		$query = $wpdb->prepare( "UPDATE {$wpdb->prefix}woo_minecraft SET delivered = %d WHERE id IN ([IN])", 1 );
+		$query = $this->prepare_in( $query, $row_ids, true );
+		return $wpdb->query( $query );
+	}
+
+	/**
+	 * Gets all un-delivered orders based on player names
+	 *
+	 * @param array $player_names
+	 *
+	 * @return array|null|object
+	 */
+	public function get_non_delivered( $player_names ) {
+		global $wpdb;
+		// Select only un-delivered items.
+		$prepared = $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}woo_minecraft WHERE delivered = %d AND player_name IN ([IN])", 0 );
+		$prepared = $this->prepare_in( $prepared, $player_names );
+		return $wpdb->get_results( $prepared );
+	}
+
+	function prepare_in( $sql, $vals, $int = false ) {
 		global $wpdb;
 		$not_in_count = substr_count( $sql, '[IN]' );
+		$replacement = $int ? '%d' : '%s';
+
 		if ( 0 < $not_in_count ) {
-			$args = array( str_replace( '[IN]', implode( ', ', array_fill( 0, count( $vals ), '%s' ) ), str_replace( '%', '%%', $sql ) ) );
+			$args = array( str_replace( '[IN]', implode( ', ', array_fill( 0, count( $vals ), $replacement ) ), str_replace( '%', '%%', $sql ) ) );
 			// This will populate ALL the [IN]'s with the $vals, assuming you have more than one [IN] in the sql
 			for ( $i = 0; $i < substr_count( $sql, '[IN]' ); $i ++ ) {
 				$args = array_merge( $args, $vals );
