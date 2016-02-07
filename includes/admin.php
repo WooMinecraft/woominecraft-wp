@@ -59,7 +59,7 @@ class WCM_Admin {
 		}
 
 		$meta = get_post_meta( $post->ID, 'minecraft_woo', true );
-		include_once 'views/commands.php';
+		include 'views/commands.php';
 	}
 
 	/**
@@ -150,16 +150,31 @@ class WCM_Admin {
 
 	/**
 	 * Sets up scripts for the administrator pages.
+	 *
+	 * @param $hook
 	 */
-	public function scripts() {
+	public function scripts( $hook = '' ) {
 		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 		wp_register_script( 'woo_minecraft_js', $this->plugin->url( "assets/js/jquery.woo{$min}.js" ), array( 'jquery' ), '1.0', true );
 		wp_register_style( 'woo_minecraft_css', plugins_url( 'style.css', dirname( __FILE__ ) ), array( 'woocommerce_admin_styles' ), '1.0' );
 
-		wp_localize_script( 'woo_minecraft_js', 'woominecraft', array(
+		$script_data = array(
 			'script_debug' => defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? true : false,
 			'confirm' => __( 'This will delete ALL commands, are you sure? This cannot be undone.', 'wmc' ),
-		) );
+			'donations_resent' => __( 'All donations for this order have been resent', 'wmc' ),
+		);
+
+		if ( 'post.php' == $hook ) {
+			global $post;
+			if ( isset( $post->ID ) ) {
+				$script_data['order_id'] = $post->ID;
+				$script_data['player_id'] = get_post_meta( $post->ID, 'player_id', true );
+			}
+		}
+
+		error_log( print_r( $script_data, 1 ) );
+
+		wp_localize_script( 'woo_minecraft_js', 'woominecraft', $script_data );
 
 		wp_enqueue_script( 'woo_minecraft_js' );
 		wp_enqueue_style( 'woo_minecraft_css' );
