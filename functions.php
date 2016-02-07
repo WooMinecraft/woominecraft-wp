@@ -240,7 +240,7 @@ class Woo_Minecraft {
 				$results = $this->get_non_delivered( $namesArr );
 				if ( empty( $results ) ) {
 					wp_send_json_error( array(
-						'msg'    => sprintf( __( 'No results for the following players: %s', 'wcm' ), $namesArr ),
+						'msg'    => sprintf( __( 'No results for the following players: %s', 'wcm' ), implode( ',', $namesArr ) ),
 						'status' => 'empty',
 						'code'   => 6,
 					) );
@@ -311,13 +311,17 @@ class Woo_Minecraft {
 		$not_in_count = substr_count( $sql, '[IN]' );
 		$replacement = $int ? '%d' : '%s';
 
+		if ( ! is_array( $vals ) ) {
+			$vals = array( $vals );
+		}
+
 		if ( 0 < $not_in_count ) {
 			$args = array( str_replace( '[IN]', implode( ', ', array_fill( 0, count( $vals ), $replacement ) ), str_replace( '%', '%%', $sql ) ) );
 			// This will populate ALL the [IN]'s with the $vals, assuming you have more than one [IN] in the sql
 			for ( $i = 0; $i < substr_count( $sql, '[IN]' ); $i ++ ) {
 				$args = array_merge( $args, $vals );
 			}
-			$sql = call_user_func_array( array( $wpdb, 'prepare' ), array_merge( $args ) );
+			$sql = call_user_func_array( array( $wpdb, 'prepare' ), $args );
 		}
 
 		return $sql;
