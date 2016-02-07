@@ -24,11 +24,18 @@ class WCM_Admin {
 
 		add_action( 'woocommerce_order_status_changed', array( $this, 'delete_sql_data' ), 10, 3 );
 
+		add_action( 'wp_ajax_wmc_resend_donations', array( $this, 'ajax_handler' ) );
+
 		// TODO: Add per-item resend capability.
 		//add_action( 'woocommerce_order_item_line_item_html', array( $this, 'line_item'), 10, 2);
 
 		add_action( 'admin_menu', array( $this, 'setup_admin_menu' ) );
 		add_action( 'admin_init', array( $this, 'admin_init' ) );
+	}
+
+	public function ajax_handler() {
+		error_log( print_r( $_POST, 1 ) );
+		wp_send_json_success();
 	}
 
 	/**

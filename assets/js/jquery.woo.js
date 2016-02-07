@@ -6,6 +6,7 @@ window.WooMinecraft = ( function( window, document, $ ) {
 	app.cache = function() {
 		app.$body = $( 'body' );
 		app.$nonce = app.$body.find( '#woo_minecraft_nonce' );
+		app.$resend_donations = app.$body.find( '#resendDonations' );
 	};
 
 	app.init = function() {
@@ -15,7 +16,31 @@ window.WooMinecraft = ( function( window, document, $ ) {
 		app.$body.on( 'click', '.woo_minecraft_add', app.add_command );
 		app.$body.on( 'click', '.remove_row', app.remove_command );
 		app.$body.on( 'click', '.woo_minecraft_reset', app.reset_form );
+		app.$resend_donations.on( 'click', app.resend_donations );
 
+	};
+
+	app.resend_donations = function( evt ) {
+		evt.preventDefault();
+
+		$.ajax( {
+			url:      ajaxurl,
+			data:     {
+				action:    'wmc_resend_donations',
+				order_id:  app.l10n.order_id,
+				player_id: app.l10n.player_id
+			},
+			dataType: 'json',
+			method:   'POST'
+		} ).done( app.xhrDone );
+
+	};
+
+	app.xhrDone = function( data, textStatus, jqXHR ) {
+		if ( data.success ) {
+			// TODO: Make a prettier dialog, instead of this crap.
+			alert( app.l10n.donations_resent );
+		}
 	};
 
 	/**
