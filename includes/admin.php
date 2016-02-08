@@ -248,7 +248,8 @@ class WCM_Admin {
 
 		$variations = $_POST['minecraft_woo'];
 		foreach ( $variations as $id => $commands ) {
-			update_post_meta( $id, 'minecraft_woo', array_filter( $commands ) );
+			$commands = array_map( 'esc_attr', $commands ); // Escape the commands.
+			update_post_meta( intval( $id ), 'minecraft_woo', array_filter( $commands ) );
 		}
 	}
 }

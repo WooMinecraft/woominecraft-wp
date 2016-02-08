@@ -149,7 +149,7 @@ class Woo_Minecraft {
 		global $woocommerce;
 
 		$items = $woocommerce->cart->cart_contents;
-		if ( ! has_commands( $items ) || ! function_exists( 'woocommerce_form_field' ) ) {
+		if ( ! wmc_has_commands( $items ) || ! function_exists( 'woocommerce_form_field' ) ) {
 			return false;
 		}
 
@@ -176,7 +176,7 @@ class Woo_Minecraft {
 		}
 
 
-		$key = isset( $_REQUEST['key'] ) ? $_REQUEST['key'] : false;
+		$key = isset( $_REQUEST['key'] ) ? esc_attr( $_REQUEST['key'] ) : false;
 		if ( empty( $key ) ) {
 			wp_send_json_error( array(
 				'msg'  => __( 'Cannot communicate with database, key not provided.', 'wmc' ),
@@ -184,7 +184,7 @@ class Woo_Minecraft {
 			) );
 		}
 
-		$method = isset( $_REQUEST['woo_minecraft'] ) ? $_REQUEST['woo_minecraft'] : false;
+		$method = isset( $_REQUEST['woo_minecraft'] ) ? esc_attr( $_REQUEST['woo_minecraft'] ) : false;
 		$key_db = get_option( 'wm_key' );
 		if ( empty( $key_db ) ) {
 			wp_send_json_error( array(
@@ -206,6 +206,12 @@ class Woo_Minecraft {
 
 		if ( 'update' == $method ) {
 			$ids = $_REQUEST['players'];
+
+			if ( is_array( $ids ) ) {
+				$ids = array_map( 'intval', $ids );
+			} else {
+				$ids = intval( $ids );
+			}
 
 			if ( empty( $ids ) ) {
 				wp_send_json_error( array(
@@ -233,7 +239,7 @@ class Woo_Minecraft {
 				) );
 			}
 		} else if ( false !== $method && isset( $_REQUEST['names'] ) ) {
-			$namesArr = explode( ',', $_REQUEST['names'] );
+			$namesArr = array_map( 'esc_attr', explode( ',', $_REQUEST['names'] ) );
 			if ( empty( $namesArr ) ) {
 				$json['status'] = 'false';
 			} else {
@@ -254,7 +260,7 @@ class Woo_Minecraft {
 			// Bandaid for debugging the java side of things
 			wp_send_json_error( array(
 				'msg'  => __( 'Method or Names parameter was not set.', 'wcm' ),
-				'request_data' => json_encode( $_REQUEST ),
+				'request_data' => json_encode( esc_attr( $_REQUEST ) ),
 				'code' => 7,
 			) );
 		}
@@ -389,7 +395,7 @@ class Woo_Minecraft {
 		$playerID = isset( $_POST['player_id'] ) ? esc_attr( $_POST['player_id'] ) : false;
 		$items    = $woocommerce->cart->cart_contents;
 
-		if ( ! has_commands( $items ) ) {
+		if ( ! wmc_has_commands( $items ) ) {
 			return;
 		}
 
@@ -579,7 +585,7 @@ add_action( 'plugins_loaded', array( Woo_Minecraft(), 'hooks' ) );
  * @TODO: Move this to helper file
  * @return bool
  */
-function has_commands( $data ) {
+function wmc_has_commands( $data ) {
 	if ( is_array( $data ) ) {
 		// Assume $data is cart contents
 		foreach ( $data as $item ) {
