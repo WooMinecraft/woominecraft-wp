@@ -1,5 +1,5 @@
 === WooMinecraft-WP ===
-Contributors: xphyrax
+Contributors: phyrax
 Tags: minecraft, woocommerce, donations
 License: GPLv2 or later
 Requires at least: 4.4.2
