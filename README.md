@@ -53,6 +53,9 @@ payments - [check google](http://lmgtfy.com/?q###Woocommerce+payment+gateways)
 
 ## Changelog
 
+### v1.0.1
+* Donations hotfix that was looping over donations infinitely
+
 ### v1.0.0
 * First official release on .org
 * First clean release on Github

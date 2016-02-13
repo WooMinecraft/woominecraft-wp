@@ -54,6 +54,9 @@ Yea sure, we've all use to BuyCraft, but well, it doesn't have the flexibility o
 
 == Changelog ==
 
+= v1.0.1 =
+* Donations hotfix that was looping over donations infinitely
+
 = v1.0.0 =
 * First official release on .org
 
