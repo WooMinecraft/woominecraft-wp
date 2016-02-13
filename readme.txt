@@ -1,5 +1,4 @@
-== WooMinecraft-WP ==
-
+=== WooMinecraft-WP ===
 Contributors: xphyrax
 Tags: minecraft, woocommerce, donations
 License: GPLv2 or later
@@ -20,6 +19,7 @@ them executed on your server, once a user purchases that product.
 We're providing this to you in full faith you'll follow the [Mojang Donation Guidelines](https://mojang.com/2014/06/lets-talk-server-monetisation-the-follow-up-qa/).
 
 Supports the following:
+
 * Multiple commands per product
 * Multiple commands per product variation
 * MC Username verification ( we only support paid legit accounts via the Mojang API )
