@@ -589,9 +589,14 @@ function wmc_has_commands( $data ) {
 	if ( is_array( $data ) ) {
 		// Assume $data is cart contents
 		foreach ( $data as $item ) {
-			$metag = get_post_meta( $item['product_id'], 'minecraft_woo_g', true );
-			$metav = get_post_meta( $item['variation_id'], 'minecraft_woo_v', true );
-			if ( empty( $metag ) && empty( $metav ) ) {
+			$post_id = $item['product_id'];
+
+			if ( ! empty( $item['variation_id'] ) ) {
+				$post_id = $item['variation_id'];
+			}
+
+			$has_command = get_post_meta( $post_id, 'minecraft_woo', true );
+			if ( empty( $has_command ) ) {
 				continue;
 			} else {
 				return true;
