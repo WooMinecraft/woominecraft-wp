@@ -54,6 +54,9 @@ Yea sure, we've all use to BuyCraft, but well, it doesn't have the flexibility o
 
 == Changelog ==
 
+= v1.0.2 =
+* Hotfix for meta data - fixed [#76](https://github.com/WooMinecraft/WooMinecraft/issues/76)
+
 = v1.0.1 =
 * Donations hotfix that was looping over donations infinitely
 
