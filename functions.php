@@ -197,7 +197,6 @@ class Woo_Minecraft {
 			wp_send_json_error( array(
 				'msg'  => __( 'Keys do not match', 'wmc' ),
 				'web'  => $key,
-				'db'   => $key_db,
 				'code' => 3,
 			) );
 		}
