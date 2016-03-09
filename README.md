@@ -4,7 +4,7 @@
 **License:** GPLv2 or later   
 **Requires at least:** 4.4.2   
 **Tested up to:** 4.4.2   
-**Stable tag:** 1.0.2   
+**Stable tag:** 1.0.3   
 
 Works in conjunction with the WooMinecraft java plugin for Minecraft to provide a self-hosted donation platform.
 
@@ -52,6 +52,9 @@ payments - [check google](http://lmgtfy.com/?q###Woocommerce+payment+gateways)
 ![Adding commands to single variations.](https://raw.githubusercontent.com/WooMinecraft/woominecraft-wp/dev/screenshot-2.png)
 
 ## Changelog
+
+### v1.0.3
+* Security fix - prevents sending back database stored key - Thanks to [FinlayDaG33k](https://github.com/FinlayDaG33k) [PR#15](https://github.com/WooMinecraft/woominecraft-wp/pull/15)
 
 ### v1.0.2
 * Hotfix for meta data - fixed [#76](https://github.com/WooMinecraft/WooMinecraft/issues/76)
