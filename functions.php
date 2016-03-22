@@ -258,7 +258,7 @@ class Woo_Minecraft {
 			// Bandaid for debugging the java side of things
 			wp_send_json_error( array(
 				'msg'  => __( 'Method or Names parameter was not set.', 'wcm' ),
-				'request_data' => json_encode( esc_attr( $_REQUEST ) ),
+				'request_data' => $_REQUEST,
 				'code' => 7,
 			) );
 		}
