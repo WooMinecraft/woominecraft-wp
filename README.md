@@ -53,6 +53,9 @@ payments - [check google](http://lmgtfy.com/?q###Woocommerce+payment+gateways)
 
 ## Changelog
 
+### v1.0.4
+* Update debugging information by not escaping $_REQUEST that is sent back to java.
+
 ### v1.0.3
 * Security fix - prevents sending back database stored key - Thanks to [FinlayDaG33k](https://github.com/FinlayDaG33k) [PR#15](https://github.com/WooMinecraft/woominecraft-wp/pull/15)
 
