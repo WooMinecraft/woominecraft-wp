@@ -4,7 +4,7 @@ Plugin Name: Minecraft WooCommerce
 Plugin URI: http://plugish.com/plugins/minecraft_woo
 Description: To be used in conjunction with the minecraft_woo plugin.  If you do not have it you can get it on the repository at <a href="https://github.com/JayWood/WooMinecraft">Github</a>.  Please be sure and fork the repository and make pull requests.
 Author: Jerry Wood
-Version: 1.0.0
+Version: 1.0.3
 License: GPLv2
 Text Domain: wmc
 Author URI: http://plugish.com
@@ -40,7 +40,7 @@ class Woo_Minecraft {
 	 * @var  string
 	 * @since  0.1.0
 	 */
-	const VERSION = '0.1.0';
+	const VERSION = '1.0.3';
 
 	/**
 	 * URL of plugin directory
@@ -81,6 +81,11 @@ class Woo_Minecraft {
 	 * @since 0.1.0
 	 */
 	public $admin = null;
+
+	/**
+	 * @var string The db table name
+	 */
+	private $table = 'woo_minecraft';
 
 	/**
 	 * Sets up our plugin
@@ -196,7 +201,7 @@ class Woo_Minecraft {
 		global $woocommerce;
 
 		$items = $woocommerce->cart->cart_contents;
-		if ( ! has_commands( $items ) || ! function_exists( 'woocommerce_form_field' ) ) {
+		if ( ! wmc_has_commands( $items ) || ! function_exists( 'woocommerce_form_field' ) ) {
 			return false;
 		}
 
@@ -218,7 +223,12 @@ class Woo_Minecraft {
 	 */
 	public function check_json() {
 
-		$key = isset( $_REQUEST['key'] ) ? $_REQUEST['key'] : false;
+		if ( ! isset( $_REQUEST['woo_minecraft'] ) ) {
+			return;
+		}
+
+
+		$key = isset( $_REQUEST['key'] ) ? esc_attr( $_REQUEST['key'] ) : false;
 		if ( empty( $key ) ) {
 			wp_send_json_error( array(
 				'msg'  => __( 'Cannot communicate with database, key not provided.', 'wmc' ),
@@ -226,7 +236,7 @@ class Woo_Minecraft {
 			) );
 		}
 
-		$method = isset( $_REQUEST['woo_minecraft'] ) ? $_REQUEST['woo_minecraft'] : false;
+		$method = isset( $_REQUEST['woo_minecraft'] ) ? esc_attr( $_REQUEST['woo_minecraft'] ) : false;
 		$key_db = get_option( 'wm_key' );
 		if ( empty( $key_db ) ) {
 			wp_send_json_error( array(
@@ -238,8 +248,6 @@ class Woo_Minecraft {
 		if ( $key_db != $key ) {
 			wp_send_json_error( array(
 				'msg'  => __( 'Keys do not match', 'wmc' ),
-				'web'  => $key,
-				'db'   => $key_db,
 				'code' => 3,
 			) );
 		}
@@ -249,16 +257,19 @@ class Woo_Minecraft {
 		if ( 'update' == $method ) {
 			$ids = $_REQUEST['players'];
 
+			if ( is_array( $ids ) ) {
+				$ids = array_map( 'intval', $ids );
+			} else {
+				$ids = intval( $ids );
+			}
+
 			if ( empty( $ids ) ) {
 				wp_send_json_error( array(
 					'msg'  => __( 'No IDs for update request.', 'wmc' ),
 					'code' => 4,
 				) );
 			}
-
-			// Sets the item as delivered
-			$query   = $wpdb->prepare( "UPDATE {$wpdb->prefix}woo_minecraft SET delivered = %d WHERE id IN(%s)", 1, $ids );
-			$results = $wpdb->query( $query );
+			$results = $this->update_deliveries_for_players( $ids );
 			if ( false === $results ) {
 				// Error
 				wp_send_json_error( array(
@@ -277,20 +288,14 @@ class Woo_Minecraft {
 				) );
 			}
 		} else if ( false !== $method && isset( $_REQUEST['names'] ) ) {
-			$namesArr = explode( ',', $_REQUEST['names'] );
+			$namesArr = array_map( 'esc_attr', explode( ',', $_REQUEST['names'] ) );
 			if ( empty( $namesArr ) ) {
 				$json['status'] = 'false';
 			} else {
-				foreach ( $namesArr as $k => $v ) {
-					$namesArr[ $k ] = '"' . strtolower( $v ) . '"';
-				}
-				$namesArr = implode( ',', $namesArr );
-				// Select only un-delivered items.
-				$prepared = $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}woo_minecraft WHERE delivered = %d AND player_name IN (%s)", 0, $namesArr );
-				$results  = $wpdb->get_results( $prepared );
+				$results = $this->get_non_delivered( $namesArr );
 				if ( empty( $results ) ) {
 					wp_send_json_error( array(
-						'msg'    => sprintf( __( 'No results for the following players: %s', 'wcm' ), $namesArr ),
+						'msg'    => sprintf( __( 'No results for the following players: %s', 'wcm' ), implode( ',', $namesArr ) ),
 						'status' => 'empty',
 						'code'   => 6,
 					) );
@@ -304,9 +309,78 @@ class Woo_Minecraft {
 			// Bandaid for debugging the java side of things
 			wp_send_json_error( array(
 				'msg'  => __( 'Method or Names parameter was not set.', 'wcm' ),
+				'request_data' => $_REQUEST,
 				'code' => 7,
 			) );
 		}
+	}
+
+	/**
+	 * Sets the items for a specific player to non-delivered.
+	 *
+	 * @param string $player_id
+	 *
+	 * @return false|int
+	 */
+	public function set_non_delivered_for_player( $player_id, $order_id = 0 ) {
+		global $wpdb;
+		$sql_query = $wpdb->prepare( "UPDATE {$wpdb->prefix}{$this->table} SET delivered = %d WHERE player_name = %s", 0, $player_id );
+
+		if ( ! empty( $order_id ) ) {
+			$sql_query .= $wpdb->prepare( ' AND orderid = %d', $order_id );
+		}
+		return $wpdb->query( $sql_query );
+	}
+
+	/**
+	 * Sets orders to delivered in the database.
+	 *
+	 * @param array $row_ids
+	 *
+	 * @return false|int
+	 */
+	public function update_deliveries_for_players( $row_ids ) {
+		global $wpdb;
+		// Sets the item as delivered
+		$sql_query = $wpdb->prepare( "UPDATE {$wpdb->prefix}{$this->table} SET delivered = %d WHERE id IN ([IN])", 1 );
+		$sql_query = $this->prepare_in( $sql_query, $row_ids, true );
+		return $wpdb->query( $sql_query );
+	}
+
+	/**
+	 * Gets all un-delivered orders based on player names
+	 *
+	 * @param array $player_names
+	 *
+	 * @return array|null|object
+	 */
+	public function get_non_delivered( $player_names ) {
+		global $wpdb;
+		// Select only un-delivered items.
+		$prepared = $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}{$this->table} WHERE delivered = %d AND player_name IN ([IN])", 0 );
+		$prepared = $this->prepare_in( $prepared, $player_names );
+		return $wpdb->get_results( $prepared );
+	}
+
+	function prepare_in( $sql, $vals, $int = false ) {
+		global $wpdb;
+		$not_in_count = substr_count( $sql, '[IN]' );
+		$replacement = $int ? '%d' : '%s';
+
+		if ( ! is_array( $vals ) ) {
+			$vals = array( $vals );
+		}
+
+		if ( 0 < $not_in_count ) {
+			$args = array( str_replace( '[IN]', implode( ', ', array_fill( 0, count( $vals ), $replacement ) ), str_replace( '%', '%%', $sql ) ) );
+			// This will populate ALL the [IN]'s with the $vals, assuming you have more than one [IN] in the sql
+			for ( $i = 0; $i < substr_count( $sql, '[IN]' ); $i ++ ) {
+				$args = array_merge( $args, $vals );
+			}
+			$sql = call_user_func_array( array( $wpdb, 'prepare' ), $args );
+		}
+
+		return $sql;
 	}
 
 	/**
@@ -371,7 +445,7 @@ class Woo_Minecraft {
 		$playerID = isset( $_POST['player_id'] ) ? esc_attr( $_POST['player_id'] ) : false;
 		$items    = $woocommerce->cart->cart_contents;
 
-		if ( ! has_commands( $items ) ) {
+		if ( ! wmc_has_commands( $items ) ) {
 			return;
 		}
 
@@ -403,7 +477,7 @@ class Woo_Minecraft {
 		$player_name = get_post_meta( $order_id, 'player_id', true );
 		foreach ( $items as $item ) {
 			// Insert into database table
-			$product = get_post_meta( $item['product_id'], 'minecraft_woo_g', true );
+			$product = get_post_meta( $item['product_id'], 'minecraft_woo', true );
 			if ( ! empty( $product ) ) {
 				for ( $n = 0; $n < $item['qty']; $n ++ ) {
 					foreach ( $product as $command ) {
@@ -419,7 +493,7 @@ class Woo_Minecraft {
 			}
 
 
-			$product_variation = get_post_meta( $item['variation_id'], 'minecraft_woo_v', true );
+			$product_variation = get_post_meta( $item['variation_id'], 'minecraft_woo', true );
 			if ( ! empty( $product_variation ) ) {
 				for ( $n = 0; $n < $item['qty']; $n ++ ) {
 					foreach ( $product_variation as $command ) {
@@ -563,13 +637,18 @@ add_action( 'plugins_loaded', array( Woo_Minecraft(), 'hooks' ) );
  * @TODO: Move this to helper file
  * @return bool
  */
-function has_commands( $data ) {
+function wmc_has_commands( $data ) {
 	if ( is_array( $data ) ) {
 		// Assume $data is cart contents
 		foreach ( $data as $item ) {
-			$metag = get_post_meta( $item['product_id'], 'minecraft_woo_g', true );
-			$metav = get_post_meta( $item['variation_id'], 'minecraft_woo_v', true );
-			if ( empty( $metag ) && empty( $metav ) ) {
+			$post_id = $item['product_id'];
+
+			if ( ! empty( $item['variation_id'] ) ) {
+				$post_id = $item['variation_id'];
+			}
+
+			$has_command = get_post_meta( $post_id, 'minecraft_woo', true );
+			if ( empty( $has_command ) ) {
 				continue;
 			} else {
 				return true;
