@@ -112,7 +112,8 @@ class Woo_Minecraft {
 		add_action( 'woocommerce_order_status_completed', array( $this, 'finalize_order' ) );
 		add_action( 'woocommerce_before_checkout_billing_form', array( $this, 'additional_checkout_field' ) );
 		add_action( 'woocommerce_thankyou', array( $this, 'thanks' ) );
-		add_action( 'plugins_loaded', array( $this, 'json_feed' ) );
+
+		add_action( 'template_redirect', array( $this, 'json_feed' ) );
 		add_action( 'init', array( $this, 'init' ) );
 
 		$this->admin->hooks();
@@ -157,6 +158,8 @@ class Woo_Minecraft {
 				}
 			}
 		}
+
+		wp_send_json_success( $output );
 
 	}
 

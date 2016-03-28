@@ -122,7 +122,7 @@ class WCM_Admin {
 	public function install() {
 		global $wp_version, $wpdb;
 		$plugin_ver  = get_option( 'wm_db_version', false );
-		$current_ver = $this->plugin->get_version();
+		$current_ver = $this->plugin->version;
 
 		if ( $plugin_ver == $current_ver ) {
 			return;
