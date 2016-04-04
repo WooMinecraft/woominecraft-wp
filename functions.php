@@ -203,13 +203,8 @@ class Woo_Minecraft {
 		global $wpdb;
 
 		if ( 'update' == $method ) {
-			$ids = $_REQUEST['players'];
 
-			if ( is_array( $ids ) ) {
-				$ids = array_map( 'intval', $ids );
-			} else {
-				$ids = intval( $ids );
-			}
+			$ids = array_map( 'intval', explode( ',', $_REQUEST['players'] ) );
 
 			if ( empty( $ids ) ) {
 				wp_send_json_error( array(
@@ -323,6 +318,7 @@ class Woo_Minecraft {
 		if ( 0 < $not_in_count ) {
 			$args = array( str_replace( '[IN]', implode( ', ', array_fill( 0, count( $vals ), $replacement ) ), str_replace( '%', '%%', $sql ) ) );
 			// This will populate ALL the [IN]'s with the $vals, assuming you have more than one [IN] in the sql
+			$vals = array_map( 'trim', $vals );
 			for ( $i = 0; $i < substr_count( $sql, '[IN]' ); $i ++ ) {
 				$args = array_merge( $args, $vals );
 			}
