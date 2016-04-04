@@ -54,7 +54,7 @@ Yea sure, we've all use to BuyCraft, but well, it doesn't have the flexibility o
 
 == Changelog ==
 
-== v1.0.4 ==
+= v1.0.4 =
 * Update debugging information by not escaping $_REQUEST that is sent back to java.
 * Fixed - Multiple players were getting re-sent donations, this was due to assumptions in posted data.
 
