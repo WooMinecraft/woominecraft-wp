@@ -203,13 +203,12 @@ class Woo_Minecraft {
 		global $wpdb;
 
 		if ( 'update' == $method ) {
-			$ids = $_REQUEST['players'];
 
-			if ( is_array( $ids ) ) {
-				$ids = array_map( 'intval', $ids );
-			} else {
-				$ids = intval( $ids );
-			}
+			$ids = array_map( 'intval', explode( ',', $_REQUEST['players'] ) );
+			error_log( print_r( $ids, 1 ) );
+
+
+			error_log( print_r( $ids, 1 ) );
 
 			if ( empty( $ids ) ) {
 				wp_send_json_error( array(
@@ -293,6 +292,7 @@ class Woo_Minecraft {
 		// Sets the item as delivered
 		$sql_query = $wpdb->prepare( "UPDATE {$wpdb->prefix}{$this->table} SET delivered = %d WHERE id IN ([IN])", 1 );
 		$sql_query = $this->prepare_in( $sql_query, $row_ids, true );
+		error_log( print_r( $sql_query, 1 ) );
 		return $wpdb->query( $sql_query );
 	}
 
