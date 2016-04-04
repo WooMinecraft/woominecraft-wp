@@ -131,6 +131,7 @@ class Woo_Minecraft {
 		$order_query = apply_filters( 'woo_minecraft_json_orders_args', array(
 			'posts_per_page' => '-1',
 			'post_status'    => 'wc-completed',
+			'post_type'      => 'shop_order',
 			'meta_query'     => array(
 				'relation' => 'AND',
 				array(
@@ -154,12 +155,13 @@ class Woo_Minecraft {
 					continue;
 				}
 
-				$player_id = get_post_meta( $wc_order->ID, 'player_id' );
+				$player_id = get_post_meta( $wc_order->ID, 'player_id', true );
 				$order_array = $this->generate_order_json( $wc_order );
 
-				error_log( print_r( $order_array, 1 ) );
-
 				if ( ! empty( $order_array ) ) {
+					if ( ! isset( $output[ $player_id ] ) ) {
+						$output[ $player_id ] = array();
+					}
 					$output[ $player_id ][ $wc_order->ID ] = $order_array;
 				}
 			}
@@ -175,9 +177,8 @@ class Woo_Minecraft {
 			return array();
 		}
 
-		$order = new WC_Order( $order_post->ID );
-
-		return get_post_meta( $order_post->ID, 'wmc_commands', true );
+		$general_commands = get_post_meta( $order_post->ID, 'wmc_commands', true );
+		return $general_commands;
 	}
 
 
