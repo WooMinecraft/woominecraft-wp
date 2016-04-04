@@ -109,7 +109,7 @@ class Woo_Minecraft {
 	 */
 	public function hooks() {
 		add_action( 'woocommerce_checkout_process', array( $this, 'check_player' ) );
-		add_action( 'woocommerce_order_status_completed', array( $this, 'finalize_order' ) );
+		add_action( 'woocommerce_checkout_update_order_meta', array( $this, 'save_commands_to_order' ) );
 		add_action( 'woocommerce_before_checkout_billing_form', array( $this, 'additional_checkout_field' ) );
 		add_action( 'woocommerce_thankyou', array( $this, 'thanks' ) );
 
@@ -119,6 +119,9 @@ class Woo_Minecraft {
 		$this->admin->hooks();
 	}
 
+	/**
+	 * Produces the JSON Feed for Orders Pending Delivery
+	 */
 	public function json_feed() {
 		$db_key = get_option( 'wm_key' );
 		if ( ! isset( $_REQUEST['key'] ) || $db_key !== $_REQUEST['key'] ) {
@@ -142,6 +145,7 @@ class Woo_Minecraft {
 		) );
 
 		$orders = get_posts( $order_query );
+
 		$output = array();
 
 		if ( ! empty( $orders ) ) {
@@ -152,6 +156,8 @@ class Woo_Minecraft {
 
 				$player_id = get_post_meta( $wc_order->ID, 'player_id' );
 				$order_array = $this->generate_order_json( $wc_order );
+
+				error_log( print_r( $order_array, 1 ) );
 
 				if ( ! empty( $order_array ) ) {
 					$output[ $player_id ][ $wc_order->ID ] = $order_array;
@@ -170,15 +176,8 @@ class Woo_Minecraft {
 		}
 
 		$order = new WC_Order( $order_post->ID );
-		$items = $order->get_items();
 
-		if ( empty( $items ) ) {
-			return array();
-		}
-
-		foreach( $items as $line_item ) {
-
-		}
+		return get_post_meta( $order_post->ID, 'wmc_commands', true );
 	}
 
 
@@ -471,7 +470,7 @@ class Woo_Minecraft {
 		}
 	}
 
-	public function finalize_order( $order_id ) {
+	public function save_commands_to_order( $order_id ) {
 		global $wpdb;
 
 		$orderData   = new WC_Order( $order_id );
@@ -484,13 +483,7 @@ class Woo_Minecraft {
 			if ( ! empty( $product ) ) {
 				for ( $n = 0; $n < $item['qty']; $n ++ ) {
 					foreach ( $product as $command ) {
-						$x = array(
-							'postid'      => $item['product_id'],
-							'command'     => $command,
-							'orderid'     => $order_id,
-							'player_name' => $player_name,
-						);
-						array_push( $tmpArray, $x );
+						$tmpArray[] = ( false === strpos( '%s', $command ) ) ? $command : sprintf( $command, $player_name );
 					}
 				}
 			}
@@ -500,22 +493,14 @@ class Woo_Minecraft {
 			if ( ! empty( $product_variation ) ) {
 				for ( $n = 0; $n < $item['qty']; $n ++ ) {
 					foreach ( $product_variation as $command ) {
-						$x1 = array(
-							'postid'      => $item['variation_id'],
-							'command'     => $command,
-							'orderid'     => $order_id,
-							'player_name' => $player_name,
-						);
-						array_push( $tmpArray, $x1 );
+						$tmpArray[] = ( false === strpos( '%s', $command ) ) ? $command : sprintf( $command, $player_name );
 					}
 				}
 			}
 		}
 
 		if ( ! empty( $tmpArray ) ) {
-			foreach ( $tmpArray as $row ) {
-				$wpdb->insert( $wpdb->prefix . 'woo_minecraft', $row, array( '%d', '%s', '%d', '%s' ) );
-			}
+			update_post_meta( $order_id, 'wmc_commands', $tmpArray );
 		}
 	}
 
