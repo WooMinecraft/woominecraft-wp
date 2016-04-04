@@ -4,7 +4,7 @@ Tags: minecraft, woocommerce, donations
 License: GPLv2 or later
 Requires at least: 4.4.2
 Tested up to: 4.4.2
-Stable tag: 1.0.3
+Stable tag: 1.0.4
 
 Works in conjunction with the WooMinecraft java plugin for Minecraft to provide a self-hosted donation platform.
 
@@ -53,6 +53,10 @@ Yea sure, we've all use to BuyCraft, but well, it doesn't have the flexibility o
 2. Adding commands to single variations.
 
 == Changelog ==
+
+= v1.0.4 =
+* Update debugging information by not escaping $_REQUEST that is sent back to java.
+* Fixed - Multiple players were getting re-sent donations, this was due to assumptions in posted data.
 
 = v1.0.3 =
 * Security fix - prevents sending back database stored key - Thanks to [FinlayDaG33k](https://github.com/FinlayDaG33k) [PR#15](https://github.com/WooMinecraft/woominecraft-wp/pull/15)
