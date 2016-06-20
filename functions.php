@@ -286,14 +286,14 @@ class Woo_Minecraft {
 				) );
 			}
 		} else if ( false !== $method && isset( $_REQUEST['names'] ) ) {
-			$namesArr = array_map( 'esc_attr', explode( ',', $_REQUEST['names'] ) );
-			if ( empty( $namesArr ) ) {
+			$names_array = array_map( 'esc_attr', explode( ',', $_REQUEST['names'] ) );
+			if ( empty( $names_array ) ) {
 				$json['status'] = 'false';
 			} else {
-				$results = $this->get_non_delivered( $namesArr );
+				$results = $this->get_non_delivered( $names_array );
 				if ( empty( $results ) ) {
 					wp_send_json_error( array(
-						'msg'    => sprintf( __( 'No results for the following players: %s', 'wcm' ), implode( ',', $namesArr ) ),
+						'msg'    => sprintf( __( 'No results for the following players: %s', 'wcm' ), implode( ',', $names_array ) ),
 						'status' => 'empty',
 						'code'   => 6,
 					) );
@@ -317,6 +317,7 @@ class Woo_Minecraft {
 	 * Sets the items for a specific player to non-delivered.
 	 *
 	 * @param string $player_id
+	 * @param int $order_id
 	 *
 	 * @return false|int
 	 */
@@ -385,7 +386,7 @@ class Woo_Minecraft {
 	/**
 	 * Caches the results of the mojang API based on player ID
 	 *
-	 * @param String $playerID Minecraft Username
+	 * @param String $player_id Minecraft Username
 	 *
 	 * Object is as follows
 	 * {
@@ -397,15 +398,15 @@ class Woo_Minecraft {
 	 *
 	 * @return bool|object False on failure, Object on success
 	 */
-	public function mojang_player_cache( $playerID ) {
+	public function mojang_player_cache( $player_id ) {
 
-		$key     = md5( 'minecraft_player_' . $playerID );
+		$key     = md5( 'minecraft_player_' . $player_id );
 		$mc_json = wp_cache_get( $key, 'wcm' );
 
 		if ( false == $mc_json ) {
 
 			$post_config = apply_filters( 'mojang_profile_api_post_args', array(
-				'body'    => json_encode( array( rawurlencode( $playerID ) ) ),
+				'body'    => json_encode( array( rawurlencode( $player_id ) ) ),
 				'method'  => 'POST',
 				'headers' => array( 'content-type' => 'application/json' ),
 			) );
@@ -441,21 +442,21 @@ class Woo_Minecraft {
 			return;
 		}
 
-		$playerID = isset( $_POST['player_id'] ) ? esc_attr( $_POST['player_id'] ) : false;
+		$player_id = isset( $_POST['player_id'] ) ? esc_attr( $_POST['player_id'] ) : false;
 		$items    = $woocommerce->cart->cart_contents;
 
 		if ( ! wmc_has_commands( $items ) ) {
 			return;
 		}
 
-		if ( ! $playerID ) {
+		if ( ! $player_id ) {
 			wc_add_notice( __( 'You MUST provide a Minecraft username.', 'ucm' ), 'error' );
 
 			return;
 		}
 
 		// Grab JSON data
-		$mc_json = $this->mojang_player_cache( $playerID );
+		$mc_json = $this->mojang_player_cache( $player_id );
 		if ( ! $mc_json ) {
 			wc_add_notice( __( 'There was an error with the Mojang API, please try again later.', 'wcm' ) );
 		}
@@ -470,9 +471,9 @@ class Woo_Minecraft {
 	public function save_commands_to_order( $order_id ) {
 		global $wpdb;
 
-		$orderData   = new WC_Order( $order_id );
-		$items       = $orderData->get_items();
-		$tmpArray    = array();
+		$order_data   = new WC_Order( $order_id );
+		$items       = $order_data->get_items();
+		$tmp_array    = array();
 		$player_name = get_post_meta( $order_id, 'player_id', true );
 		foreach ( $items as $item ) {
 			// Insert into database table
@@ -480,7 +481,7 @@ class Woo_Minecraft {
 			if ( ! empty( $product ) ) {
 				for ( $n = 0; $n < $item['qty']; $n ++ ) {
 					foreach ( $product as $command ) {
-						$tmpArray[] = ( false === strpos( '%s', $command ) ) ? $command : sprintf( $command, $player_name );
+						$tmp_array[] = ( false === strpos( '%s', $command ) ) ? $command : sprintf( $command, $player_name );
 					}
 				}
 			}
@@ -490,14 +491,14 @@ class Woo_Minecraft {
 			if ( ! empty( $product_variation ) ) {
 				for ( $n = 0; $n < $item['qty']; $n ++ ) {
 					foreach ( $product_variation as $command ) {
-						$tmpArray[] = ( false === strpos( '%s', $command ) ) ? $command : sprintf( $command, $player_name );
+						$tmp_array[] = ( false === strpos( '%s', $command ) ) ? $command : sprintf( $command, $player_name );
 					}
 				}
 			}
 		}
 
-		if ( ! empty( $tmpArray ) ) {
-			update_post_meta( $order_id, 'wmc_commands', $tmpArray );
+		if ( ! empty( $tmp_array ) ) {
+			update_post_meta( $order_id, 'wmc_commands', $tmp_array );
 		}
 	}
 
