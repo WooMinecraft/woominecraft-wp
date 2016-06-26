@@ -15,7 +15,7 @@ class WCM_Admin {
 		add_action( 'admin_enqueue_scripts', array( $this, 'scripts' ) );
 
 		add_action( 'woocommerce_checkout_update_order_meta', array( $this, 'save_player_id_to_order' ) );
-		add_action( 'woocommerce_admin_order_data_after_billing_address', array( $this, 'display_player_name_in_order_meta' ) );
+		add_action( 'woocommerce_admin_order_data_after_shipping_address', array( $this, 'display_player_name_in_order_meta' ) );
 		add_action( 'woocommerce_product_options_general_product_data', array( $this, 'add_group_field' ) );
 		add_action( 'woocommerce_process_product_meta', array( $this, 'save_product_commands' ) );
 
@@ -80,15 +80,26 @@ class WCM_Admin {
 
 	/**
 	 * Adds the players ID to the order information screen.
-	 * @param WP_Post $order
+	 * @param WC_Order $order
 	 */
 	public function display_player_name_in_order_meta( $order ) {
-		$playerID = get_post_meta( $order->id, 'player_id', true ) or 'N/A';
+
+		error_log( __LINE__ );
+
+		$player_id = get_post_meta( $order->id, 'player_id', true );
+
+		if ( empty( $player_id ) ) {
+			$player_id = 'N/A';
+		}
 		wp_nonce_field( 'woominecraft', 'woo_minecraft_nonce' );
-		?><p><strong><?php _e( 'Player Name:', 'woominecraft' ); ?></strong> <?php echo $playerID; ?></p>
-		<?php if ( 'N/A' != $playerID ) : ?>
+
+		?><h3><?php _e( 'WooMinecraft', 'woominecraft' ); ?></h3><?php
+
+		?><p><strong><?php _e( 'Player Name:', 'woominecraft' ); ?></strong> <?php echo $player_id; ?></p>
+
+		<?php if ( 'N/A' != $player_id ) : ?>
 			<?php global $post; ?>
-			<p><input type="button" class="button button-primary" id="resendDonations" value="<?php _e( 'Resend Donations', 'woominecraft' ); ?>" data-id="<?php echo $playerID; ?>" data-orderid="<?php echo $post->ID; ?>"/></p>
+			<p><input type="button" class="button button-primary" id="resendDonations" value="<?php _e( 'Resend Donations', 'woominecraft' ); ?>" data-id="<?php echo $player_id; ?>" data-orderid="<?php echo $post->ID; ?>"/></p>
 		<?php endif;
 	}
 
