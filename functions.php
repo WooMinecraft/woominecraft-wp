@@ -240,14 +240,16 @@ class Woo_Minecraft {
 	/**
 	 * Helper method for transient busting
 	 *
+	 * @param int $post_id
+	 *
 	 * @author JayWood
 	 */
-	public function bust_command_cache( $post_id ) {
+	public function bust_command_cache( $post_id = 0 ) {
 		if ( ( defined( 'DOING_AJAX' ) && DOING_AJAX ) || ( defined( 'DOING_CRON' ) && DOING_CRON ) ) {
 			return;
 		}
 
-		if ( 'product' !== get_post_type( $post_id ) ) {
+		if ( ! empty( $post_id ) && 'product' !== get_post_type( $post_id ) ) {
 			return;
 		}
 
