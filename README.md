@@ -55,26 +55,26 @@ payments - [check google](http://lmgtfy.com/?q###Woocommerce+payment+gateways)
 
 ## Changelog
 
-### v1.0.5
+### 1.0.5
 * Remove custom DB table requirements
 * Update plugin to use order meta instead of DB table
 * Code cleanup
 * Auto-migrates old DB pending deliveries to order meta
 
-### v1.0.4
+### 1.0.4
 * Update debugging information by not escaping $_REQUEST that is sent back to java.
 * Fixed - Multiple players were getting re-sent donations, this was due to assumptions in posted data.
 
-### v1.0.3
+### 1.0.3
 * Security fix - prevents sending back database stored key - Thanks to [FinlayDaG33k](https://github.com/FinlayDaG33k) [PR#15](https://github.com/WooMinecraft/woominecraft-wp/pull/15)
 
-### v1.0.2
+### 1.0.2
 * Hotfix for meta data - fixed [#76](https://github.com/WooMinecraft/WooMinecraft/issues/76)
 
-### v1.0.1
+### 1.0.1
 * Donations hotfix that was looping over donations infinitely
 
-### v1.0.0
+### 1.0.0
 * First official release on .org
 * First clean release on Github
 
