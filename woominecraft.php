@@ -266,7 +266,7 @@ class Woo_Minecraft {
 		$order_ids = (array) $this->sanitized_orders_post( $_POST['processedOrders'] );
 
 		if (  empty( $order_ids ) ) {
-			wp_send_json_error( array( 'msg' => __( 'Commands was empty', 'wmc' ) ) );
+			wp_send_json_error( array( 'msg' => __( 'Commands was empty', 'woominecraft' ) ) );
 		}
 
 		// Set the orders to delivered
@@ -298,8 +298,8 @@ class Woo_Minecraft {
 		woocommerce_form_field( 'player_id', array(
 			'type'        => 'text',
 			'class'       => array(),
-			'label'       => __( 'Player ID ( Minecraft Username ):', 'wmc' ),
-			'placeholder' => __( 'Required Field', 'wmc' ),
+			'label'       => __( 'Player ID ( Minecraft Username ):', 'woominecraft' ),
+			'placeholder' => __( 'Required Field', 'woominecraft' ),
 		), $cart->get_value( 'player_id' ) );
 		?></div><?php
 

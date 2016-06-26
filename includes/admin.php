@@ -44,7 +44,7 @@ class WCM_Admin {
 			}
 		}
 
-		wp_send_json_error( array( 'msg' => __( 'Cannot reset deliveries for order.', 'wmc' ) ) );
+		wp_send_json_error( array( 'msg' => __( 'Cannot reset deliveries for order.', 'woominecraft' ) ) );
 	}
 
 	/**
@@ -85,10 +85,10 @@ class WCM_Admin {
 	public function display_player_name_in_order_meta( $order ) {
 		$playerID = get_post_meta( $order->id, 'player_id', true ) or 'N/A';
 		wp_nonce_field( 'woominecraft', 'woo_minecraft_nonce' );
-		?><p><strong><?php _e( 'Player Name:', 'wmc' ); ?></strong> <?php echo $playerID; ?></p>
+		?><p><strong><?php _e( 'Player Name:', 'woominecraft' ); ?></strong> <?php echo $playerID; ?></p>
 		<?php if ( 'N/A' != $playerID ) : ?>
 			<?php global $post; ?>
-			<p><input type="button" class="button button-primary" id="resendDonations" value="<?php _e( 'Resend Donations', 'wmc' ); ?>" data-id="<?php echo $playerID; ?>" data-orderid="<?php echo $post->ID; ?>"/></p>
+			<p><input type="button" class="button button-primary" id="resendDonations" value="<?php _e( 'Resend Donations', 'woominecraft' ); ?>" data-id="<?php echo $playerID; ?>" data-orderid="<?php echo $post->ID; ?>"/></p>
 		<?php endif;
 	}
 
@@ -118,10 +118,10 @@ class WCM_Admin {
 
 		$script_data = array(
 			'script_debug'     => defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? true : false,
-			'confirm'          => __( 'This will delete ALL commands, are you sure? This cannot be undone.', 'wmc' ),
-			'donations_resent' => __( 'All donations for this order have been resent', 'wmc' ),
-			'resend'           => __( 'Resend Donations', 'wmc' ),
-			'please_wait'      => __( 'Please wait...', 'wmc' ),
+			'confirm'          => __( 'This will delete ALL commands, are you sure? This cannot be undone.', 'woominecraft' ),
+			'donations_resent' => __( 'All donations for this order have been resent', 'woominecraft' ),
+			'resend'           => __( 'Resend Donations', 'woominecraft' ),
+			'please_wait'      => __( 'Please wait...', 'woominecraft' ),
 		);
 
 		if ( 'post.php' == $hook ) {
