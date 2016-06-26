@@ -12,6 +12,8 @@ A FREE Minecraft Donation plugin which works in conjunction with my WooMinecraft
 
 Contribute to this plugins development on [Github](https://github.com/WooMinecraft/woominecraft-wp) if you'd like.
 
+**Version 1.0.5 is only compatible with WooMinecraft Java plugin version 1.0.6-RC1+ and WILL NOT WORK for earlier versions.**
+
 This plugin works in conjunction with our [WooMinecraft JAVA Plugin](https://github.com/WooMinecraft/WooMinecraft) for Minecraft on GitHub
 and is intended for Minecraft servers.  This plugin allows you to add commands to your [WooCommerce](https://wordpress.org/plugins/woocommerce/) products to have
 them executed on your server, once a user purchases that product.
@@ -54,26 +56,26 @@ Yea sure, we've all use to BuyCraft, but well, it doesn't have the flexibility o
 
 == Changelog ==
 
-= v1.0.5 =
+= 1.0.5 =
 * Remove custom DB table requirements
 * Update plugin to use order meta instead of DB table
 * Code cleanup
 * Auto-migrates old DB pending deliveries to order meta
 
-= v1.0.4 =
+= 1.0.4 =
 * Update debugging information by not escaping $_REQUEST that is sent back to java.
 * Fixed - Multiple players were getting re-sent donations, this was due to assumptions in posted data.
 
-= v1.0.3 =
+= 1.0.3 =
 * Security fix - prevents sending back database stored key - Thanks to [FinlayDaG33k](https://github.com/FinlayDaG33k) [PR#15](https://github.com/WooMinecraft/woominecraft-wp/pull/15)
 
-= v1.0.2 =
+= 1.0.2 =
 * Hotfix for meta data - fixed [#76](https://github.com/WooMinecraft/WooMinecraft/issues/76)
 
-= v1.0.1 =
+= 1.0.1 =
 * Donations hotfix that was looping over donations infinitely
 
-= v1.0.0 =
+= 1.0.0 =
 * First official release on .org
 
 == Installation ==
@@ -82,3 +84,7 @@ Yea sure, we've all use to BuyCraft, but well, it doesn't have the flexibility o
 2. Type "WooMinecraft-WP" into the Search Input and click the "Search" button.
 3. Find WooMinecraft-WP in the list and click "Install Now"
 4. Activate the plugin.
+
+== Upgrade Notice ==
+= 1.0.5 =
+This version is only compatible with the Java Plugin v1.0.6-RC1+ anything lower will not work with this version.

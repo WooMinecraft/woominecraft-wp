@@ -220,13 +220,20 @@ class WCM_Admin {
 		$this->maybe_update();
 	}
 
+	/**
+	 * Updates old DB data to the new layout.
+	 *
+	 * Usable for ONLY 1.0.4 to 1.0.5 update. Will remove in 1.0.6
+	 *
+	 * @author JayWood
+	 */
 	private function maybe_update() {
 		$is_old_version = get_option( 'wm_db_version', false );
 		if ( ! $is_old_version ) {
 			return;
 		}
 
-		
+
 	}
 
 	/**
