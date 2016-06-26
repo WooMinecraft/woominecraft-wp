@@ -325,36 +325,6 @@ class Woo_Minecraft {
 	}
 
 	/**
-	 * Sets orders to delivered in the database.
-	 *
-	 * @param array $row_ids
-	 *
-	 * @return false|int
-	 */
-	public function update_deliveries_for_players( $row_ids ) {
-		global $wpdb;
-		// Sets the item as delivered
-		$sql_query = $wpdb->prepare( "UPDATE {$wpdb->prefix}{$this->table} SET delivered = %d WHERE id IN ([IN])", 1 );
-		$sql_query = $this->prepare_in( $sql_query, $row_ids, true );
-		return $wpdb->query( $sql_query );
-	}
-
-	/**
-	 * Gets all un-delivered orders based on player names
-	 *
-	 * @param array $player_names
-	 *
-	 * @return array|null|object
-	 */
-	public function get_non_delivered( $player_names ) {
-		global $wpdb;
-		// Select only un-delivered items.
-		$prepared = $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}{$this->table} WHERE delivered = %d AND player_name IN ([IN])", 0 );
-		$prepared = $this->prepare_in( $prepared, $player_names );
-		return $wpdb->get_results( $prepared );
-	}
-
-	/**
 	 * Shorthand to sanitize and setup an IN statement
 	 *
 	 * @param string $sql
