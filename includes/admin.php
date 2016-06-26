@@ -216,6 +216,8 @@ class WCM_Admin {
 	public function admin_init() {
 		register_setting( 'woo_minecraft', 'wm_key' );
 
+		$this->install();
+
 		$this->maybe_update();
 	}
 
@@ -230,6 +232,7 @@ class WCM_Admin {
 	 * @author JayWood
 	 */
 	private function maybe_update() {
+
 		$is_old_version = get_option( 'wm_db_version', false );
 		if ( ! $is_old_version ) {
 			return false;
@@ -245,10 +248,14 @@ class WCM_Admin {
 			$order_id = $command_object->orderid;
 			$is_delivered = (bool) $command_object->delivered;
 			if ( get_post_meta( $order_id, 'wmc_commands' ) ) {
+				error_log( __LINE__ );
 				continue;
 			}
 
-//			$this->plugin->save_commands_to_order( $order_id );
+			$this->plugin->save_commands_to_order( $order_id );
+			if ( $is_delivered ) {
+				update_post_meta( $order_id, 'wmc_delivered', 1 );
+			}
 		}
 	}
 

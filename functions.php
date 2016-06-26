@@ -153,7 +153,7 @@ class Woo_Minecraft {
 						'compare' => 'EXISTS',
 					),
 					array(
-						'key'     => 'wm_delivered',
+						'key'     => 'wmc_delivered',
 						'compare' => 'NOT EXISTS',
 					),
 				),
@@ -271,7 +271,7 @@ class Woo_Minecraft {
 
 		// Set the orders to delivered
 		foreach ( $order_ids as $order_id ) {
-			update_post_meta( $order_id, 'wm_delivered', true );
+			update_post_meta( $order_id, 'wmc_delivered', true );
 		}
 
 		$this->bust_command_cache();
@@ -461,7 +461,6 @@ class Woo_Minecraft {
 	 * @author JayWood
 	 */
 	public function save_commands_to_order( $order_id ) {
-		global $wpdb;
 
 		$order_data   = new WC_Order( $order_id );
 		$items       = $order_data->get_items();
