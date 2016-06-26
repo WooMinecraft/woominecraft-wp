@@ -117,40 +117,6 @@ class WCM_Admin {
 	}
 
 	/**
-	 * Runs the database installation process
-	 */
-	public function install() {
-		global $wp_version, $wpdb;
-		$plugin_ver  = get_option( 'wm_db_version', false );
-		$current_ver = $this->plugin->version;
-
-		if ( $plugin_ver == $current_ver ) {
-			return;
-		}
-
-		if ( version_compare( $wp_version, '3.0', '<' ) ) {
-			$i18n_error_msg = sprintf( '<div class="error"><strong>%1$s</strong> %2$s</div>', __( 'ERROR:', 'wmc' ), __( 'Plugin requires WordPress v3.1 or higher.', 'wmc' ) );
-			die( $i18n_error_msg );
-		}
-
-		$tName = $wpdb->prefix . 'woo_minecraft';
-		$table = "CREATE TABLE IF NOT EXISTS $tName (
-			id mediumint(9) NOT NULL AUTO_INCREMENT,
-			orderid mediumint(9) NOT NULL,
-			postid mediumint(9) NOT NULL,
-			delivered TINYINT(1) NOT NULL DEFAULT 0,
-			player_name VARCHAR(64) NOT NULL,
-			command VARCHAR(128) NOT NULL,
-			PRIMARY KEY  (id)
-		);";
-
-		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-		dbDelta( $table );
-
-		update_option( 'wm_db_version', $current_ver );
-	}
-
-	/**
 	 * Adds a 'resend item' so administrators can resend single items.
 	 *
 	 * @param int     $item_id
@@ -215,9 +181,6 @@ class WCM_Admin {
 	 */
 	public function admin_init() {
 		register_setting( 'woo_minecraft', 'wm_key' );
-
-		$this->install();
-
 		$this->maybe_update();
 	}
 
@@ -259,7 +222,7 @@ class WCM_Admin {
 		}
 
 		delete_option( 'wm_db_version' );
-		
+
 		// Drop the entire table now.
 		$query = 'DROP TABLE IF EXISTS ' . $wpdb->prefix . 'woo_minecraft';
 		$wpdb->query( $query );
