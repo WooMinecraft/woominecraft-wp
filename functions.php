@@ -4,7 +4,7 @@ Plugin Name: Minecraft WooCommerce
 Plugin URI: http://plugish.com/plugins/minecraft_woo
 Description: To be used in conjunction with the minecraft_woo plugin.  If you do not have it you can get it on the repository at <a href="https://github.com/JayWood/WooMinecraft">Github</a>.  Please be sure and fork the repository and make pull requests.
 Author: Jerry Wood
-Version: 1.0.4
+Version: 1.0.5
 License: GPLv2
 Text Domain: wmc
 Author URI: http://plugish.com
@@ -304,6 +304,18 @@ class Woo_Minecraft {
 		?></div><?php
 
 		return true;
+	}
+
+	/**
+	 * Resets an order from being delivered.
+	 *
+	 * @param $order_id
+	 *
+	 * @author JayWood
+	 * @return bool
+	 */
+	public function reset_order( $order_id ) {
+		return delete_post_meta( $order_id, 'wmc_delivered' );
 	}
 
 	/**
