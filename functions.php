@@ -122,6 +122,8 @@ class Woo_Minecraft {
 		add_action( 'template_redirect', array( $this, 'json_feed' ) );
 		add_action( 'init', array( $this, 'init' ) );
 
+		add_action( 'save_post', array( $this, 'bust_command_cache' ) );
+
 		$this->admin->hooks();
 	}
 
@@ -240,7 +242,15 @@ class Woo_Minecraft {
 	 *
 	 * @author JayWood
 	 */
-	public function bust_command_cache() {
+	public function bust_command_cache( $post_id ) {
+		if ( ( defined( 'DOING_AJAX' ) && DOING_AJAX ) || ( defined( 'DOING_CRON' ) && DOING_CRON ) ) {
+			return;
+		}
+
+		if ( 'product' !== get_post_type( $post_id ) ) {
+			return;
+		}
+
 		delete_transient( $this->command_transient );
 	}
 
