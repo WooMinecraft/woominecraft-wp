@@ -7,6 +7,7 @@ Author: Jerry Wood
 Version: 1.0.5
 License: GPLv2
 Text Domain: woominecraft
+Domain Path: /languages
 Author URI: http://plugish.com
 */
 
@@ -120,7 +121,6 @@ class Woo_Minecraft {
 		add_action( 'woocommerce_thankyou', array( $this, 'thanks' ) );
 
 		add_action( 'template_redirect', array( $this, 'json_feed' ) );
-		add_action( 'init', array( $this, 'init' ) );
 
 		add_action( 'save_post', array( $this, 'bust_command_cache' ) );
 
@@ -208,13 +208,13 @@ class Woo_Minecraft {
 
 
 	/**
-	 * Init hooks
+	 * Setup Localization
 	 *
 	 * @since  0.1.0
 	 * @return null
 	 */
-	public function init() {
-		load_plugin_textdomain( 'wcm', false, dirname( $this->basename ) . '/languages/' );
+	public function i18n() {
+		load_plugin_textdomain( 'woominecraft', false, dirname( $this->basename ) . '/languages/' );
 	}
 
 	/**
@@ -555,6 +555,7 @@ function Woo_Minecraft() {
 }
 
 add_action( 'plugins_loaded', array( Woo_Minecraft(), 'hooks' ) );
+add_action( 'plugins_loaded', array( Woo_Minecraft(), 'i18n' ) );
 
 /**
  * Has Commands
