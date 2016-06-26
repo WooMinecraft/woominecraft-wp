@@ -6,7 +6,7 @@ Description: To be used in conjunction with the minecraft_woo plugin.  If you do
 Author: Jerry Wood
 Version: 1.0.5
 License: GPLv2
-Text Domain: wmc
+Text Domain: woominecraft
 Author URI: http://plugish.com
 */
 
@@ -317,7 +317,7 @@ class Woo_Minecraft {
 	public function reset_order( $order_id ) {
 		return delete_post_meta( $order_id, 'wmc_delivered' );
 	}
-	
+
 	/**
 	 * Caches the results of the mojang API based on player ID
 	 *
@@ -336,7 +336,7 @@ class Woo_Minecraft {
 	public function mojang_player_cache( $player_id ) {
 
 		$key     = md5( 'minecraft_player_' . $player_id );
-		$mc_json = wp_cache_get( $key, 'wcm' );
+		$mc_json = wp_cache_get( $key, 'woominecraft' );
 
 		if ( false == $mc_json ) {
 
@@ -385,7 +385,7 @@ class Woo_Minecraft {
 		}
 
 		if ( ! $player_id ) {
-			wc_add_notice( __( 'You MUST provide a Minecraft username.', 'ucm' ), 'error' );
+			wc_add_notice( __( 'You MUST provide a Minecraft username.', 'woominecraft' ), 'error' );
 
 			return;
 		}
@@ -393,11 +393,11 @@ class Woo_Minecraft {
 		// Grab JSON data
 		$mc_json = $this->mojang_player_cache( $player_id );
 		if ( ! $mc_json ) {
-			wc_add_notice( __( 'There was an error with the Mojang API, please try again later.', 'wcm' ) );
+			wc_add_notice( __( 'There was an error with the Mojang API, please try again later.', 'woominecraft' ) );
 		}
 
 		if ( isset( $mc_json->demo ) ) {
-			wc_add_notice( __( 'We do not allow unpaid-accounts to make donations, sorry!', 'wcm' ) );
+			wc_add_notice( __( 'We do not allow unpaid-accounts to make donations, sorry!', 'woominecraft' ) );
 
 			return;
 		}
@@ -447,9 +447,9 @@ class Woo_Minecraft {
 		$player_name = get_post_meta( $id, 'player_id', true );
 		if ( ! empty( $player_name ) ) {
 			?>
-			<div class="woo_minecraft"><h4><?php _e( 'Minecraft Details', 'wcm' ); ?></h4>
+			<div class="woo_minecraft"><h4><?php _e( 'Minecraft Details', 'woominecraft' ); ?></h4>
 
-			<p><strong><?php _e( 'Username:', 'wcm' ); ?></strong><?php echo $player_name ?></p></div><?php
+			<p><strong><?php _e( 'Username:', 'woominecraft' ); ?></strong><?php echo $player_name ?></p></div><?php
 		}
 	}
 
