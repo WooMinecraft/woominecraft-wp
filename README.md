@@ -3,10 +3,10 @@
 **Tags:** minecraft, woocommerce, donations   
 **License:** GPLv2 or later   
 **Requires at least:** 4.4.2   
-**Tested up to:** 4.4.2   
+**Tested up to:** 4.5.3   
 **Stable tag:** 1.0.4   
 
-Works in conjunction with the WooMinecraft java plugin for Minecraft to provide a self-hosted donation platform.
+A FREE Minecraft Donation plugin which works in conjunction with my WooMinecraft java plugin for Minecraft to provide a self-hosted donation platform.
 
 ## Description
 
@@ -52,6 +52,12 @@ payments - [check google](http://lmgtfy.com/?q###Woocommerce+payment+gateways)
 ![Adding commands to single variations.](https://raw.githubusercontent.com/WooMinecraft/woominecraft-wp/dev/screenshot-2.png)
 
 ## Changelog
+
+### v1.0.5
+* Remove custom DB table requirements
+* Update plugin to use order meta instead of DB table
+* Code cleanup
+* Auto-migrates old DB pending deliveries to order meta
 
 ### v1.0.4
 * Update debugging information by not escaping $_REQUEST that is sent back to java.
