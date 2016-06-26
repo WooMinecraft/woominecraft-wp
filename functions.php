@@ -320,21 +320,31 @@ class Woo_Minecraft {
 		return $wpdb->get_results( $prepared );
 	}
 
-	function prepare_in( $sql, $vals, $int = false ) {
+	/**
+	 * Shorthand to sanitize and setup an IN statement
+	 *
+	 * @param string $sql
+	 * @param array  $values
+	 * @param bool   $int
+	 *
+	 * @author JayWood
+	 * @return mixed
+	 */
+	private function prepare_in( $sql, $values, $int = false ) {
 		global $wpdb;
 		$not_in_count = substr_count( $sql, '[IN]' );
 		$replacement = $int ? '%d' : '%s';
 
-		if ( ! is_array( $vals ) ) {
-			$vals = array( $vals );
+		if ( ! is_array( $values ) ) {
+			$values = array( $values );
 		}
 
 		if ( 0 < $not_in_count ) {
-			$args = array( str_replace( '[IN]', implode( ', ', array_fill( 0, count( $vals ), $replacement ) ), str_replace( '%', '%%', $sql ) ) );
+			$args = array( str_replace( '[IN]', implode( ', ', array_fill( 0, count( $values ), $replacement ) ), str_replace( '%', '%%', $sql ) ) );
 			// This will populate ALL the [IN]'s with the $vals, assuming you have more than one [IN] in the sql
-			$vals = array_map( 'trim', $vals );
+			$values = array_map( 'trim', $values );
 			for ( $i = 0; $i < substr_count( $sql, '[IN]' ); $i ++ ) {
-				$args = array_merge( $args, $vals );
+				$args = array_merge( $args, $values );
 			}
 			$sql = call_user_func_array( array( $wpdb, 'prepare' ), $args );
 		}
