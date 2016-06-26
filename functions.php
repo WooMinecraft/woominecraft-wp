@@ -88,6 +88,12 @@ class Woo_Minecraft {
 	private $table = 'woo_minecraft';
 
 	/**
+	 * The transient key
+	 * @var string
+	 */
+	private $command_transient = 'wmc-transient-command-feed';
+
+	/**
 	 * Sets up our plugin
 	 *
 	 * @since  0.1.0
@@ -132,43 +138,48 @@ class Woo_Minecraft {
 			$this->process_completed_commands();
 		}
 
-		$order_query = apply_filters( 'woo_minecraft_json_orders_args', array(
-			'posts_per_page' => '-1',
-			'post_status'    => 'wc-completed',
-			'post_type'      => 'shop_order',
-			'meta_query'     => array(
-				'relation' => 'AND',
-				array(
-					'key'     => 'player_id',
-					'compare' => 'EXISTS',
+		if ( false === ( $output = get_transient( $this->command_transient ) ) ) {
+
+			$order_query = apply_filters( 'woo_minecraft_json_orders_args', array(
+				'posts_per_page' => '-1',
+				'post_status'    => 'wc-completed',
+				'post_type'      => 'shop_order',
+				'meta_query'     => array(
+					'relation' => 'AND',
+					array(
+						'key'     => 'player_id',
+						'compare' => 'EXISTS',
+					),
+					array(
+						'key'     => 'wm_delivered',
+						'compare' => 'NOT EXISTS',
+					),
 				),
-				array(
-					'key'     => 'wm_delivered',
-					'compare' => 'NOT EXISTS',
-				),
-			),
-		) );
+			) );
 
-		$orders = get_posts( $order_query );
+			$orders = get_posts( $order_query );
 
-		$output = array();
+			$output = array();
 
-		if ( ! empty( $orders ) ) {
-			foreach ( $orders as $wc_order ) {
-				if ( ! isset( $wc_order->ID ) ) {
-					continue;
-				}
-
-				$player_id = get_post_meta( $wc_order->ID, 'player_id', true );
-				$order_array = $this->generate_order_json( $wc_order );
-
-				if ( ! empty( $order_array ) ) {
-					if ( ! isset( $output[ $player_id ] ) ) {
-						$output[ $player_id ] = array();
+			if ( ! empty( $orders ) ) {
+				foreach ( $orders as $wc_order ) {
+					if ( ! isset( $wc_order->ID ) ) {
+						continue;
 					}
-					$output[ $player_id ][ $wc_order->ID ] = $order_array;
+
+					$player_id   = get_post_meta( $wc_order->ID, 'player_id', true );
+					$order_array = $this->generate_order_json( $wc_order );
+
+					if ( ! empty( $order_array ) ) {
+						if ( ! isset( $output[ $player_id ] ) ) {
+							$output[ $player_id ] = array();
+						}
+						$output[ $player_id ][ $wc_order->ID ] = $order_array;
+					}
 				}
 			}
+
+			set_transient( $this->command_transient, $output, 60 * 60 ); // Stores the feed in a transient for 1 hour.
 		}
 
 		wp_send_json_success( $output );
@@ -225,6 +236,15 @@ class Woo_Minecraft {
 	}
 
 	/**
+	 * Helper method for transient busting
+	 *
+	 * @author JayWood
+	 */
+	public function bust_command_cache() {
+		delete_transient( $this->command_transient );
+	}
+
+	/**
 	 * Processes all completed commands.
 	 *
 	 * @author JayWood
@@ -241,6 +261,8 @@ class Woo_Minecraft {
 		foreach ( $order_ids as $order_id ) {
 			update_post_meta( $order_id, 'wm_delivered', true );
 		}
+
+		$this->bust_command_cache();
 	}
 
 
