@@ -128,6 +128,10 @@ class Woo_Minecraft {
 			return;
 		}
 
+		if ( isset( $_REQUEST['processedOrders'] ) ) {
+			$this->process_completed_commands();
+		}
+
 		$order_query = apply_filters( 'woo_minecraft_json_orders_args', array(
 			'posts_per_page' => '-1',
 			'post_status'    => 'wc-completed',
@@ -171,6 +175,14 @@ class Woo_Minecraft {
 
 	}
 
+	/**
+	 * Generates the order JSON data for a single order.
+	 *
+	 * @param WP_Post $order_post
+	 *
+	 * @author JayWood
+	 * @return array|mixed
+	 */
 	private function generate_order_json( $order_post ) {
 
 		if ( ! isset( $order_post->ID ) ) {
@@ -190,6 +202,45 @@ class Woo_Minecraft {
 	 */
 	public function init() {
 		load_plugin_textdomain( 'wcm', false, dirname( $this->basename ) . '/languages/' );
+	}
+
+	/**
+	 * Take special care to sanitize the incoming post data.
+	 *
+	 * While not as simple as running esc_attr, this is still necessary since the JSON
+	 * from the Java code comes in escaped, so we need some custom sanitization.
+	 *
+	 * @param $post_data
+	 *
+	 * @author JayWood
+	 * @return array
+	 */
+	private function sanitized_orders_post( $post_data ) {
+		$decoded = json_decode( stripslashes( urldecode( $post_data ) ) );
+		if ( empty( $decoded ) ) {
+			return array();
+		}
+
+		return array_map( 'intval', $decoded );
+	}
+
+	/**
+	 * Processes all completed commands.
+	 *
+	 * @author JayWood
+	 */
+	private function process_completed_commands() {
+		$key = esc_attr( $_GET['key'] );
+		$order_ids = (array) $this->sanitized_orders_post( $_POST['processedOrders'] );
+
+		if (  empty( $order_ids ) ) {
+			wp_send_json_error( array( 'msg' => __( 'Commands was empty', 'wmc' ) ) );
+		}
+
+		// Set the orders to delivered
+		foreach ( $order_ids as $order_id ) {
+			update_post_meta( $order_id, 'wm_delivered', true );
+		}
 	}
 
 
