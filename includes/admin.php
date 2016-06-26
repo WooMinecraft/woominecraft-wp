@@ -38,7 +38,7 @@ class WCM_Admin {
 		$order_id = isset( $_POST['order_id'] ) ? intval( $_POST['order_id'] ) : false;
 
 		if ( $player_id && $order_id ) {
-			$result = $this->plugin->set_non_delivered_for_player( $player_id, $order_id );
+			$result = $this->plugin->reset_order( $order_id );
 			if ( $result > 0 ) {
 				wp_send_json_success();
 			}
@@ -76,30 +76,6 @@ class WCM_Admin {
 
 		$meta = get_post_meta( $post->ID, 'minecraft_woo', true );
 		include 'views/commands.php';
-	}
-
-	/**
-	 * Fires when the order status changes.
-	 *
-	 * @param int    $order_id
-	 * @param string $current_status
-	 * @param string $new_status
-	 */
-	public function delete_sql_data( $order_id, $current_status, $new_status ) {
-		if ( 'completed' !== $current_status ) {
-			return;
-		}
-		global $wpdb;
-
-		//$orderData  = new WC_Order( $order_id );
-		//$items      = $orderData->get_items();
-		//$tmpArray   = array();
-		//$playername = get_post_meta( $order_id, 'player_id', true );
-		$result     = $wpdb->delete( $wpdb->prefix . 'woo_minecraft', array( 'orderid' => $order_id ), array( '%d' ) );
-		if ( false === $result ) {
-			wp_die( $wpdb->last_error );
-		}
-
 	}
 
 	/**

@@ -319,24 +319,6 @@ class Woo_Minecraft {
 	}
 
 	/**
-	 * Sets the items for a specific player to non-delivered.
-	 *
-	 * @param string $player_id
-	 * @param int $order_id
-	 *
-	 * @return false|int
-	 */
-	public function set_non_delivered_for_player( $player_id, $order_id = 0 ) {
-		global $wpdb;
-		$sql_query = $wpdb->prepare( "UPDATE {$wpdb->prefix}{$this->table} SET delivered = %d WHERE player_name = %s", 0, $player_id );
-
-		if ( ! empty( $order_id ) ) {
-			$sql_query .= $wpdb->prepare( ' AND orderid = %d', $order_id );
-		}
-		return $wpdb->query( $sql_query );
-	}
-
-	/**
 	 * Shorthand to sanitize and setup an IN statement
 	 *
 	 * @param string $sql
