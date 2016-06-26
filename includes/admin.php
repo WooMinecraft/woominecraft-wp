@@ -216,6 +216,17 @@ class WCM_Admin {
 	public function admin_init() {
 		register_setting( 'woo_minecraft', 'wm_key' );
 		$this->install();
+
+		$this->maybe_update();
+	}
+
+	private function maybe_update() {
+		$is_old_version = get_option( 'wm_db_version', false );
+		if ( ! $is_old_version ) {
+			return;
+		}
+
+		
 	}
 
 	/**
