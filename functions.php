@@ -453,6 +453,13 @@ class Woo_Minecraft {
 		}
 	}
 
+	/**
+	 * Updates an order's meta data with the commands hash.
+	 *
+	 * @param $order_id
+	 *
+	 * @author JayWood
+	 */
 	public function save_commands_to_order( $order_id ) {
 		global $wpdb;
 

@@ -215,7 +215,6 @@ class WCM_Admin {
 	 */
 	public function admin_init() {
 		register_setting( 'woo_minecraft', 'wm_key' );
-		$this->install();
 
 		$this->maybe_update();
 	}
@@ -223,17 +222,34 @@ class WCM_Admin {
 	/**
 	 * Updates old DB data to the new layout.
 	 *
-	 * Usable for ONLY 1.0.4 to 1.0.5 update. Will remove in 1.0.6
+	 * Usable for ONLY 1.0.4 to 1.0.5 update.
+	 * Will remove in 1.0.6
 	 *
+	 * @deprecated Will be removed in 1.0.6
+	 * @internal
 	 * @author JayWood
 	 */
 	private function maybe_update() {
 		$is_old_version = get_option( 'wm_db_version', false );
 		if ( ! $is_old_version ) {
-			return;
+			return false;
 		}
 
+		global $wpdb;
+		$results = $wpdb->get_results( "SELECT orderid,delivered FROM {$wpdb->prefix}woo_minecraft" );
+		if ( empty( $results ) ) {
+			return delete_option( 'wm_db_version' );
+		}
 
+		foreach ( $results as $command_object ) {
+			$order_id = $command_object->orderid;
+			$is_delivered = (bool) $command_object->delivered;
+			if ( get_post_meta( $order_id, 'wmc_commands' ) ) {
+				continue;
+			}
+
+//			$this->plugin->save_commands_to_order( $order_id );
+		}
 	}
 
 	/**
