@@ -257,13 +257,10 @@ class WCM_Admin {
 				update_post_meta( $order_id, 'wmc_delivered', 1 );
 			}
 		}
-	}
 
-	/**
-	 * Drops the database if a user uninstalls the entire plugin.
-	 */
-	public function uninstall() {
-		global $wpdb;
+		delete_option( 'wm_db_version' );
+		
+		// Drop the entire table now.
 		$query = 'DROP TABLE IF EXISTS ' . $wpdb->prefix . 'woo_minecraft';
 		$wpdb->query( $query );
 	}
