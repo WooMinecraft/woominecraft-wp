@@ -55,6 +55,9 @@ payments - [check google](http://lmgtfy.com/?q###Woocommerce+payment+gateways)
 
 ## Changelog
 
+### 1.0.6
+* Fixed [#96](https://github.com/WooMinecraft/WooMinecraft/issues/96) - Checking wrong post type for cache busting.
+
 ### 1.0.5
 * Remove custom DB table requirements
 * Update plugin to use order meta instead of DB table
