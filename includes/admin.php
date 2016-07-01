@@ -22,8 +22,6 @@ class WCM_Admin {
 		add_action( 'woocommerce_product_after_variable_attributes', array( $this, 'add_variation_field' ), 10, 3 );
 		add_action( 'woocommerce_save_product_variation', array( $this, 'save_product_commands' ), 10 );
 
-		add_action( 'woocommerce_order_status_changed', array( $this, 'delete_sql_data' ), 10, 3 );
-
 		add_action( 'wp_ajax_wmc_resend_donations', array( $this, 'ajax_handler' ) );
 
 		// TODO: Add per-item resend capability.
@@ -83,8 +81,6 @@ class WCM_Admin {
 	 * @param WC_Order $order
 	 */
 	public function display_player_name_in_order_meta( $order ) {
-
-		error_log( __LINE__ );
 
 		$player_id = get_post_meta( $order->id, 'player_id', true );
 
