@@ -245,17 +245,10 @@ class Woo_Minecraft {
 	 * @author JayWood
 	 */
 	public function bust_command_cache( $post_id = 0 ) {
-		if ( ( defined( 'DOING_AJAX' ) && DOING_AJAX ) || ( defined( 'DOING_CRON' ) && DOING_CRON ) ) {
-			error_log( __LINE__ );
+
+		if ( ! empty( $post_id ) && 'shop_order' !== get_post_type( $post_id ) ) {
 			return;
 		}
-
-		if ( ! empty( $post_id ) && 'product' !== get_post_type( $post_id ) ) {
-			error_log( __LINE__ );
-			return;
-		}
-
-		error_log( __LINE__ );
 
 		delete_transient( $this->command_transient );
 	}
