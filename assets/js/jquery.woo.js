@@ -47,8 +47,7 @@ window.WooMinecraft = ( function( window, document, $ ) {
 			// TODO: Make a prettier dialog, instead of this crap.
 			alert( app.l10n.donations_resent );
 		}
-
-
+		
 		app.$resend_donations.prop( 'disabled', false );
 	};
 

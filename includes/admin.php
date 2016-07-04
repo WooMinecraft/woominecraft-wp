@@ -179,6 +179,19 @@ class WCM_Admin {
 	 */
 	private function maybe_update() {
 
+		// Migrate old options to new array set
+		if ( $old_key = get_option( 'wm_key' ) ) {
+			$new_options = array(
+				array(
+					'name' => __( 'Main', 'woominecraft' ),
+					'key'  => $old_key,
+				),
+			);
+
+			update_option( 'wm_servers', $new_options );
+			delete_option( 'wm_key' );
+		}
+
 		$is_old_version = get_option( 'wm_db_version', false );
 		if ( ! $is_old_version ) {
 			return false;

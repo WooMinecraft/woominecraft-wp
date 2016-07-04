@@ -424,7 +424,6 @@ class Woo_Minecraft {
 				}
 			}
 
-
 			$product_variation = get_post_meta( $item['variation_id'], 'minecraft_woo', true );
 			if ( ! empty( $product_variation ) ) {
 				for ( $n = 0; $n < $item['qty']; $n ++ ) {
