@@ -508,7 +508,7 @@ class Woo_Minecraft {
 	 * Creates or returns an instance of this class.
 	 *
 	 * @since  0.1.0
-	 * @return WDS_Client_Plugin_Name A single instance of this class.
+	 * @return Woo_Minecraft A single instance of this class.
 	 */
 	public static function get_instance() {
 		if ( null === self::$single_instance ) {
@@ -542,12 +542,12 @@ class Woo_Minecraft {
 	}
 }
 
-function Woo_Minecraft() {
+function woo_minecraft() {
 	return Woo_Minecraft::get_instance();
 }
 
-add_action( 'plugins_loaded', array( Woo_Minecraft(), 'hooks' ) );
-add_action( 'plugins_loaded', array( Woo_Minecraft(), 'i18n' ) );
+add_action( 'plugins_loaded', array( woo_minecraft(), 'hooks' ) );
+add_action( 'plugins_loaded', array( woo_minecraft(), 'i18n' ) );
 
 /**
  * Has Commands

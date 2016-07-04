@@ -28,17 +28,26 @@ class WCM_Admin {
 		add_action( 'admin_init', array( $this, 'admin_init' ) );
 
 		add_filter( 'woocommerce_get_settings_general', array( $this, 'wmc_settings' ) );
-		add_action( 'woocommerce_admin_field_wmc_servers', array( $this, 'servers_options' ) );
-	}
-
-	public function servers_options( $values ) {
-
+		add_action( 'woocommerce_admin_field_wmc_servers', array( $this, 'render_servers_section' ) );
 	}
 
 	/**
-	 * @param $settings
+	 * Renders the server section of the settings page.
+	 * @param $values
+	 * @since 1.0.7
 	 *
-	 * @since 
+	 * @author JayWood
+	 */
+	public function render_servers_section( $values ) {
+		require_once 'views/server-section.php';
+	}
+
+	/**
+	 * Add settings section to woocommerce general settings page
+	 *
+	 * @param array $settings
+	 *
+	 * @since 1.0.7
 	 * @author JayWood
 	 * @return array
 	 */
@@ -60,6 +69,41 @@ class WCM_Admin {
 		);
 
 		return $settings;
+	}
+
+	/**
+	 * Gets all servers and sanitizes their output.
+	 *
+	 * @since 1.7.0
+	 * @author JayWood
+	 * @return array
+	 */
+	public function get_servers() {
+		$servers = get_option( 'wm_servers', array() );
+		if ( empty( $servers ) || ! is_array( $servers ) ) {
+			return array(
+				'name' => __( 'Main', 'woominecraft' ),
+				'key' => '',
+			);
+		}
+
+		$output = array();
+
+		foreach ( $servers as $server ) {
+			$name = isset( $server['name'] ) ? esc_attr( $server['name'] ) : false;
+			$key  = isset( $server['key'] ) ? esc_attr( $server['key'] ) : false;
+
+			if ( ! $name || ! $key ) {
+				continue;
+			}
+
+			$output[] = array(
+				'name' => $name,
+				'key'  => $key,
+			);
+
+		}
+		return $output;
 	}
 
 	public function ajax_handler() {
