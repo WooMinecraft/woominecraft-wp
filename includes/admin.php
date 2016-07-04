@@ -24,11 +24,42 @@ class WCM_Admin {
 
 		add_action( 'wp_ajax_wmc_resend_donations', array( $this, 'ajax_handler' ) );
 
-		// TODO: Add per-item resend capability.
-		//add_action( 'woocommerce_order_item_line_item_html', array( $this, 'line_item'), 10, 2);
-
 		add_action( 'admin_menu', array( $this, 'setup_admin_menu' ) );
 		add_action( 'admin_init', array( $this, 'admin_init' ) );
+
+		add_filter( 'woocommerce_get_settings_general', array( $this, 'wmc_settings' ) );
+		add_action( 'woocommerce_admin_field_wmc_servers', array( $this, 'servers_options' ) );
+	}
+
+	public function servers_options( $values ) {
+
+	}
+
+	/**
+	 * @param $settings
+	 *
+	 * @since 
+	 * @author JayWood
+	 * @return array
+	 */
+	public function wmc_settings( $settings ) {
+
+		$settings[] = array(
+			'title' => __( 'WooMinecraft Options', 'woominecraft' ),
+			'id' => 'wmc_options',
+			'type' => 'title',
+		);
+
+		$settings[] = array(
+			'type' => 'wmc_servers',
+		);
+
+		$settings[] = array(
+			'type' => 'sectionend',
+			'id' => 'wmc_options',
+		);
+
+		return $settings;
 	}
 
 	public function ajax_handler() {
