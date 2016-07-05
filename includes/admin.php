@@ -30,7 +30,6 @@ class WCM_Admin {
 
 		add_action( 'wp_ajax_wmc_resend_donations', array( $this, 'ajax_handler' ) );
 
-		add_action( 'admin_menu', array( $this, 'setup_admin_menu' ) );
 		add_action( 'admin_init', array( $this, 'admin_init' ) );
 
 		add_filter( 'woocommerce_get_settings_general', array( $this, 'wmc_settings' ) );
@@ -258,24 +257,10 @@ class WCM_Admin {
 	}
 
 	/**
-	 * Generates the HTML for the settings page.
-	 */
-	public function setup_admin_page() {
-		include_once 'views/admin-settings.php';
-	}
-
-	/**
-	 * Adds the menu to the Admin menu.
-	 */
-	public function setup_admin_menu() {
-		add_options_page( 'Woo Minecraft', 'Woo Minecraft', 'manage_options', 'woominecraft', array( $this, 'setup_admin_page' ) );
-	}
-
-	/**
 	 * Registers the setting key, and installs the database.
 	 */
 	public function admin_init() {
-		register_setting( 'woo_minecraft', 'wm_key' );
+		register_setting( 'woo_minecraft', $this->option_key );
 		$this->maybe_update();
 	}
 
@@ -285,7 +270,7 @@ class WCM_Admin {
 	 * Usable for ONLY 1.0.4 to 1.0.5 update.
 	 * Will remove in 1.0.6
 	 *
-	 * @deprecated Will be removed in 1.0.6
+	 * @deprecated This method is used to force update database information
 	 * @internal
 	 * @author JayWood
 	 */
