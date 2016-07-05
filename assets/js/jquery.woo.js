@@ -17,12 +17,71 @@ window.WooMinecraft = ( function( window, document, $ ) {
 		app.$body.on( 'click', '.remove_row', app.remove_command );
 		app.$body.on( 'click', '.woo_minecraft_reset', app.reset_form );
 
+		app.$body.on( 'click', '.button.wmc_add_server', app.add_server );
+		app.$body.on( 'click', '.button.wmc_delete_server', app.remove_server );
+
 		if ( app.l10n.player_id ) {
 			app.$resend_donations.on( 'click', app.resend_donations );
 		} else {
 			app.$resend_donations.prop( 'disabled', true );
 		}
+	};
 
+	/**
+	 * Adds a server to the list of servers in the admin panel
+	 * @since 1.0.7
+	 * @param evt
+	 */
+	app.add_server = function( evt ) {
+		evt.preventDefault();
+		var $row = $( '.woominecraft tbody tr:first' );
+		if ( ! $row ) {
+			return false;
+		}
+
+		var $new_row = $row.clone();
+
+		// Clear out all values
+		$new_row.find( ':text' ).val( '' );
+		$row.parent( 'tbody' ).append( $new_row );
+		app.reindex_rows();
+	};
+
+	/**
+	 * Removes a server from the list of servers in the admin panel.
+	 * @since 1.0.7
+	 * @param evt
+	 */
+	app.remove_server = function( evt ) {
+		evt.preventDefault();
+		if ( 0 == ( $( '.woominecraft tbody tr').length - 1 ) ) {
+			alert( "You must have at least one server listed." );
+			return false;
+		}
+
+		$( this ).closest( 'tr.row' ).fadeOut( 200, function() {
+			$( this ).remove();
+			app.reindex_rows();
+		} );
+	};
+
+	/**
+	 * @since 1.0.7
+	 */
+	app.reindex_rows = function() {
+		var $rows = $( '.woominecraft tbody tr' );
+		if ( ! $rows ) {
+			return false;
+		}
+
+		$rows.each( function( index ) {
+			$( this ).find( ':text' ).each( function(){
+				var $name = $( this ).attr( 'name' );
+				$name = $name.replace( /\[([0-9]+)\]/, '['+ index +']' );
+
+				$( this ).attr( 'name', $name );
+			} );
+		} );
 	};
 
 	app.resend_donations = function( evt ) {
@@ -47,7 +106,7 @@ window.WooMinecraft = ( function( window, document, $ ) {
 			// TODO: Make a prettier dialog, instead of this crap.
 			alert( app.l10n.donations_resent );
 		}
-		
+
 		app.$resend_donations.prop( 'disabled', false );
 	};
 
