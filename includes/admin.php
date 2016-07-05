@@ -203,6 +203,7 @@ class WCM_Admin {
 			'confirm'          => __( 'This will delete ALL commands, are you sure? This cannot be undone.', 'woominecraft' ),
 			'donations_resent' => __( 'All donations for this order have been resent', 'woominecraft' ),
 			'resend'           => __( 'Resend Donations', 'woominecraft' ),
+			'must_have_single' => __( 'You must have at least one server.', 'woominecraft' ),
 			'please_wait'      => __( 'Please wait...', 'woominecraft' ),
 		);
 

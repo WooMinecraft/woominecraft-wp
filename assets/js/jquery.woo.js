@@ -12,11 +12,8 @@ window.WooMinecraft = ( function( window, document, $ ) {
 	app.init = function() {
 
 		app.cache();
-
-		app.$body.on( 'click', '.woo_minecraft_add', app.add_command );
-		app.$body.on( 'click', '.remove_row', app.remove_command );
+		
 		app.$body.on( 'click', '.woo_minecraft_reset', app.reset_form );
-
 		app.$body.on( 'click', '.button.wmc_add_server', app.add_server );
 		app.$body.on( 'click', '.button.wmc_delete_server', app.remove_server );
 
@@ -55,7 +52,7 @@ window.WooMinecraft = ( function( window, document, $ ) {
 	app.remove_server = function( evt ) {
 		evt.preventDefault();
 		if ( 0 == ( $( '.woominecraft tbody tr').length - 1 ) ) {
-			alert( "You must have at least one server listed." );
+			alert( app.l10n.must_have_single );
 			return false;
 		}
 
@@ -66,6 +63,7 @@ window.WooMinecraft = ( function( window, document, $ ) {
 	};
 
 	/**
+	 * Re-indexes rows for array processing
 	 * @since 1.0.7
 	 */
 	app.reindex_rows = function() {
@@ -110,28 +108,6 @@ window.WooMinecraft = ( function( window, document, $ ) {
 		app.$resend_donations.prop( 'disabled', false );
 	};
 
-	/**
-	 * Adds more rows for the commands.
-	 * @param evt
-	 */
-	app.add_command = function( evt ) {
-		evt.preventDefault();
-		var current_block = $( this ).closest( '.form-fields' );  // Update to grab the parent
-		var cloned = current_block.find( '.woo_minecraft_copyme' ).clone().removeClass( 'woo_minecraft_copyme' ).removeAttr( 'style' );
-		current_block.append( cloned );
-	};
-
-	/**
-	 * Removes commands from post data.
-	 * @param evt
-	 */
-	app.remove_command = function( evt ) {
-		evt.preventDefault();
-
-		$(this).parent('span').fadeOut(200, function(e){
-			$(this).remove();
-		});
-	};
 
 	/**
 	 * Removes ALL commands from the current selection.
