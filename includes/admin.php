@@ -7,6 +7,12 @@ class WCM_Admin {
 	 */
 	private $plugin = null;
 
+	/**
+	 * The servers key to store in the database
+	 * @var string
+	 */
+	private $option_key = 'wm_servers';
+
 	public function __construct( $plugin ) {
 		$this->plugin = $plugin;
 	}
@@ -29,6 +35,36 @@ class WCM_Admin {
 
 		add_filter( 'woocommerce_get_settings_general', array( $this, 'wmc_settings' ) );
 		add_action( 'woocommerce_admin_field_wmc_servers', array( $this, 'render_servers_section' ) );
+		add_action( 'woocommerce_settings_save_general', array( $this, 'save' ) );
+	}
+
+	public function save() {
+		if ( ! isset( $_POST['wmc_servers'] ) ) {
+			return;
+		}
+
+		$servers = (array) $_POST['wmc_servers'];
+		$output = [];
+		foreach ( $servers as $server ) {
+			$name = array_key_exists( 'name', $server ) && ! empty( $server['name'] ) ? esc_attr( $server['name'] ) : false;
+			$key = array_key_exists( 'key', $server ) && ! empty( $server['key'] ) ? esc_attr( $server['key'] ) : false;
+			if ( ! $name || ! $key ) {
+				continue;
+			}
+			$output[] = array(
+				'name' => $name,
+				'key'  => $key,
+			);
+		}
+
+		if ( empty( $output ) ) {
+			$output[] = array(
+				'name' => __( 'Main', 'woominecraft' ),
+				'key' => '',
+			);
+		}
+
+		update_option( $this->option_key, $output );
 	}
 
 	/**
@@ -79,7 +115,7 @@ class WCM_Admin {
 	 * @return array
 	 */
 	public function get_servers() {
-		$servers = get_option( 'wm_servers', array() );
+		$servers = get_option( $this->option_key, array() );
 		if ( empty( $servers ) || ! is_array( $servers ) ) {
 			return array(
 				'name' => __( 'Main', 'woominecraft' ),
@@ -264,7 +300,7 @@ class WCM_Admin {
 				),
 			);
 
-			update_option( 'wm_servers', $new_options );
+			update_option( $this->option_key, $new_options );
 			delete_option( 'wm_key' );
 		}
 
