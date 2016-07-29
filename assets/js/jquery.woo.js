@@ -12,7 +12,7 @@ window.WooMinecraft = ( function( window, document, $ ) {
 	app.init = function() {
 
 		app.cache();
-		
+
 		app.$body.on( 'click', '.woo_minecraft_reset', app.reset_form );
 		app.$body.on( 'click', '.button.wmc_add_server', app.add_server );
 		app.$body.on( 'click', '.button.wmc_delete_server', app.remove_server );
@@ -74,6 +74,13 @@ window.WooMinecraft = ( function( window, document, $ ) {
 
 		$rows.each( function( index ) {
 			$( this ).find( ':text' ).each( function(){
+				var $name = $( this ).attr( 'name' );
+				$name = $name.replace( /\[([0-9]+)\]/, '['+ index +']' );
+
+				$( this ).attr( 'name', $name );
+			} );
+
+			$( this ).find( 'select' ).each( function(){
 				var $name = $( this ).attr( 'name' );
 				$name = $name.replace( /\[([0-9]+)\]/, '['+ index +']' );
 

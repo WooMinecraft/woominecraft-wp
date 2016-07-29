@@ -230,7 +230,7 @@ class WCM_Admin {
 	 */
 	public function scripts( $hook = '' ) {
 		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
-		wp_register_script( 'woo_minecraft_js', $this->plugin->url( "assets/js/jquery.woo{$min}.js" ), array( 'jquery' ), '1.0', true );
+		wp_register_script( 'woo_minecraft_js', $this->plugin->url( "assets/js/jquery.woo{$min}.js" ), array( 'jquery' ), '1.1', true );
 		wp_register_style( 'woo_minecraft_css', plugins_url( 'style.css', dirname( __FILE__ ) ), array( 'woocommerce_admin_styles' ), '1.0' );
 
 		$script_data = array(
@@ -353,9 +353,9 @@ class WCM_Admin {
 		}
 
 		$variations = $_POST['wmc_commands'];
+		error_log( print_r( $variations, 1 ) );
 		$meta = array();
 		foreach ( $variations as $id => $commands ) {
-
 			// Key commands by key.
 			$key     = $commands['server'];
 			$command = esc_attr( $commands['command'] );
