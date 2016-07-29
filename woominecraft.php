@@ -127,13 +127,24 @@ class Woo_Minecraft {
 	 * Produces the JSON Feed for Orders Pending Delivery
 	 */
 	public function json_feed() {
-		$db_key = get_option( 'wm_key' );
-		if ( ! isset( $_REQUEST['key'] ) || $db_key !== $_REQUEST['key'] ) {
+
+		$servers = get_option( 'wm_servers', array() );
+		if ( empty( $servers ) ) {
+			return;
+		}
+		$keys = wp_list_pluck( $servers, 'key' );
+		if ( empty( $keys ) ) {
+			return;
+		}
+
+		$key = esc_attr( $_GET['key'] );
+
+		if ( ! isset( $_REQUEST['key'] ) || ! array_search( $key, $keys ) ) {
 			return;
 		}
 
 		if ( isset( $_REQUEST['processedOrders'] ) ) {
-			$this->process_completed_commands();
+			$this->process_completed_commands( $key );
 		}
 
 		if ( false === ( $output = get_transient( $this->command_transient ) ) ) {
@@ -253,9 +264,9 @@ class Woo_Minecraft {
 	 * Processes all completed commands.
 	 *
 	 * @author JayWood
+	 * @param string $key
 	 */
-	private function process_completed_commands() {
-		$key = esc_attr( $_GET['key'] );
+	private function process_completed_commands( $key = '' ) {
 		$order_ids = (array) $this->sanitized_orders_post( $_POST['processedOrders'] );
 
 		if (  empty( $order_ids ) ) {
