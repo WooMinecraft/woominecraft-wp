@@ -423,6 +423,14 @@ class Woo_Minecraft {
 		$order_data   = new WC_Order( $order_id );
 		$items       = $order_data->get_items();
 		$tmp_array   = array();
+
+		if ( ! isset( $_POST['player_id'] ) || empty( $_POST['player_id'] ) ) {
+			return;
+		}
+
+		$player_id = esc_attr( $_POST['player_id'] );
+		update_post_meta( $order_id, 'player_id', $player_id );
+
 		$player_name = get_post_meta( $order_id, 'player_id', true );
 		foreach ( $items as $item ) {
 			// Insert into database table
@@ -435,10 +443,12 @@ class Woo_Minecraft {
 						}
 						if ( is_array( $command ) ) {
 							foreach( $command as $c ) {
-								$tmp_array[ $server_key ][] = ( false === strpos( '%s', $c ) ) ? $c : sprintf( $c, $player_name );
+								error_log( print_r( array( $c, $player_name ), 1 ) );
+								$tmp_array[ $server_key ][] = sprintf( $c, $player_name );
 							}
 						} else {
-							$tmp_array[ $server_key ][] = ( false === strpos( '%s', $command ) ) ? $command : sprintf( $command, $player_name );
+							error_log( print_r( array( $command, $player_name ), 1 ) );
+							$tmp_array[ $server_key ][] = sprintf( $command, $player_name );
 						}
 					}
 				}
@@ -455,10 +465,10 @@ class Woo_Minecraft {
 
 							if ( is_array( $command ) ) {
 								foreach( $command as $c ) {
-									$tmp_array[ $server_key ][] = ( false === strpos( '%s', $c ) ) ? $c : sprintf( $c, $player_name );
+									$tmp_array[ $server_key ][] = sprintf( $c, $player_name );
 								}
 							} else {
-								$tmp_array[ $server_key ][] = ( false === strpos( '%s', $command ) ) ? $command : sprintf( $command, $player_name );
+								$tmp_array[ $server_key ][] = sprintf( $command, $player_name );
 							}
 						}
 					}

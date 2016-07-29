@@ -19,8 +19,7 @@ class WCM_Admin {
 
 	public function hooks() {
 		add_action( 'admin_enqueue_scripts', array( $this, 'scripts' ) );
-
-		add_action( 'woocommerce_checkout_update_order_meta', array( $this, 'save_player_id_to_order' ) );
+		
 		add_action( 'woocommerce_admin_order_data_after_shipping_address', array( $this, 'display_player_name_in_order_meta' ) );
 		add_action( 'woocommerce_product_options_general_product_data', array( $this, 'add_group_field' ) );
 		add_action( 'woocommerce_process_product_meta', array( $this, 'save_product_commands' ) );
@@ -331,16 +330,6 @@ class WCM_Admin {
 		// Drop the entire table now.
 		$query = 'DROP TABLE IF EXISTS ' . $wpdb->prefix . 'woo_minecraft';
 		$wpdb->query( $query );
-	}
-
-	/**
-	 * Saves the player ID to the order, for use later.
-	 * @param int $order_id
-	 */
-	public function save_player_id_to_order( $order_id ) {
-		if ( $_POST['player_id'] ) {
-			update_post_meta( $order_id, 'player_id', esc_attr( $_POST['player_id'] ) );
-		}
 	}
 
 	/**
