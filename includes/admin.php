@@ -265,6 +265,16 @@ class WCM_Admin {
 	}
 
 	/**
+	 * Updates all OLD commands to the new structure.
+	 *
+	 * @deprecated
+	 * @author JayWood
+	 */
+	private function update_commands( $old_key ) {
+
+	}
+
+	/**
 	 * Updates old DB data to the new layout.
 	 *
 	 * Usable for ONLY 1.0.4 to 1.0.5 update.
@@ -285,6 +295,8 @@ class WCM_Admin {
 				),
 			);
 
+			$this->update_commands( $old_key );
+
 			update_option( $this->option_key, $new_options );
 			delete_option( 'wm_key' );
 		}
@@ -293,7 +305,7 @@ class WCM_Admin {
 		if ( ! $is_old_version ) {
 			return false;
 		}
-		
+
 		global $wpdb;
 		$results = $wpdb->get_results( "SELECT orderid,delivered FROM {$wpdb->prefix}woo_minecraft" );
 		if ( empty( $results ) ) {
@@ -334,16 +346,28 @@ class WCM_Admin {
 	/**
 	 * Saves the general commands to post meta data.
 	 */
-	public function save_product_commands() {
+	public function save_product_commands( $post_id = 0 ) {
 
-		if ( ! isset( $_POST['minecraft_woo'] ) ) {
+		if ( ! isset( $_POST['wmc_commands'] ) || empty( $post_id ) ) {
 			return;
 		}
 
-		$variations = $_POST['minecraft_woo'];
+		$variations = $_POST['wmc_commands'];
+		$meta = array();
 		foreach ( $variations as $id => $commands ) {
-			$commands = array_map( 'esc_attr', $commands ); // Escape the commands.
-			update_post_meta( intval( $id ), 'minecraft_woo', array_filter( $commands ) );
+
+			// Key commands by key.
+			$key     = $commands['server'];
+			$command = esc_attr( $commands['command'] );
+			if ( ! isset( $meta[ $key ] ) ) {
+				$meta[ $key ] = array();
+			}
+
+			$meta[ $key ][] = $command;
+		}
+
+		if ( ! empty( $meta ) ) {
+			update_post_meta( $post_id, 'wmc_commands', $meta );
 		}
 	}
 }
