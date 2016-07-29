@@ -165,7 +165,7 @@ class WCM_Admin {
 			return;
 		}
 
-		$meta = get_post_meta( $post->ID, 'minecraft_woo', true );
+		$commands = get_post_meta( $post->ID, 'wmc_commands', true );
 		include_once 'views/commands.php';
 	}
 
@@ -182,7 +182,7 @@ class WCM_Admin {
 			return;
 		}
 
-		$meta = get_post_meta( $post->ID, 'minecraft_woo', true );
+		$commands = get_post_meta( $post->ID, 'wmc_commands', true );
 		include 'views/commands.php';
 	}
 
