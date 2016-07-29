@@ -19,7 +19,7 @@ class WCM_Admin {
 
 	public function hooks() {
 		add_action( 'admin_enqueue_scripts', array( $this, 'scripts' ) );
-		
+
 		add_action( 'woocommerce_admin_order_data_after_shipping_address', array( $this, 'display_player_name_in_order_meta' ) );
 		add_action( 'woocommerce_product_options_general_product_data', array( $this, 'add_group_field' ) );
 		add_action( 'woocommerce_process_product_meta', array( $this, 'save_product_commands' ) );
@@ -269,8 +269,58 @@ class WCM_Admin {
 	 * @deprecated
 	 * @author JayWood
 	 */
-	private function update_commands( $old_key ) {
+	private function update_product_commands( $old_key ) {
 
+		$posts = get_posts( array(
+			'post_type'   => array( 'product', 'product_variation' ),
+			'post_status' => 'any',
+			'meta_query'  => array(
+				array(
+					'key'     => 'minecraft_woo',
+					'compare' => 'EXISTS',
+				)
+			)
+		) );
+
+		if ( empty( $posts ) ) {
+			return;
+		}
+
+		foreach ( $posts as $product ) {
+			$meta = get_post_meta( $product->ID, 'minecraft_woo', true );
+			$new_array = array();
+			$new_array[ $old_key ] = $meta;
+			update_post_meta( $product->ID, 'wmc_commands', $new_array );
+			delete_post_meta( $product->ID, 'minecraft_woo' );
+		}
+
+	}
+
+	/**
+	 * Updates all orders to the new order command structure.
+	 *
+	 * @deprecated
+	 * @param string $old_key
+	 *
+	 * @author JayWood
+	 */
+	private function update_order_commands( $old_key ) {
+		$posts = get_posts( array(
+			'post_type' => 'shop_order',
+			'post_status' => 'any',
+			'meta_query' => array(
+				array(
+					'key'     => 'wmc_commands',
+					'compare' => 'EXISTS',
+				)
+			),
+		) );
+
+		foreach ( $posts as $post_obj ) {
+			$meta = get_post_meta( $post_obj->ID, 'wmc_commands' );
+			update_post_meta( $post_obj->ID, '_wmc_commands_' . $old_key, $meta );
+			delete_post_meta( $post_obj->ID, 'wmc_commands' );
+		}
 	}
 
 	/**
@@ -287,6 +337,9 @@ class WCM_Admin {
 
 		// Migrate old options to new array set
 		if ( $old_key = get_option( 'wm_key' ) ) {
+
+			$old_key = esc_attr( $old_key );
+
 			$new_options = array(
 				array(
 					'name' => __( 'Main', 'woominecraft' ),
@@ -294,42 +347,40 @@ class WCM_Admin {
 				),
 			);
 
-			$this->update_commands( $old_key );
+			$this->update_product_commands( $old_key );
+			$this->update_order_commands( $old_key );
 
 			update_option( $this->option_key, $new_options );
-			delete_option( 'wm_key' );
+//			delete_option( 'wm_key' );
 		}
 
 		$is_old_version = get_option( 'wm_db_version', false );
-		if ( ! $is_old_version ) {
-			return false;
-		}
-
-		global $wpdb;
-		$results = $wpdb->get_results( "SELECT orderid,delivered FROM {$wpdb->prefix}woo_minecraft" );
-		if ( empty( $results ) ) {
-			return delete_option( 'wm_db_version' );
-		}
-
-		foreach ( $results as $command_object ) {
-			$order_id = $command_object->orderid;
-			$is_delivered = (bool) $command_object->delivered;
-			if ( get_post_meta( $order_id, 'wmc_commands' ) ) {
-				error_log( __LINE__ );
-				continue;
+		if ( $is_old_version ) {
+			global $wpdb;
+			$results = $wpdb->get_results( "SELECT orderid,delivered FROM {$wpdb->prefix}woo_minecraft" );
+			if ( empty( $results ) ) {
+				return delete_option( 'wm_db_version' );
 			}
 
-			$this->plugin->save_commands_to_order( $order_id );
-			if ( $is_delivered ) {
-				update_post_meta( $order_id, 'wmc_delivered', 1 );
+			foreach ( $results as $command_object ) {
+				$order_id     = $command_object->orderid;
+				$is_delivered = (bool) $command_object->delivered;
+				if ( get_post_meta( $order_id, 'wmc_commands' ) ) {
+					continue;
+				}
+
+				$this->plugin->save_commands_to_order( $order_id );
+				if ( $is_delivered ) {
+					update_post_meta( $order_id, 'wmc_delivered', 1 );
+				}
 			}
+
+			delete_option( 'wm_db_version' );
+
+			// Drop the entire table now.
+			$query = 'DROP TABLE IF EXISTS ' . $wpdb->prefix . 'woo_minecraft';
+			$wpdb->query( $query );
 		}
-
-		delete_option( 'wm_db_version' );
-
-		// Drop the entire table now.
-		$query = 'DROP TABLE IF EXISTS ' . $wpdb->prefix . 'woo_minecraft';
-		$wpdb->query( $query );
 	}
 
 	/**
