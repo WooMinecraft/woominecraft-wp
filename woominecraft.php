@@ -442,11 +442,9 @@ class Woo_Minecraft {
 						}
 						if ( is_array( $command ) ) {
 							foreach( $command as $c ) {
-								error_log( print_r( array( $c, $player_name ), 1 ) );
 								$tmp_array[ $server_key ][] = sprintf( $c, $player_name );
 							}
 						} else {
-							error_log( print_r( array( $command, $player_name ), 1 ) );
 							$tmp_array[ $server_key ][] = sprintf( $command, $player_name );
 						}
 					}
@@ -475,11 +473,9 @@ class Woo_Minecraft {
 			}
 		}
 
-		error_log( print_r( $tmp_array, 1 ) );
-
 		if ( ! empty( $tmp_array ) ) {
 			foreach ( $tmp_array as $server_key => $commands ) {
-//				update_post_meta( $order_id, '_wmc_commands_' . $server_key, $commands );
+				update_post_meta( $order_id, '_wmc_commands_' . $server_key, $commands );
 			}
 		}
 	}
