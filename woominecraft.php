@@ -421,15 +421,18 @@ class Woo_Minecraft {
 
 		$order_data   = new WC_Order( $order_id );
 		$items       = $order_data->get_items();
-		$tmp_array    = array();
+		$tmp_array   = array();
 		$player_name = get_post_meta( $order_id, 'player_id', true );
 		foreach ( $items as $item ) {
 			// Insert into database table
 			$general_commands = get_post_meta( $item['product_id'], 'wmc_commands', true );
 			if ( ! empty( $general_commands ) ) {
-				for ( $n = 0; $n < $item['qty']; $n ++ ) {
-					foreach ( $general_commands as $command ) {
-						$tmp_array[] = ( false === strpos( '%s', $command ) ) ? $command : sprintf( $command, $player_name );
+				for ( $n = 0; $n < $item['qty']; $n++ ) {
+					foreach ( $general_commands as $server_key => $command ) {
+						if ( ! isset( $tmp_array[ $server_key ] ) ) {
+							$tmp_array[ $server_key ] = array();
+						}
+						$tmp_array[ $server_key ][] = ( false === strpos( '%s', $command ) ) ? $command : sprintf( $command, $player_name );
 					}
 				}
 			}
@@ -437,9 +440,12 @@ class Woo_Minecraft {
 			if ( isset( $item['variation_id'] ) ) {
 				$variation_commands = get_post_meta( $item['variation_id'], 'wmc_commands', true );
 				if ( ! empty( $variation_commands ) ) {
-					for ( $n = 0; $n < $item['qty']; $n ++ ) {
-						foreach ( $variation_commands as $command ) {
-							$tmp_array[] = ( false === strpos( '%s', $command ) ) ? $command : sprintf( $command, $player_name );
+					for ( $n = 0; $n < $item['qty']; $n++ ) {
+						foreach ( $variation_commands as $server_key => $command ) {
+							if ( ! isset( $tmp_array[ $server_key ] ) ) {
+								$tmp_array[ $server_key ] = array();
+							}
+							$tmp_array[ $server_key ][] = ( false === strpos( '%s', $command ) ) ? $command : sprintf( $command, $player_name );
 						}
 					}
 				}
@@ -447,7 +453,9 @@ class Woo_Minecraft {
 		}
 
 		if ( ! empty( $tmp_array ) ) {
-			update_post_meta( $order_id, 'wmc_commands', $tmp_array );
+			foreach ( $tmp_array as $server_key => $commands ) {
+				update_post_meta( $order_id, '_wmc_commands_' . $server_key, $commands );
+			}
 		}
 	}
 
