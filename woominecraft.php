@@ -150,6 +150,7 @@ class Woo_Minecraft {
 		if ( false === ( $output = get_transient( $this->command_transient ) ) || isset( $_GET['delete-trans'] ) ) {
 
 			$delivered = '_wmc_delivered_' . $key;
+			$meta_key = '_wmc_commands_' . $key;
 
 			$order_query = apply_filters( 'woo_minecraft_json_orders_args', array(
 				'posts_per_page' => '-1',
@@ -158,7 +159,7 @@ class Woo_Minecraft {
 				'meta_query'     => array(
 					'relation' => 'AND',
 					array(
-						'key'     => 'player_id',
+						'key' => $meta_key,
 						'compare' => 'EXISTS',
 					),
 					array(
@@ -179,8 +180,8 @@ class Woo_Minecraft {
 					}
 
 					$player_id   = get_post_meta( $wc_order->ID, 'player_id', true );
-					$order_array = $this->generate_order_json( $wc_order );
-
+					$order_array = $this->generate_order_json( $wc_order, $key );
+					
 					if ( ! empty( $order_array ) ) {
 						if ( ! isset( $output[ $player_id ] ) ) {
 							$output[ $player_id ] = array();
@@ -201,18 +202,18 @@ class Woo_Minecraft {
 	 * Generates the order JSON data for a single order.
 	 *
 	 * @param WP_Post $order_post
-	 *
+	 * @param string $key Server key to check against
 	 * @author JayWood
 	 * @return array|mixed
 	 */
-	private function generate_order_json( $order_post ) {
+	private function generate_order_json( $order_post, $key ) {
 
 		if ( ! isset( $order_post->ID ) ) {
 			return array();
 		}
 
-		$general_commands = get_post_meta( $order_post->ID, 'wmc_commands', true );
-		error_log( print_r( $general_commands, 1 ) );
+		$general_commands = get_post_meta( $order_post->ID, '_wmc_commands_' . $key, true );
+
 		return $general_commands;
 	}
 
