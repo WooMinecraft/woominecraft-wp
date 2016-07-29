@@ -138,8 +138,7 @@ class Woo_Minecraft {
 		}
 
 		$key = esc_attr( $_GET['key'] );
-
-		if ( ! isset( $_REQUEST['key'] ) || ! array_search( $key, $keys ) ) {
+		if ( ! isset( $_REQUEST['key'] ) || false === array_search( $key, $keys ) ) {
 			return;
 		}
 
