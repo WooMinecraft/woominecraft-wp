@@ -353,7 +353,6 @@ class WCM_Admin {
 		}
 
 		$variations = $_POST['wmc_commands'];
-		error_log( print_r( $variations, 1 ) );
 		$meta = array();
 		foreach ( $variations as $id => $commands ) {
 			// Key commands by key.
