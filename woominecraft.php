@@ -428,10 +428,9 @@ class Woo_Minecraft {
 			return;
 		}
 
-		$player_id = esc_attr( $_POST['player_id'] );
-		update_post_meta( $order_id, 'player_id', $player_id );
+		$player_name = esc_attr( $_POST['player_id'] );
+		update_post_meta( $order_id, 'player_id', $player_name );
 
-		$player_name = get_post_meta( $order_id, 'player_id', true );
 		foreach ( $items as $item ) {
 			// Insert into database table
 			$general_commands = get_post_meta( $item['product_id'], 'wmc_commands', true );
