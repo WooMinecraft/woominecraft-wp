@@ -146,7 +146,9 @@ class Woo_Minecraft {
 			$this->process_completed_commands( $key );
 		}
 
-		if ( false === ( $output = get_transient( $this->command_transient ) ) ) {
+		if ( false === ( $output = get_transient( $this->command_transient ) ) || isset( $_GET['delete-trans'] ) ) {
+
+			$delivered = '_wmc_delivered_' . $key;
 
 			$order_query = apply_filters( 'woo_minecraft_json_orders_args', array(
 				'posts_per_page' => '-1',
@@ -159,7 +161,7 @@ class Woo_Minecraft {
 						'compare' => 'EXISTS',
 					),
 					array(
-						'key'     => 'wmc_delivered',
+						'key'     => $delivered,
 						'compare' => 'NOT EXISTS',
 					),
 				),
@@ -209,6 +211,7 @@ class Woo_Minecraft {
 		}
 
 		$general_commands = get_post_meta( $order_post->ID, 'wmc_commands', true );
+		error_log( print_r( $general_commands, 1 ) );
 		return $general_commands;
 	}
 
@@ -266,6 +269,7 @@ class Woo_Minecraft {
 	 * @param string $key
 	 */
 	private function process_completed_commands( $key = '' ) {
+		$delivered = '_wmc_delivered_' . $key;
 		$order_ids = (array) $this->sanitized_orders_post( $_POST['processedOrders'] );
 
 		if (  empty( $order_ids ) ) {
@@ -274,7 +278,7 @@ class Woo_Minecraft {
 
 		// Set the orders to delivered
 		foreach ( $order_ids as $order_id ) {
-			update_post_meta( $order_id, 'wmc_delivered', true );
+			update_post_meta( $order_id, $delivered, true );
 		}
 
 		$this->bust_command_cache();

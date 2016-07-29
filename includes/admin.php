@@ -293,7 +293,7 @@ class WCM_Admin {
 		if ( ! $is_old_version ) {
 			return false;
 		}
-
+		
 		global $wpdb;
 		$results = $wpdb->get_results( "SELECT orderid,delivered FROM {$wpdb->prefix}woo_minecraft" );
 		if ( empty( $results ) ) {
