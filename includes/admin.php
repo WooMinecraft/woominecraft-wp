@@ -345,6 +345,8 @@ class WCM_Admin {
 
 	/**
 	 * Saves the general commands to post meta data.
+	 *
+	 * @param int $post_id
 	 */
 	public function save_product_commands( $post_id = 0 ) {
 
