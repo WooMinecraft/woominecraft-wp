@@ -1,4 +1,7 @@
 <?php
+/**
+ * @global array $commands
+ */
 $servers = woo_minecraft()->admin->get_servers();
 ?>
 <div class="woo_minecraft">
