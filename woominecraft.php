@@ -137,10 +137,11 @@ class Woo_Minecraft {
 			return;
 		}
 
-		$key = esc_attr( $_GET['key'] );
-		if ( ! isset( $_REQUEST['key'] ) || false === array_search( $key, $keys ) ) {
+		if ( ! isset( $_REQUEST['key'] ) || false === array_search( $_GET['key'], $keys ) ) {
 			return;
 		}
+
+		$key = esc_attr( $_GET['key'] );
 
 		if ( isset( $_REQUEST['processedOrders'] ) ) {
 			$this->process_completed_commands( $key );
@@ -432,7 +433,13 @@ class Woo_Minecraft {
 						if ( ! isset( $tmp_array[ $server_key ] ) ) {
 							$tmp_array[ $server_key ] = array();
 						}
-						$tmp_array[ $server_key ][] = ( false === strpos( '%s', $command ) ) ? $command : sprintf( $command, $player_name );
+						if ( is_array( $command ) ) {
+							foreach( $command as $c ) {
+								$tmp_array[ $server_key ][] = ( false === strpos( '%s', $c ) ) ? $c : sprintf( $c, $player_name );
+							}
+						} else {
+							$tmp_array[ $server_key ][] = ( false === strpos( '%s', $command ) ) ? $command : sprintf( $command, $player_name );
+						}
 					}
 				}
 			}
@@ -445,16 +452,25 @@ class Woo_Minecraft {
 							if ( ! isset( $tmp_array[ $server_key ] ) ) {
 								$tmp_array[ $server_key ] = array();
 							}
-							$tmp_array[ $server_key ][] = ( false === strpos( '%s', $command ) ) ? $command : sprintf( $command, $player_name );
+
+							if ( is_array( $command ) ) {
+								foreach( $command as $c ) {
+									$tmp_array[ $server_key ][] = ( false === strpos( '%s', $c ) ) ? $c : sprintf( $c, $player_name );
+								}
+							} else {
+								$tmp_array[ $server_key ][] = ( false === strpos( '%s', $command ) ) ? $command : sprintf( $command, $player_name );
+							}
 						}
 					}
 				}
 			}
 		}
 
+		error_log( print_r( $tmp_array, 1 ) );
+
 		if ( ! empty( $tmp_array ) ) {
 			foreach ( $tmp_array as $server_key => $commands ) {
-				update_post_meta( $order_id, '_wmc_commands_' . $server_key, $commands );
+//				update_post_meta( $order_id, '_wmc_commands_' . $server_key, $commands );
 			}
 		}
 	}
@@ -591,7 +607,7 @@ function wmc_has_commands( $data ) {
 				$post_id = $item['variation_id'];
 			}
 
-			$has_command = get_post_meta( $post_id, 'minecraft_woo', true );
+			$has_command = get_post_meta( $post_id, 'wmc_commands', true );
 			if ( empty( $has_command ) ) {
 				continue;
 			} else {
