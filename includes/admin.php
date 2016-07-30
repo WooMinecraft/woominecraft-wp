@@ -335,6 +335,34 @@ class WCM_Admin {
 	 */
 	private function maybe_update() {
 
+		$is_old_version = get_option( 'wm_db_version', false );
+		if ( $is_old_version ) {
+			global $wpdb;
+			$results = $wpdb->get_results( "SELECT orderid,delivered FROM {$wpdb->prefix}woo_minecraft" );
+			if ( empty( $results ) ) {
+				delete_option( 'wm_db_version' );
+			} else {
+				foreach ( $results as $command_object ) {
+					$order_id     = $command_object->orderid;
+					$is_delivered = (bool) $command_object->delivered;
+					if ( get_post_meta( $order_id, 'wmc_commands' ) ) {
+						continue;
+					}
+
+					$this->plugin->save_commands_to_order( $order_id );
+					if ( $is_delivered ) {
+						update_post_meta( $order_id, 'wmc_delivered', 1 );
+					}
+				}
+
+				delete_option( 'wm_db_version' );
+
+				// Drop the entire table now.
+				$query = 'DROP TABLE IF EXISTS ' . $wpdb->prefix . 'woo_minecraft';
+				$wpdb->query( $query );
+			}
+		}
+
 		// Migrate old options to new array set
 		if ( $old_key = get_option( 'wm_key' ) ) {
 
@@ -351,35 +379,7 @@ class WCM_Admin {
 			$this->update_order_commands( $old_key );
 
 			update_option( $this->option_key, $new_options );
-//			delete_option( 'wm_key' );
-		}
-
-		$is_old_version = get_option( 'wm_db_version', false );
-		if ( $is_old_version ) {
-			global $wpdb;
-			$results = $wpdb->get_results( "SELECT orderid,delivered FROM {$wpdb->prefix}woo_minecraft" );
-			if ( empty( $results ) ) {
-				return delete_option( 'wm_db_version' );
-			}
-
-			foreach ( $results as $command_object ) {
-				$order_id     = $command_object->orderid;
-				$is_delivered = (bool) $command_object->delivered;
-				if ( get_post_meta( $order_id, 'wmc_commands' ) ) {
-					continue;
-				}
-
-				$this->plugin->save_commands_to_order( $order_id );
-				if ( $is_delivered ) {
-					update_post_meta( $order_id, 'wmc_delivered', 1 );
-				}
-			}
-
-			delete_option( 'wm_db_version' );
-
-			// Drop the entire table now.
-			$query = 'DROP TABLE IF EXISTS ' . $wpdb->prefix . 'woo_minecraft';
-			$wpdb->query( $query );
+			delete_option( 'wm_key' );
 		}
 	}
 
