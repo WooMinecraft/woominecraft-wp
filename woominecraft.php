@@ -128,17 +128,22 @@ class Woo_Minecraft {
 	 */
 	public function json_feed() {
 
-		$servers = get_option( 'wm_servers', array() );
-		if ( empty( $servers ) ) {
-			return;
-		}
-		$keys = wp_list_pluck( $servers, 'key' );
-		if ( empty( $keys ) ) {
+		if ( ! isset( $_REQUEST['key'] ) ) {
+			// Bail if no key
 			return;
 		}
 
-		if ( ! isset( $_REQUEST['key'] ) || false === array_search( $_GET['key'], $keys ) ) {
-			return;
+		$servers = get_option( 'wm_servers', array() );
+		if ( empty( $servers ) ) {
+			wp_send_json_error( array( 'msg' => "No servers setup, check WordPress config." ) );
+		}
+		$keys = wp_list_pluck( $servers, 'key' );
+		if ( empty( $keys ) ) {
+			wp_send_json_error( array( 'msg' => "WordPress keys are not set." ) );
+		}
+
+		if ( false === array_search( $_GET['key'], $keys ) ) {
+			wp_send_json_error( array( 'msg' => "Invalid key supplied to WordPress, compare your keys." ) );
 		}
 
 		$key = esc_attr( $_GET['key'] );
@@ -181,7 +186,7 @@ class Woo_Minecraft {
 
 					$player_id   = get_post_meta( $wc_order->ID, 'player_id', true );
 					$order_array = $this->generate_order_json( $wc_order, $key );
-					
+
 					if ( ! empty( $order_array ) ) {
 						if ( ! isset( $output[ $player_id ] ) ) {
 							$output[ $player_id ] = array();
