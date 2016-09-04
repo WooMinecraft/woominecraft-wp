@@ -329,7 +329,9 @@ class Woo_Minecraft {
 	 * @return bool
 	 */
 	public function reset_order( $order_id ) {
-		return delete_post_meta( $order_id, 'wmc_delivered' );
+		delete_post_meta( $order_id, 'wmc_delivered' );
+		$this->bust_command_cache( $order_id );
+		return true;
 	}
 
 	/**
