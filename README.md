@@ -61,6 +61,7 @@ payments - [check google](http://lmgtfy.com/?q###Woocommerce+payment+gateways)
 * Send messages to the Java world so users/admins are notified of errors.
 * Added username column in order listing
 * Added delivery column in order listing
+* Better error handling for keys, instead of blindly killing over.
 
 ### 1.0.6
 * Fixed [#96](https://github.com/WooMinecraft/WooMinecraft/issues/96) - Checking wrong post type for cache busting.
