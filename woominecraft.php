@@ -41,7 +41,7 @@ class Woo_Minecraft {
 	 * @var  string
 	 * @since  0.1.0
 	 */
-	const VERSION = '1.0.3';
+	const VERSION = '1.0.7';
 
 	/**
 	 * URL of plugin directory
