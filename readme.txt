@@ -3,7 +3,7 @@ Contributors: phyrax
 Tags: minecraft, woocommerce, donations
 License: GPLv2 or later
 Requires at least: 4.4.2
-Tested up to: 4.5.3
+Tested up to: 4.6
 Stable tag: 1.0.7
 
 A FREE Minecraft Donation plugin which works in conjunction with my WooMinecraft java plugin for Minecraft to provide a self-hosted donation platform.
@@ -55,6 +55,13 @@ Yea sure, we've all use to BuyCraft, but well, it doesn't have the flexibility o
 2. Adding commands to single variations.
 
 == Changelog ==
+
+= 1.0.7 =
+* Multi-server support added in.
+* Moved server key settings to WooCommerce->Settings ( near the bottom )
+* Send messages to the Java world so users/admins are notified of errors.
+* Added username column in order listing
+* Added delivery column in order listing
 
 = 1.0.6 =
 * Fixed [#96](https://github.com/WooMinecraft/WooMinecraft/issues/96) - Checking wrong post type for cache busting.
