@@ -4,7 +4,7 @@
 **License:** GPLv2 or later   
 **Requires at least:** 4.4.2   
 **Tested up to:** 4.5.3   
-**Stable tag:** 1.0.6   
+**Stable tag:** 1.0.7   
 
 A FREE Minecraft Donation plugin which works in conjunction with my WooMinecraft java plugin for Minecraft to provide a self-hosted donation platform.
 
@@ -54,6 +54,9 @@ payments - [check google](http://lmgtfy.com/?q###Woocommerce+payment+gateways)
 ![Adding commands to single variations.](https://raw.githubusercontent.com/WooMinecraft/woominecraft-wp/dev/screenshot-2.png)
 
 ## Changelog
+
+### 1.0.7
+* Better error handling for keys, instead of blindly killing over.
 
 ### 1.0.6
 * Fixed [#96](https://github.com/WooMinecraft/WooMinecraft/issues/96) - Checking wrong post type for cache busting.

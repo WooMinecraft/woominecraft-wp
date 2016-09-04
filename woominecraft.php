@@ -131,9 +131,15 @@ class Woo_Minecraft {
 	 * Produces the JSON Feed for Orders Pending Delivery
 	 */
 	public function json_feed() {
-		$db_key = get_option( 'wm_key' );
-		if ( ! isset( $_REQUEST['key'] ) || $db_key !== $_REQUEST['key'] ) {
+
+		if ( ! isset( $_REQUEST['key'] ) ) {
 			return;
+		}
+
+		$requested_key = esc_attr( $_REQUEST['key'] );
+		$db_key        = get_option( 'wm_key' );
+		if ( $requested_key !== $db_key ) {
+			wp_send_json_error( array( 'msg' => 'Keys do not match, compare keys in WordPress to your config.yml' ) );
 		}
 
 		if ( isset( $_REQUEST['processedOrders'] ) ) {

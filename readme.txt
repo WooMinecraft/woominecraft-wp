@@ -56,6 +56,9 @@ Yea sure, we've all use to BuyCraft, but well, it doesn't have the flexibility o
 
 == Changelog ==
 
+= 1.0.7 =
+* Better error handling for keys, instead of blindly killing over.
+
 = 1.0.6 =
 * Fixed [#96](https://github.com/WooMinecraft/WooMinecraft/issues/96) - Checking wrong post type for cache busting.
 
