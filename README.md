@@ -55,6 +55,13 @@ payments - [check google](http://lmgtfy.com/?q###Woocommerce+payment+gateways)
 
 ## Changelog
 
+### 1.0.7
+* Multi-server support added in.
+* Moved server key settings to WooCommerce->Settings ( near the bottom )
+* Send messages to the Java world so users/admins are notified of errors.
+* Added username column in order listing
+* Added delivery column in order listing
+
 ### 1.0.6
 * Fixed [#96](https://github.com/WooMinecraft/WooMinecraft/issues/96) - Checking wrong post type for cache busting.
 
