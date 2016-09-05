@@ -132,11 +132,11 @@ class Woo_Minecraft {
 	 */
 	public function json_feed() {
 
-		if ( ! isset( $_REQUEST['key'] ) ) {
+		if ( ! isset( $_REQUEST['wmc_key'] ) ) {
 			return;
 		}
 
-		$requested_key = esc_attr( $_REQUEST['key'] );
+		$requested_key = esc_attr( $_REQUEST['wmc_key'] );
 		$db_key        = get_option( 'wm_key' );
 		if ( $requested_key !== $db_key ) {
 			wp_send_json_error( array( 'msg' => 'Keys do not match, compare keys in WordPress to your config.yml' ) );
@@ -265,7 +265,7 @@ class Woo_Minecraft {
 	 * @author JayWood
 	 */
 	private function process_completed_commands() {
-		$key = esc_attr( $_GET['key'] );
+		$key = esc_attr( $_GET['wmc_key'] );
 		$order_ids = (array) $this->sanitized_orders_post( $_POST['processedOrders'] );
 
 		if (  empty( $order_ids ) ) {
