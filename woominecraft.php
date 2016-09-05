@@ -4,7 +4,7 @@ Plugin Name: Minecraft WooCommerce
 Plugin URI: http://plugish.com/plugins/minecraft_woo
 Description: To be used in conjunction with the minecraft_woo plugin.  If you do not have it you can get it on the repository at <a href="https://github.com/JayWood/WooMinecraft">Github</a>.  Please be sure and fork the repository and make pull requests.
 Author: Jerry Wood
-Version: 1.0.7
+Version: 1.0.8
 License: GPLv2
 Text Domain: woominecraft
 Domain Path: /languages
@@ -41,7 +41,7 @@ class Woo_Minecraft {
 	 * @var  string
 	 * @since  0.1.0
 	 */
-	const VERSION = '1.0.7';
+	const VERSION = '1.0.8';
 
 	/**
 	 * URL of plugin directory
@@ -132,11 +132,11 @@ class Woo_Minecraft {
 	 */
 	public function json_feed() {
 
-		if ( ! isset( $_REQUEST['key'] ) ) {
+		if ( ! isset( $_REQUEST['wmc_key'] ) ) {
 			return;
 		}
 
-		$requested_key = esc_attr( $_REQUEST['key'] );
+		$requested_key = esc_attr( $_REQUEST['wmc_key'] );
 		$db_key        = get_option( 'wm_key' );
 		if ( $requested_key !== $db_key ) {
 			wp_send_json_error( array( 'msg' => 'Keys do not match, compare keys in WordPress to your config.yml' ) );
@@ -265,7 +265,7 @@ class Woo_Minecraft {
 	 * @author JayWood
 	 */
 	private function process_completed_commands() {
-		$key = esc_attr( $_GET['key'] );
+		$key = esc_attr( $_GET['wmc_key'] );
 		$order_ids = (array) $this->sanitized_orders_post( $_POST['processedOrders'] );
 
 		if (  empty( $order_ids ) ) {
