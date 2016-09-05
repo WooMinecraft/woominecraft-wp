@@ -4,7 +4,7 @@
 **License:** GPLv2 or later   
 **Requires at least:** 4.4.2   
 **Tested up to:** 4.6   
-**Stable tag:** 1.1   
+**Stable tag:** 1.1  
 
 A FREE Minecraft Donation plugin which works in conjunction with my WooMinecraft java plugin for Minecraft to provide a self-hosted donation platform.
 
@@ -61,6 +61,9 @@ payments - [check google](http://lmgtfy.com/?q###Woocommerce+payment+gateways)
 * Send messages to the Java world so users/admins are notified of errors.
 * Added username column in order listing
 * Added delivery column in order listing
+
+### 1.0.8
+* Hotfix for [#18](https://github.com/WooMinecraft/woominecraft-wp/issues/18) - Apparently WooCommerce uses the 'key' key as well...
 
 ### 1.0.7
 * Better error handling for keys, instead of blindly killing over.

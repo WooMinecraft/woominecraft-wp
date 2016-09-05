@@ -4,7 +4,11 @@ Plugin Name: Minecraft WooCommerce
 Plugin URI: http://plugish.com/plugins/minecraft_woo
 Description: To be used in conjunction with the minecraft_woo plugin.  If you do not have it you can get it on the repository at <a href="https://github.com/JayWood/WooMinecraft">Github</a>.  Please be sure and fork the repository and make pull requests.
 Author: Jerry Wood
+<<<<<<< HEAD
 Version: 1.1
+=======
+Version: 1.0.8
+>>>>>>> master
 License: GPLv2
 Text Domain: woominecraft
 Domain Path: /languages
