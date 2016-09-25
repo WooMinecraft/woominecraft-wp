@@ -4,11 +4,7 @@ Plugin Name: Minecraft WooCommerce
 Plugin URI: http://plugish.com/plugins/minecraft_woo
 Description: To be used in conjunction with the minecraft_woo plugin.  If you do not have it you can get it on the repository at <a href="https://github.com/JayWood/WooMinecraft">Github</a>.  Please be sure and fork the repository and make pull requests.
 Author: Jerry Wood
-<<<<<<< HEAD
 Version: 1.1
-=======
-Version: 1.0.8
->>>>>>> master
 License: GPLv2
 Text Domain: woominecraft
 Domain Path: /languages
@@ -33,6 +29,14 @@ function wmc_autoload_classes( $class_name ) {
 
 spl_autoload_register( 'wmc_autoload_classes' );
 
+/**
+ * Class Woo_Minecraft
+ *
+ * @todo: Create some way of handling orphaned orders. See Below -
+ * If an order is created which had commands tied to a specific server, and that server is later deleted, those commands cannot be re-sent at any time.
+ *
+ * @author JayWood
+ */
 class Woo_Minecraft {
 
 	/**
@@ -307,7 +311,7 @@ class Woo_Minecraft {
 		global $woocommerce;
 
 		$items = $woocommerce->cart->cart_contents;
-		if ( ! wmc_has_commands( $items ) || ! function_exists( 'woocommerce_form_field' ) ) {
+		if ( ! wmc_items_have_commands( $items ) || ! function_exists( 'woocommerce_form_field' ) ) {
 			return false;
 		}
 
@@ -328,6 +332,8 @@ class Woo_Minecraft {
 	 * Resets an order from being delivered.
 	 *
 	 * @param $order_id
+	 *
+	 * @todo update this for multi-server support
 	 *
 	 * @author JayWood
 	 * @return bool
@@ -400,7 +406,7 @@ class Woo_Minecraft {
 		$player_id = isset( $_POST['player_id'] ) ? esc_attr( $_POST['player_id'] ) : false;
 		$items    = $woocommerce->cart->cart_contents;
 
-		if ( ! wmc_has_commands( $items ) ) {
+		if ( ! wmc_items_have_commands( $items ) ) {
 			return;
 		}
 
@@ -614,7 +620,7 @@ add_action( 'plugins_loaded', array( woo_minecraft(), 'i18n' ) );
  * @TODO: Move this to helper file
  * @return bool
  */
-function wmc_has_commands( $data ) {
+function wmc_items_have_commands( $data ) {
 	if ( is_array( $data ) ) {
 		// Assume $data is cart contents
 		foreach ( $data as $item ) {

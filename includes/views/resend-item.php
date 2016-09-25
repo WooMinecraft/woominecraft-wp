@@ -2,6 +2,8 @@
 /**
  * @global WP_Post $post
  * @global array $item
+ * 
+ * @todo: provide a dropdown select of registered servers to select from
  */
 ?>
 <span class="woominecraft resend_item">

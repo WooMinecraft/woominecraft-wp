@@ -33,10 +33,15 @@ class WCM_Admin {
 
 		add_filter( 'woocommerce_get_settings_general', array( $this, 'wmc_settings' ) );
 		add_action( 'woocommerce_admin_field_wmc_servers', array( $this, 'render_servers_section' ) );
-		add_action( 'woocommerce_settings_save_general', array( $this, 'save' ) );
+		add_action( 'woocommerce_settings_save_general', array( $this, 'save_servers' ) );
 	}
 
-	public function save() {
+	/**
+	 * Saves server keys
+	 *
+	 * @author JayWood
+	 */
+	public function save_servers() {
 		if ( ! isset( $_POST['wmc_servers'] ) ) {
 			return;
 		}
@@ -140,6 +145,13 @@ class WCM_Admin {
 		return $output;
 	}
 
+	/**
+	 * Re-sends orders to players based on player ID and order ID
+	 *
+	 * @todo: update this for multi-server support
+	 *
+	 * @author JayWood
+	 */
 	public function ajax_handler() {
 		$player_id = isset( $_POST['player_id'] ) ? esc_attr( $_POST['player_id'] ) : false;
 		$order_id = isset( $_POST['order_id'] ) ? intval( $_POST['order_id'] ) : false;
