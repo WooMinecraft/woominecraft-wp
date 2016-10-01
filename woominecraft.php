@@ -419,7 +419,7 @@ class Woo_Minecraft {
 		// Grab JSON data
 		$mc_json = $this->mojang_player_cache( $player_id );
 		if ( ! $mc_json ) {
-			wc_add_notice( __( 'There was an error with the Mojang API, please try again later.', 'woominecraft' ), 'error' );
+			wc_add_notice( __( 'We cannot retrieve your account from the Mojang API. Try again later, or contact an administrator.', 'woominecraft' ), 'error' );
 		}
 
 		if ( isset( $mc_json->demo ) ) {
