@@ -136,7 +136,7 @@ class Woo_Minecraft {
 	 */
 	public function json_feed() {
 
-		if ( ! isset( $_REQUEST['key'] ) ) {
+		if ( ! isset( $_REQUEST['wmc_key'] ) ) {
 			// Bail if no key
 			return;
 		}
@@ -154,7 +154,7 @@ class Woo_Minecraft {
 			wp_send_json_error( array( 'msg' => "Invalid key supplied to WordPress, compare your keys." ) );
 		}
 
-		$key = esc_attr( $_GET['key'] );
+		$key = esc_attr( $_GET['wmc_key'] );
 
 		if ( isset( $_REQUEST['processedOrders'] ) ) {
 			$this->process_completed_commands( $key );
