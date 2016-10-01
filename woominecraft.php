@@ -419,11 +419,11 @@ class Woo_Minecraft {
 		// Grab JSON data
 		$mc_json = $this->mojang_player_cache( $player_id );
 		if ( ! $mc_json ) {
-			wc_add_notice( __( 'There was an error with the Mojang API, please try again later.', 'woominecraft' ) );
+			wc_add_notice( __( 'There was an error with the Mojang API, please try again later.', 'woominecraft' ), 'error' );
 		}
 
 		if ( isset( $mc_json->demo ) ) {
-			wc_add_notice( __( 'We do not allow unpaid-accounts to make donations, sorry!', 'woominecraft' ) );
+			wc_add_notice( __( 'We do not allow unpaid-accounts to make donations, sorry!', 'woominecraft' ), 'error' );
 
 			return;
 		}
