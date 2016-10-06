@@ -241,6 +241,8 @@ class WCM_Admin {
 						<option value="<?php echo $k; ?>"><?php echo $v; ?></option>
 					<?php endforeach; ?>
 				</select>
+			</p>
+			<p>
 				<input type="button" class="button button-primary" id="resendDonations" value="<?php _e( 'Resend Donations', 'woominecraft' ); ?>" data-id="<?php echo $player_id; ?>" data-orderid="<?php echo $order->ID; ?>"/>
 			</p>
 		</div>
