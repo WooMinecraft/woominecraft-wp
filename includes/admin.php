@@ -203,21 +203,48 @@ class WCM_Admin {
 	 */
 	public function display_player_name_in_order_meta( $order ) {
 
-		$player_id = get_post_meta( $order->id, 'player_id', true );
+		$player_id   = get_post_meta( $order->id, 'player_id', true );
+		$servers     = get_option( $this->option_key );
+		$post_custom = get_post_custom( $order->ID );
 
-		if ( empty( $player_id ) ) {
-			$player_id = 'N/A';
+		if ( empty( $player_id ) || empty( $post_custom ) ) {
+			// Just show nothing if there's no player ID
+			return;
 		}
-		wp_nonce_field( 'woominecraft', 'woo_minecraft_nonce' );
 
-		?><h3><?php _e( 'WooMinecraft', 'woominecraft' ); ?></h3><?php
+		$option_set = array();
+		foreach( $post_custom as $key => $data ) {
+			if ( 0 === stripos( $key, '_wmc_commands_' ) ) {
+				$server_key = substr( $key, 14, strlen( $key ) );
+				$option_set[ $key ] = __( 'Deleted', 'woominecraft' ) . ' ( ' . $server_key . ' )';
+				foreach ( $servers as $server ) {
+					if ( $server_key == $server['key'] ) {
+						$option_set[ $key ] = $server['name'];
+						break;
+					}
+				}
+			}
+		}
 
-		?><p><strong><?php _e( 'Player Name:', 'woominecraft' ); ?></strong> <?php echo $player_id; ?></p>
-
-		<?php if ( 'N/A' != $player_id ) : ?>
-			<?php global $post; ?>
-			<p><input type="button" class="button button-primary" id="resendDonations" value="<?php _e( 'Resend Donations', 'woominecraft' ); ?>" data-id="<?php echo $player_id; ?>" data-orderid="<?php echo $post->ID; ?>"/></p>
-		<?php endif;
+		?>
+		<div class="woominecraft order-meta">
+			<?php wp_nonce_field( 'woominecraft', 'woo_minecraft_nonce' ); ?>
+			<h3><?php _e( 'WooMinecraft', 'woominecraft' ); ?></h3>
+			<p>
+				<strong><?php _e( 'Player Nanme:', 'woominecraft' ); ?></strong>
+				<?php echo $player_id; ?>
+			</p>
+			<p>
+				<select name="" class="woominecraft server-select">
+					<option value=""><?php _e( 'Select a Server', 'woominecraft' ); ?></option>
+					<?php foreach( $option_set as $k => $v ) : ?>
+						<option value="<?php echo $k; ?>"><?php echo $v; ?></option>
+					<?php endforeach; ?>
+				</select>
+				<input type="button" class="button button-primary" id="resendDonations" value="<?php _e( 'Resend Donations', 'woominecraft' ); ?>" data-id="<?php echo $player_id; ?>" data-orderid="<?php echo $order->ID; ?>"/>
+			</p>
+		</div>
+		<?php
 	}
 
 	/**
