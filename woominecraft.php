@@ -88,11 +88,6 @@ class Woo_Minecraft {
 	public $admin = null;
 
 	/**
-	 * @var string The db table name
-	 */
-	private $table = 'woo_minecraft';
-
-	/**
 	 * The transient key
 	 * @var string
 	 */
@@ -143,15 +138,15 @@ class Woo_Minecraft {
 
 		$servers = get_option( 'wm_servers', array() );
 		if ( empty( $servers ) ) {
-			wp_send_json_error( array( 'msg' => "No servers setup, check WordPress config." ) );
+			wp_send_json_error( array( 'msg' => 'No servers setup, check WordPress config.' ) );
 		}
 		$keys = wp_list_pluck( $servers, 'key' );
 		if ( empty( $keys ) ) {
-			wp_send_json_error( array( 'msg' => "WordPress keys are not set." ) );
+			wp_send_json_error( array( 'msg' => 'WordPress keys are not set.' ) );
 		}
 
 		if ( false === array_search( $_GET['key'], $keys ) ) {
-			wp_send_json_error( array( 'msg' => "Invalid key supplied to WordPress, compare your keys." ) );
+			wp_send_json_error( array( 'msg' => 'Invalid key supplied to WordPress, compare your keys.' ) );
 		}
 
 		$key = esc_attr( $_GET['wmc_key'] );
@@ -331,7 +326,8 @@ class Woo_Minecraft {
 	/**
 	 * Resets an order from being delivered.
 	 *
-	 * @param $order_id
+	 * @param int $order_id
+	 * @param string $server_key
 	 *
 	 * @author JayWood
 	 * @return bool
@@ -451,13 +447,13 @@ class Woo_Minecraft {
 			// Insert into database table
 			$general_commands = get_post_meta( $item['product_id'], 'wmc_commands', true );
 			if ( ! empty( $general_commands ) ) {
-				for ( $n = 0; $n < $item['qty']; $n++ ) {
+				for ( $n = 0; $n < $item['qty']; $n ++ ) {
 					foreach ( $general_commands as $server_key => $command ) {
 						if ( ! isset( $tmp_array[ $server_key ] ) ) {
 							$tmp_array[ $server_key ] = array();
 						}
 						if ( is_array( $command ) ) {
-							foreach( $command as $c ) {
+							foreach ( $command as $c ) {
 								$tmp_array[ $server_key ][] = sprintf( $c, $player_name );
 							}
 						} else {
@@ -477,7 +473,7 @@ class Woo_Minecraft {
 							}
 
 							if ( is_array( $command ) ) {
-								foreach( $command as $c ) {
+								foreach ( $command as $c ) {
 									$tmp_array[ $server_key ][] = sprintf( $c, $player_name );
 								}
 							} else {
