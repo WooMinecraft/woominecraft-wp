@@ -92,13 +92,19 @@ window.WooMinecraft = ( function( window, document, $ ) {
 	app.resend_donations = function( evt ) {
 		evt.preventDefault();
 
+		var serverSelect = $( 'select.wmc-server-select' );
+		if ( ! serverSelect || '' == serverSelect.val() ) {
+			return false;
+		}
+
 		app.$resend_donations.prop( 'disabled', true );
 		$.ajax( {
 			url:      ajaxurl,
 			data:     {
 				action:    'wmc_resend_donations',
 				order_id:  app.l10n.order_id,
-				player_id: app.l10n.player_id
+				player_id: app.l10n.player_id,
+				server:    serverSelect.val(),
 			},
 			dataType: 'json',
 			method:   'POST'

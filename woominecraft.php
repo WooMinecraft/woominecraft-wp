@@ -333,13 +333,11 @@ class Woo_Minecraft {
 	 *
 	 * @param $order_id
 	 *
-	 * @todo update this for multi-server support
-	 *
 	 * @author JayWood
 	 * @return bool
 	 */
-	public function reset_order( $order_id ) {
-		delete_post_meta( $order_id, 'wmc_delivered' );
+	public function reset_order( $order_id, $server_key ) {
+		delete_post_meta( $order_id, '_wmc_delivered_' . $server_key );
 		$this->bust_command_cache( $order_id );
 		return true;
 	}

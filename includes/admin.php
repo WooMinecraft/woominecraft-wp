@@ -153,16 +153,16 @@ class WCM_Admin {
 	/**
 	 * Re-sends orders to players based on player ID and order ID
 	 *
-	 * @todo: update this for multi-server support
-	 *
 	 * @author JayWood
 	 */
 	public function ajax_handler() {
+
 		$player_id = isset( $_POST['player_id'] ) ? esc_attr( $_POST['player_id'] ) : false;
 		$order_id = isset( $_POST['order_id'] ) ? intval( $_POST['order_id'] ) : false;
+		$server = isset( $_POST['server'] ) ? esc_attr( $_POST['server'] ) : false;
 
-		if ( $player_id && $order_id ) {
-			$result = $this->plugin->reset_order( $order_id );
+		if ( $player_id && $order_id && $server ) {
+			$result = $this->plugin->reset_order( $order_id, $server );
 			if ( $result > 0 ) {
 				wp_send_json_success();
 			}
@@ -221,10 +221,10 @@ class WCM_Admin {
 		foreach( $post_custom as $key => $data ) {
 			if ( 0 === stripos( $key, '_wmc_commands_' ) ) {
 				$server_key = substr( $key, 14, strlen( $key ) );
-				$option_set[ $key ] = __( 'Deleted', 'woominecraft' ) . ' ( ' . $server_key . ' )';
+				$option_set[ $server_key ] = __( 'Deleted', 'woominecraft' ) . ' ( ' . $server_key . ' )';
 				foreach ( $servers as $server ) {
 					if ( $server_key == $server['key'] ) {
-						$option_set[ $key ] = $server['name'];
+						$option_set[ $server_key ] = $server['name'];
 						break;
 					}
 				}
@@ -240,7 +240,7 @@ class WCM_Admin {
 				<?php echo $player_id; ?>
 			</p>
 			<p>
-				<select name="" class="woominecraft server-select">
+				<select name="" class="woominecraft wmc-server-select">
 					<option value=""><?php _e( 'Select a Server', 'woominecraft' ); ?></option>
 					<?php foreach( $option_set as $k => $v ) : ?>
 						<option value="<?php echo $k; ?>"><?php echo $v; ?></option>
