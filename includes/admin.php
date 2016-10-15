@@ -118,12 +118,17 @@ class WCM_Admin {
 	 * @return array
 	 */
 	public function get_servers() {
-		$servers = get_option( $this->option_key, array() );
-		if ( empty( $servers ) || ! is_array( $servers ) ) {
-			return array(
+
+		$default_set = array(
+			array(
 				'name' => __( 'Main', 'woominecraft' ),
 				'key' => '',
-			);
+			)
+		);
+
+		$servers = get_option( $this->option_key, array() );
+		if ( empty( $servers ) || ! is_array( $servers ) ) {
+			return $default_set;
 		}
 
 		$output = array();
