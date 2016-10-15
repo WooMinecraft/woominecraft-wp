@@ -47,10 +47,10 @@ class WCM_Admin {
 		}
 
 		$servers = (array) $_POST['wmc_servers'];
-		$output = [];
+		$output  = [ ];
 		foreach ( $servers as $server ) {
 			$name = array_key_exists( 'name', $server ) && ! empty( $server['name'] ) ? esc_attr( $server['name'] ) : false;
-			$key = array_key_exists( 'key', $server ) && ! empty( $server['key'] ) ? esc_attr( $server['key'] ) : false;
+			$key  = array_key_exists( 'key', $server ) && ! empty( $server['key'] ) ? esc_attr( $server['key'] ) : false;
 			if ( ! $name || ! $key ) {
 				continue;
 			}
@@ -63,7 +63,7 @@ class WCM_Admin {
 		if ( empty( $output ) ) {
 			$output[] = array(
 				'name' => __( 'Main', 'woominecraft' ),
-				'key' => '',
+				'key'  => '',
 			);
 		}
 
@@ -72,8 +72,10 @@ class WCM_Admin {
 
 	/**
 	 * Renders the server section of the settings page.
+	 *
 	 * @param $values
-	 * @since 1.0.7
+	 *
+	 * @since  1.0.7
 	 *
 	 * @author JayWood
 	 */
@@ -86,7 +88,7 @@ class WCM_Admin {
 	 *
 	 * @param array $settings
 	 *
-	 * @since 1.0.7
+	 * @since  1.0.7
 	 * @author JayWood
 	 * @return array
 	 */
@@ -94,8 +96,8 @@ class WCM_Admin {
 
 		$settings[] = array(
 			'title' => __( 'WooMinecraft Options', 'woominecraft' ),
-			'id' => 'wmc_options',
-			'type' => 'title',
+			'id'    => 'wmc_options',
+			'type'  => 'title',
 		);
 
 		$settings[] = array(
@@ -104,7 +106,7 @@ class WCM_Admin {
 
 		$settings[] = array(
 			'type' => 'sectionend',
-			'id' => 'wmc_options',
+			'id'   => 'wmc_options',
 		);
 
 		return $settings;
@@ -113,7 +115,7 @@ class WCM_Admin {
 	/**
 	 * Gets all servers and sanitizes their output.
 	 *
-	 * @since 1.7.0
+	 * @since  1.7.0
 	 * @author JayWood
 	 * @return array
 	 */
@@ -122,8 +124,8 @@ class WCM_Admin {
 		$default_set = array(
 			array(
 				'name' => __( 'Main', 'woominecraft' ),
-				'key' => '',
-			)
+				'key'  => '',
+			),
 		);
 
 		$servers = get_option( $this->option_key, array() );
@@ -147,6 +149,7 @@ class WCM_Admin {
 			);
 
 		}
+
 		return $output;
 	}
 
@@ -158,8 +161,8 @@ class WCM_Admin {
 	public function ajax_handler() {
 
 		$player_id = isset( $_POST['player_id'] ) ? esc_attr( $_POST['player_id'] ) : false;
-		$order_id = isset( $_POST['order_id'] ) ? intval( $_POST['order_id'] ) : false;
-		$server = isset( $_POST['server'] ) ? esc_attr( $_POST['server'] ) : false;
+		$order_id  = isset( $_POST['order_id'] ) ? intval( $_POST['order_id'] ) : false;
+		$server    = isset( $_POST['server'] ) ? esc_attr( $_POST['server'] ) : false;
 
 		if ( $player_id && $order_id && $server ) {
 			$result = $this->plugin->reset_order( $order_id, $server );
@@ -204,13 +207,14 @@ class WCM_Admin {
 
 	/**
 	 * Adds the players ID to the order information screen.
+	 *
 	 * @param WC_Order $order
 	 */
 	public function display_player_name_in_order_meta( $order ) {
 
 		$player_id   = get_post_meta( $order->id, 'player_id', true );
 		$servers     = get_option( $this->option_key );
-		$post_custom = get_post_custom( $order->ID );
+		$post_custom = get_post_custom( $order->id );
 
 		if ( empty( $player_id ) || empty( $post_custom ) ) {
 			// Just show nothing if there's no player ID
@@ -218,9 +222,9 @@ class WCM_Admin {
 		}
 
 		$option_set = array();
-		foreach( $post_custom as $key => $data ) {
+		foreach ( $post_custom as $key => $data ) {
 			if ( 0 === stripos( $key, '_wmc_commands_' ) ) {
-				$server_key = substr( $key, 14, strlen( $key ) );
+				$server_key                = substr( $key, 14, strlen( $key ) );
 				$option_set[ $server_key ] = __( 'Deleted', 'woominecraft' ) . ' ( ' . $server_key . ' )';
 				foreach ( $servers as $server ) {
 					if ( $server_key == $server['key'] ) {
@@ -242,30 +246,16 @@ class WCM_Admin {
 			<p>
 				<select name="" class="woominecraft wmc-server-select">
 					<option value=""><?php _e( 'Select a Server', 'woominecraft' ); ?></option>
-					<?php foreach( $option_set as $k => $v ) : ?>
+					<?php foreach ( $option_set as $k => $v ) : ?>
 						<option value="<?php echo $k; ?>"><?php echo $v; ?></option>
 					<?php endforeach; ?>
 				</select>
 			</p>
 			<p>
-				<input type="button" class="button button-primary" id="resendDonations" value="<?php _e( 'Resend Donations', 'woominecraft' ); ?>" data-id="<?php echo $player_id; ?>" data-orderid="<?php echo $order->ID; ?>"/>
+				<input type="button" class="button button-primary" id="resendDonations" value="<?php _e( 'Resend Donations', 'woominecraft' ); ?>" data-id="<?php echo $player_id; ?>" data-orderid="<?php echo $order->id; ?>"/>
 			</p>
 		</div>
 		<?php
-	}
-
-	/**
-	 * Adds a 'resend item' so administrators can resend single items.
-	 *
-	 * @param int     $item_id
-	 * @param WP_Post $item
-	 */
-	public function line_item( $item_id, $item ) {
-		global $post;
-		$post_meta = get_post_meta( $item['variation_id'], 'minecraft_woo_v' );
-		if ( ! empty( $post_meta ) ) {
-			include_once 'views/resend-item.php';
-		}
 	}
 
 	/**
@@ -290,7 +280,7 @@ class WCM_Admin {
 		if ( 'post.php' == $hook ) {
 			global $post;
 			if ( isset( $post->ID ) ) {
-				$script_data['order_id'] = $post->ID;
+				$script_data['order_id']  = $post->ID;
 				$script_data['player_id'] = get_post_meta( $post->ID, 'player_id', true );
 			}
 		}
@@ -312,6 +302,8 @@ class WCM_Admin {
 	/**
 	 * Updates all OLD commands to the new structure.
 	 *
+	 * @param mixed $old_key
+	 *
 	 * @deprecated
 	 * @author JayWood
 	 */
@@ -324,7 +316,7 @@ class WCM_Admin {
 				array(
 					'key'     => 'minecraft_woo',
 					'compare' => 'EXISTS',
-				)
+				),
 			)
 		) );
 
@@ -333,8 +325,8 @@ class WCM_Admin {
 		}
 
 		foreach ( $posts as $product ) {
-			$meta = get_post_meta( $product->ID, 'minecraft_woo', true );
-			$new_array = array();
+			$meta                  = get_post_meta( $product->ID, 'minecraft_woo', true );
+			$new_array             = array();
 			$new_array[ $old_key ] = $meta;
 			update_post_meta( $product->ID, 'wmc_commands', $new_array );
 			delete_post_meta( $product->ID, 'minecraft_woo' );
@@ -346,19 +338,20 @@ class WCM_Admin {
 	 * Updates all orders to the new order command structure.
 	 *
 	 * @deprecated
+	 *
 	 * @param string $old_key
 	 *
 	 * @author JayWood
 	 */
 	private function update_order_commands( $old_key ) {
 		$posts = get_posts( array(
-			'post_type' => 'shop_order',
+			'post_type'   => 'shop_order',
 			'post_status' => 'any',
-			'meta_query' => array(
+			'meta_query'  => array(
 				array(
 					'key'     => 'wmc_commands',
 					'compare' => 'EXISTS',
-				)
+				),
 			),
 		) );
 
@@ -377,7 +370,7 @@ class WCM_Admin {
 	 *
 	 * @deprecated This method is used to force update database information
 	 * @internal
-	 * @author JayWood
+	 * @author     JayWood
 	 */
 	private function maybe_update() {
 
@@ -441,7 +434,7 @@ class WCM_Admin {
 		}
 
 		$variations = $_POST['wmc_commands'];
-		$meta = array();
+		$meta       = array();
 		foreach ( $variations as $id => $commands ) {
 			// Key commands by key.
 			$key     = $commands['server'];
