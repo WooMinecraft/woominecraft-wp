@@ -145,7 +145,7 @@ class Woo_Minecraft {
 			wp_send_json_error( array( 'msg' => 'WordPress keys are not set.' ) );
 		}
 
-		if ( false === array_search( $_GET['key'], $keys ) ) {
+		if ( false === array_search( $_GET['wmc_key'], $keys ) ) {
 			wp_send_json_error( array( 'msg' => 'Invalid key supplied to WordPress, compare your keys.' ) );
 		}
 
