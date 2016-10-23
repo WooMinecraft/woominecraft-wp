@@ -59,6 +59,8 @@ Yea sure, we've all use to BuyCraft, but well, it doesn't have the flexibility o
 = 1.1 =
 * Multi-server support added in.
 * Moved server key settings to WooCommerce->Settings ( near the bottom )
+
+**TBD:**
 * Send messages to the Java world so users/admins are notified of errors.
 * Added username column in order listing
 * Added delivery column in order listing
