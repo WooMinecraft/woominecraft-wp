@@ -38,6 +38,26 @@ class WCM_Admin {
 		add_filter( 'manage_shop_order_posts_columns', array( $this, 'add_user_and_deliveries_header' ), 999 );
 		add_action( 'manage_shop_order_posts_custom_column', array( $this, 'add_users_and_deliveries' ), 10, 2 );
 		add_filter( 'manage_edit-shop_order_sortable_columns', array( $this, 'make_player_sortable' ) );
+		add_action( 'pre_get_posts', array( $this, 'sort_by_player_name' ) );
+	}
+
+	/**
+	 * Sorts by player name, if query arg is present.
+	 *
+	 * @param WP_Query $wp_query
+	 *
+	 * @author JayWood
+	 */
+	public function sort_by_player_name( $wp_query ) {
+		if ( ! is_admin() ) {
+			return;
+		}
+
+		$orderby = $wp_query->get( 'orderby' );
+		if ( 'wmc-player' == $orderby ) {
+			$wp_query->set( 'meta_key', 'player_id' );
+			$wp_query->set( 'orderby', 'meta_value' );
+		}
 	}
 
 	public function make_player_sortable( $columns ) {
