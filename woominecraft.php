@@ -2,7 +2,7 @@
 /*
 Plugin Name: Minecraft WooCommerce
 Plugin URI: http://plugish.com/plugins/minecraft_woo
-Description: To be used in conjunction with the minecraft_woo plugin.  If you do not have it you can get it on the repository at <a href="https://github.com/JayWood/WooMinecraft">Github</a>.  Please be sure and fork the repository and make pull requests.
+Description: To be used in conjunction with the WooMinecraft Bukkit plugin.  If you do not have it you can get it on the repository at <a href="https://github.com/JayWood/WooMinecraft">Github</a>.  Please be sure and fork the repository and make pull requests.
 Author: Jerry Wood
 Version: 1.1
 License: GPLv2
@@ -152,6 +152,7 @@ class Woo_Minecraft {
 		$key = esc_attr( $_GET['wmc_key'] );
 
 		if ( isset( $_REQUEST['processedOrders'] ) ) {
+
 			$this->process_completed_commands( $key );
 		}
 
