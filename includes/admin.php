@@ -34,6 +34,90 @@ class WCM_Admin {
 		add_filter( 'woocommerce_get_settings_general', array( $this, 'wmc_settings' ) );
 		add_action( 'woocommerce_admin_field_wmc_servers', array( $this, 'render_servers_section' ) );
 		add_action( 'woocommerce_settings_save_general', array( $this, 'save_servers' ) );
+
+		add_filter( 'manage_shop_order_posts_columns', array( $this, 'add_user_and_deliveries_header' ), 999 );
+		add_action( 'manage_shop_order_posts_custom_column', array( $this, 'add_users_and_deliveries' ), 10, 2 );
+		add_filter( 'manage_edit-shop_order_sortable_columns', array( $this, 'make_player_sortable' ) );
+	}
+
+	public function make_player_sortable( $columns ) {
+		$columns['wmc-player'] = 'wmc-player';
+
+		return $columns;
+	}
+
+	/**
+	 * Adds column headers to posts for Delivered and Player data.
+	 *
+	 * @param $columns
+	 *
+	 * @author JayWood
+	 * @return array
+	 */
+	public function add_user_and_deliveries_header( $columns ) {
+		$out = array();
+		foreach( $columns as $key => $value ) {
+			$out[ $key ] = $value;
+			if ( 'order_status' == $key ) {
+				$out['wmc-delivered'] = __( 'Delivered', 'woominecraft-wp' ) . wc_help_tip( __( 'How many servers delivered versus how many still to be delivered.', 'woominecraft-wp' ) );
+				$out['wmc-player'] = __( 'Player', 'woominecraft-wp' );
+			}
+		}
+
+		return $out;
+	}
+
+	/**
+	 * Adds corresponding column data to current row if available.
+	 *
+	 * @param $column
+	 * @param $post_id
+	 *
+	 * @author JayWood
+	 */
+	public function add_users_and_deliveries( $column, $post_id ) {
+		switch ( $column ) {
+			case 'wmc-delivered':
+				printf( '<span class="wmc-orders-delivered">%s</span>', $this->get_delivered_col_output( $post_id ) );
+				break;
+			case 'wmc-player':
+				$player_id   = get_post_meta( $post_id, 'player_id', true );
+				printf( '<span class="wmc-player-name">%s</span>', $player_id ? $player_id : ' - ' );
+				break;
+		}
+
+		return;
+	}
+
+	private function get_delivered_col_output( $post_id ) {
+		$delivered = $this->get_count( $post_id, 'delivered' );
+		$pending   = $this->get_count( $post_id );
+
+		return sprintf( "<span class='completed'>%d</span> / <span class='pending'>%d</span>", count( $delivered ), count( $pending ) );
+	}
+
+	/**
+	 * Pretty much a wrapper for doing multiple get_post_meta() calls
+	 *
+	 * @param string $type
+	 * @param int    $order_id
+	 *
+	 * @author JayWood
+	 * @return array|null|object
+	 */
+	private function get_count( $order_id, $type = false ) {
+		global $wpdb;
+
+		$statement = "select * from {$wpdb->postmeta}";
+		if ( 'delivered' == $type ) {
+			$statement .= $wpdb->prepare( " where meta_key like %s", '%' . $wpdb->esc_like( '_wmc_delivered' ) . '%' );
+		} else {
+			$statement .= $wpdb->prepare( " where meta_key like %s", '%' . $wpdb->esc_like( '_wmc_commands' ) . '%' );
+		}
+
+		$statement .= $wpdb->prepare( " and post_id = %d", intval( $order_id ) );
+
+		return $wpdb->get_results( $statement );
 	}
 
 	/**
