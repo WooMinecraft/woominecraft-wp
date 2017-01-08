@@ -59,9 +59,7 @@ payments - [check google](http://lmgtfy.com/?q###Woocommerce+payment+gateways)
 * Multi-server support added in.
 * Moved server key settings to WooCommerce->Settings ( near the bottom )
 * Added multiple error messages to send back to the client of any errors.
-
-**TBD:**
-* Added username column in order listing
+* Added username column in order listing, also makes it clickable/sortable
 * Added delivery column in order listing
 
 ### 1.0.8

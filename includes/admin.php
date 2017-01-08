@@ -67,6 +67,14 @@ class WCM_Admin {
 		}
 	}
 
+	/**
+	 * Adds the player name to be sorted.
+	 *
+	 * @param array $columns
+	 *
+	 * @author JayWood
+	 * @return mixed
+	 */
 	public function make_player_sortable( $columns ) {
 		$columns['wmc-player'] = 'wmc-player';
 
