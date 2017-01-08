@@ -58,6 +58,13 @@ class WCM_Admin {
 			$wp_query->set( 'meta_key', 'player_id' );
 			$wp_query->set( 'orderby', 'meta_value' );
 		}
+
+
+		$player_name = isset( $_GET['wmc-player-name'] ) ? esc_attr( $_GET['wmc-player-name'] ) : false;
+		if ( ! empty( $player_name ) ) {
+			$wp_query->set( 'meta_key', 'player_id' );
+			$wp_query->set( 'meta_value', $player_name );
+		}
 	}
 
 	public function make_player_sortable( $columns ) {
@@ -102,8 +109,10 @@ class WCM_Admin {
 				break;
 			case 'wmc-player':
 				$player_id   = get_post_meta( $post_id, 'player_id', true );
-				printf( '<span class="wmc-player-name">%s</span>', $player_id ? $player_id : ' - ' );
+				$href = add_query_arg( 'wmc-player-name', $player_id );
+				printf( '<a class="wmc-player-name" href="%2$s">%1$s</a>', $player_id ? $player_id : ' - ', $href );
 				break;
+				// Ni Hijan
 		}
 
 		return;
