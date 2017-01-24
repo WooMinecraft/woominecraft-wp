@@ -39,3 +39,4 @@ gulp.task( 'watch', function() {
 } );
 
 gulp.task( 'default', ['scripts', 'sass', 'cssmin'] );
+gulp.task( 'styles', [ 'sass', 'cssmin' ] );
