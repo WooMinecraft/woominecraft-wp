@@ -10,3 +10,13 @@ table.woominecraft.commands{
 		width: 100% !important;
 	}
 }
+
+.wp-list-table{
+	#wmc-delivered {
+		width: 78px;
+	}
+
+	td.wmc-delivered{
+		text-align: center;
+	}
+}
