@@ -5,34 +5,61 @@ window.WooMinecraft = ( function( window, document, $ ) {
 
 	app.cache = function() {
 		app.$body = $( 'body' );
+		app.$btns = {
+			reset:        $( '.woo_minecraft_reset' ),
+			addServer:    $( '.wmc_add_server' ),
+			deleteServer: $( '.button.wmc_delete_server' )
+		};
 		app.$nonce = app.$body.find( '#woo_minecraft_nonce' );
 		app.$resend_donations = app.$body.find( '#resendDonations' );
+
+		/**
+		 * Woocommerce selectors, for consistency I separate them
+		 * @type {{variations: (*)}}
+		 */
+		app.$wc = {
+			variations: $( '#woocommerce-product-data' )
+		};
 	};
 
 	app.init = function() {
 
 		app.cache();
 
-		app.$body.on( 'click', '.woo_minecraft_reset', app.reset_form );
-		app.$body.on( 'click', '.button.wmc_add_server', app.add_server );
-		app.$body.on( 'click', '.button.wmc_delete_server', app.remove_server );
+		app.$btns.reset.on( 'click', app.reset_form );
+		app.$btns.addServer.on( 'click', app.addRow );
+		app.$btns.deleteServer.on( 'click', app.removeRow );
 
 		if ( app.l10n.player_id ) {
 			app.$resend_donations.on( 'click', app.resend_donations );
 		} else {
 			app.$resend_donations.prop( 'disabled', true );
 		}
+
+		/**
+		 * Listen for variations ajax response then reload the script, since ONLY then can we get the add/remove server
+		 * events to attach.
+		 */
+		app.$wc.variations.on( 'woocommerce_variations_loaded', app.init );
 	};
 
 	/**
-	 * Adds a server to the list of servers in the admin panel
+	 * Adds a toggleable row which you can remove in the future, relative to the current container.
 	 * @since 1.0.7
 	 * @param evt
 	 */
-	app.add_server = function( evt ) {
+	app.addRow = function( evt ) {
 		evt.preventDefault();
-		var $row = $( '.woominecraft tbody tr:first' );
+
+		var curElement = $( this );
+		var curParent = curElement.closest( 'table.woominecraft' );
+		if ( ! curParent.length ) {
+			return false;
+		}
+
+		var $row = curParent.find( 'tbody tr:first' );
 		if ( ! $row ) {
+			window.console.log( $row.length );
 			return false;
 		}
 
@@ -45,11 +72,11 @@ window.WooMinecraft = ( function( window, document, $ ) {
 	};
 
 	/**
-	 * Removes a server from the list of servers in the admin panel.
+	 * Removes a row from the current list of rows, and reindex them.
 	 * @since 1.0.7
 	 * @param evt
 	 */
-	app.remove_server = function( evt ) {
+	app.removeRow = function( evt ) {
 		evt.preventDefault();
 		if ( 0 == ( $( '.woominecraft tbody tr').length - 1 ) ) {
 			alert( app.l10n.must_have_single );
