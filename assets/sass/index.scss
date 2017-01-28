@@ -2,12 +2,22 @@ table.woominecraft.commands{
 
 	margin: 0 9px;
 
+	width: 100%;
+
 	th{
 		text-align: left;
+
+		&.buttons{
+			width: 200px;
+		}
 	}
 
 	.widefat{
 		width: 100% !important;
+	}
+
+	td select{
+		width: 100%;
 	}
 }
 

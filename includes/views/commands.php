@@ -9,9 +9,9 @@ $servers = woo_minecraft()->admin->get_servers();
 	<table class="woominecraft commands" cellpadding="5px">
 		<thead>
 			<tr>
-				<th><?php _e( 'Command', 'woominecraft' ); ?></th>
-				<th><?php _e( 'Server', 'woominecraft' ); ?></th>
-				<th><input type="button" class="button button-small button-primary wmc_add_server" value="<?php _e( 'Add Command', 'woominecraft' ); ?>" /></th>
+				<th class="command"><?php _e( 'Command', 'woominecraft' ); ?></th>
+				<th class="server"><?php _e( 'Server', 'woominecraft' ); ?></th>
+				<th class="buttons"><input type="button" class="button button-small button-primary wmc_add_server" value="<?php _e( 'Add Command', 'woominecraft' ); ?>" /></th>
 			</tr>
 		</thead>
 		<tbody>

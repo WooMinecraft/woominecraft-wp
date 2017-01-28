@@ -1,13 +1,22 @@
 table.woominecraft.commands {
   margin: 0 9px;
+  width: 100%;
 }
 
 table.woominecraft.commands th {
   text-align: left;
 }
 
+table.woominecraft.commands th.buttons {
+  width: 200px;
+}
+
 table.woominecraft.commands .widefat {
   width: 100% !important;
+}
+
+table.woominecraft.commands td select {
+  width: 100%;
 }
 
 .wp-list-table #wmc-delivered {
