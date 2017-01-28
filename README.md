@@ -57,11 +57,12 @@ payments - [check google](http://lmgtfy.com/?q###Woocommerce+payment+gateways)
 ## Changelog
 
 ### 1.1
-* Multi-server support added in.
+* **Added** Multi-server support
+* **Added** multiple error messages to send back to the client of any errors.
+* **Added** username column in order listing, also makes it clickable/sortable
+* **Added** delivery column in order listing
+* Fixed command row bug with reindexing
 * Moved server key settings to WooCommerce->Settings ( near the bottom )
-* Added multiple error messages to send back to the client of any errors.
-* Added username column in order listing, also makes it clickable/sortable
-* Added delivery column in order listing
 
 ### 1.0.8
 * Hotfix for [#18](https://github.com/WooMinecraft/woominecraft-wp/issues/18) - Apparently WooCommerce uses the 'key' key as well...
