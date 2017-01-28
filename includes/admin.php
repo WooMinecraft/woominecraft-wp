@@ -306,6 +306,7 @@ class WCM_Admin {
 		}
 
 		$commands = get_post_meta( $post->ID, 'wmc_commands', true );
+		$command_key = 'general';
 		include_once 'views/commands.php';
 	}
 
@@ -323,6 +324,7 @@ class WCM_Admin {
 		}
 
 		$commands = get_post_meta( $post->ID, 'wmc_commands', true );
+		$command_key = 'variable';
 		include 'views/commands.php';
 	}
 
@@ -554,12 +556,20 @@ class WCM_Admin {
 			return;
 		}
 
-		$variations = $_POST['wmc_commands'];
+		error_log( print_r( $_POST['wmc_commands'], 1 ) );
+
+		$command_set = $_POST['wmc_commands'];
 		$meta       = array();
-		foreach ( $variations as $id => $commands ) {
+		foreach ( $command_set as $id => $commands ) {
 			// Key commands by key.
 			$key     = $commands['server'];
 			$command = esc_attr( $commands['command'] );
+
+			// Skip empty command sets.
+			if ( empty( $command ) ) {
+				continue;
+			}
+
 			if ( ! isset( $meta[ $key ] ) ) {
 				$meta[ $key ] = array();
 			}
