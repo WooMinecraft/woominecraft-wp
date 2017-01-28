@@ -5,42 +5,39 @@ window.WooMinecraft = ( function( window, document, $ ) {
 
 	app.cache = function() {
 		app.$body = $( 'body' );
-		app.$btns = {
-			reset:        $( '.woo_minecraft_reset' ),
-			addServer:    $( '.wmc_add_server' ),
-			deleteServer: $( '.button.wmc_delete_server' )
-		};
 		app.$nonce = app.$body.find( '#woo_minecraft_nonce' );
 		app.$resend_donations = app.$body.find( '#resendDonations' );
-
-		/**
-		 * Woocommerce selectors, for consistency I separate them
-		 * @type {{variations: (*)}}
-		 */
-		app.$wc = {
-			variations: $( '#woocommerce-product-data' )
-		};
 	};
 
 	app.init = function() {
 
 		app.cache();
 
-		app.$btns.reset.on( 'click', app.reset_form );
-		app.$btns.addServer.on( 'click', app.addRow );
-		app.$btns.deleteServer.on( 'click', app.removeRow );
+		app.$body.on( 'click', '.woo_minecraft_reset', app.resetForm );
+		app.$body.on( 'click', '.wmc_add_server', app.addRow );
+		app.$body.on( 'click', '.wmc_delete_server', app.removeRow );
 
 		if ( app.l10n.player_id ) {
 			app.$resend_donations.on( 'click', app.resend_donations );
 		} else {
 			app.$resend_donations.prop( 'disabled', true );
 		}
+	};
 
-		/**
-		 * Listen for variations ajax response then reload the script, since ONLY then can we get the add/remove server
-		 * events to attach.
-		 */
-		app.$wc.variations.on( 'woocommerce_variations_loaded', app.init );
+	/**
+	 * Helper function to grab the current parent of a row.
+	 *
+	 * @param {object} selector
+	 * @returns {*}
+	 */
+	app.curParent = function( selector ) {
+		var curElement = $( selector );
+		var curParent = curElement.closest( 'table.woominecraft' );
+		if ( ! curParent.length ) {
+			return false;
+		}
+
+		return curParent;
 	};
 
 	/**
@@ -51,15 +48,13 @@ window.WooMinecraft = ( function( window, document, $ ) {
 	app.addRow = function( evt ) {
 		evt.preventDefault();
 
-		var curElement = $( this );
-		var curParent = curElement.closest( 'table.woominecraft' );
-		if ( ! curParent.length ) {
+		var curParent = app.curParent( this );
+		if ( ! curParent ) {
 			return false;
 		}
 
 		var $row = curParent.find( 'tbody tr:first' );
 		if ( ! $row ) {
-			window.console.log( $row.length );
 			return false;
 		}
 
@@ -68,7 +63,7 @@ window.WooMinecraft = ( function( window, document, $ ) {
 		// Clear out all values
 		$new_row.find( ':text' ).val( '' );
 		$row.parent( 'tbody' ).append( $new_row );
-		app.reindex_rows();
+		app.reindexRows( curParent );
 	};
 
 	/**
@@ -78,14 +73,23 @@ window.WooMinecraft = ( function( window, document, $ ) {
 	 */
 	app.removeRow = function( evt ) {
 		evt.preventDefault();
-		if ( 0 == ( $( '.woominecraft tbody tr').length - 1 ) ) {
+
+		var curParent = app.curParent( this );
+		if ( ! curParent ) {
+			window.console.trace( curParent );
+			return false;
+		}
+
+		var rowLength = curParent.find( 'tbody tr' ).length;
+
+		if ( 0 == ( rowLength - 1 ) ) {
 			alert( app.l10n.must_have_single );
 			return false;
 		}
 
 		$( this ).closest( 'tr.row' ).fadeOut( 200, function() {
 			$( this ).remove();
-			app.reindex_rows();
+			app.reindexRows( curParent );
 		} );
 	};
 
@@ -93,8 +97,9 @@ window.WooMinecraft = ( function( window, document, $ ) {
 	 * Re-indexes rows for array processing
 	 * @since 1.0.7
 	 */
-	app.reindex_rows = function() {
-		var $rows = $( '.woominecraft tbody tr' );
+	app.reindexRows = function( curParent ) {
+
+		var $rows = curParent.find( 'tbody tr' );
 		if ( ! $rows ) {
 			return false;
 		}
@@ -153,7 +158,7 @@ window.WooMinecraft = ( function( window, document, $ ) {
 	 * Removes ALL commands from the current selection.
 	 * @param evt
 	 */
-	app.reset_form = function( evt ){
+	app.resetForm = function( evt ){
 		evt.preventDefault();
 
 		var confirmation = confirm( app.l10n.confirm );
