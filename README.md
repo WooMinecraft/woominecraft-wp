@@ -10,9 +10,9 @@ A FREE Minecraft Donation plugin which works in conjunction with my WooMinecraft
 
 ## Description
 
-**Version 1.0.5 is only compatible with WooMinecraft Java plugin version 1.0.6-RC1+ and WILL NOT WORK for earlier versions.**
+> **Version 1.0.5 is only compatible with WooMinecraft Java plugin version 1.0.6-RC1+ and WILL NOT WORK for earlier versions.**
 
-Contribute to this plugins development on [Github](https://github.com/WooMinecraft/woominecraft-wp) if you'd like.
+Contribute to this plugin's development on [Github](https://github.com/WooMinecraft/woominecraft-wp) if you'd like.
 
 This plugin works in conjunction with our [WooMinecraft JAVA Plugin](https://github.com/WooMinecraft/WooMinecraft) for Minecraft on GitHub
 and is intended for Minecraft servers.  This plugin allows you to add commands to your [WooCommerce](https://wordpress.org/plugins/woocommerce/) products to have
@@ -23,6 +23,7 @@ We're providing this to you in full faith you'll follow the [Mojang Donation Gui
 Supports the following:
 * Multiple commands per product
 * Multiple commands per product variation
+* Multiple Servers
 * MC Username verification ( we only support paid legit accounts via the Mojang API )
 * Resend Donations per-order ( should you need to wipe your server ).
 * More to come?!
