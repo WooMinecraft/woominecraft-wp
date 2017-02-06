@@ -22,10 +22,10 @@ class WCM_Admin {
 
 		add_action( 'woocommerce_admin_order_data_after_shipping_address', array( $this, 'display_player_name_in_order_meta' ) );
 		add_action( 'woocommerce_product_options_general_product_data', array( $this, 'add_group_field' ) );
-		add_action( 'woocommerce_process_product_meta', array( $this, 'save_product_commands' ) );
+		add_action( 'woocommerce_process_product_meta_simple', array( $this, 'save_simple_commands' ) );
 
 		add_action( 'woocommerce_product_after_variable_attributes', array( $this, 'add_variation_field' ), 10, 3 );
-		add_action( 'woocommerce_save_product_variation', array( $this, 'save_product_commands' ), 10 );
+		add_action( 'woocommerce_update_product_variation', array( $this, 'save_variable_commands' ), 10 );
 
 		add_action( 'wp_ajax_wmc_resend_donations', array( $this, 'ajax_handler' ) );
 
@@ -307,6 +307,7 @@ class WCM_Admin {
 
 		$commands = get_post_meta( $post->ID, 'wmc_commands', true );
 		$command_key = 'general';
+		$post_id = $post->ID;
 		include_once 'views/commands.php';
 	}
 
@@ -325,6 +326,7 @@ class WCM_Admin {
 
 		$commands = get_post_meta( $post->ID, 'wmc_commands', true );
 		$command_key = 'variable';
+		$post_id = $post->ID;
 		include 'views/commands.php';
 	}
 
@@ -546,21 +548,49 @@ class WCM_Admin {
 	}
 
 	/**
-	 * Saves the general commands to post meta data.
+	 * Saves Simple commands
 	 *
 	 * @param int $post_id
+	 *
+	 * @author JayWood
 	 */
-	public function save_product_commands( $post_id = 0 ) {
-
-		if ( ! isset( $_POST['wmc_commands'] ) || empty( $post_id ) ) {
+	public function save_simple_commands( $post_id = 0 ) {
+		if ( empty( $post_id ) ) {
 			return;
 		}
 
-		error_log( print_r( $_POST['wmc_commands'], 1 ) );
+		$this->_save_commands( $post_id, 'simple' );
+	}
 
-		$command_set = $_POST['wmc_commands'];
+	/**
+	 * Saves variable-based commands
+	 *
+	 * @param int $post_id
+	 *
+	 * @author JayWood
+	 */
+	public function save_variable_commands( $post_id = 0 ) {
+		if ( empty( $post_id ) ) {
+			return;
+		}
+
+		$this->_save_commands( $post_id, 'variable' );
+	}
+
+	/**
+	 * Saves the general commands to post meta data.
+	 *
+	 * @param int $post_id The post ID to save commands against
+	 * @param array $commands A linear array of commands to be saved
+	 */
+	private function _save_product_commands( $post_id = 0, $command_set = array() ) {
+
+		if ( empty( $command_set ) || empty( $post_id ) ) {
+			return;
+		}
+
 		$meta       = array();
-		foreach ( $command_set as $id => $commands ) {
+		foreach ( $command_set as $commands ) {
 			// Key commands by key.
 			$key     = $commands['server'];
 			$command = esc_attr( $commands['command'] );
@@ -580,5 +610,24 @@ class WCM_Admin {
 		if ( ! empty( $meta ) ) {
 			update_post_meta( $post_id, 'wmc_commands', $meta );
 		}
+	}
+
+	/**
+	 * @param int $post_id
+	 * @param string $type
+	 *
+	 * @author JayWood
+	 */
+	private function _save_commands( $post_id, $type ) {
+		if ( ! isset( $_POST['wmc_commands'] ) || ! isset( $_POST['wmc_commands'][ $type ] ) ) {
+			return;
+		}
+
+		$variable_commands = $_POST['wmc_commands'][ $type ];
+		if ( ! isset( $variable_commands[ 'post_' . $post_id ] ) ) {
+			return;
+		}
+
+		$this->_save_product_commands( $post_id, $variable_commands[ 'post_' . $post_id ] );
 	}
 }
