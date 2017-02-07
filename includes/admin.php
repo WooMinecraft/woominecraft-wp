@@ -365,7 +365,7 @@ class WCM_Admin {
 			<?php wp_nonce_field( 'woominecraft', 'woo_minecraft_nonce' ); ?>
 			<h3><?php _e( 'WooMinecraft', 'woominecraft' ); ?></h3>
 			<p>
-				<strong><?php _e( 'Player Nanme:', 'woominecraft' ); ?></strong>
+				<strong><?php _e( 'Player Name:', 'woominecraft' ); ?></strong>
 				<?php echo $player_id; ?>
 			</p>
 			<p>
