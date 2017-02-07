@@ -445,42 +445,31 @@ class Woo_Minecraft {
 		update_post_meta( $order_id, 'player_id', $player_name );
 
 		foreach ( $items as $item ) {
-			// Insert into database table
-			$general_commands = get_post_meta( $item['product_id'], 'wmc_commands', true );
-			if ( ! empty( $general_commands ) ) {
-				for ( $n = 0; $n < $item['qty']; $n ++ ) {
-					foreach ( $general_commands as $server_key => $command ) {
-						if ( ! isset( $tmp_array[ $server_key ] ) ) {
-							$tmp_array[ $server_key ] = array();
-						}
-						if ( is_array( $command ) ) {
-							foreach ( $command as $c ) {
-								$tmp_array[ $server_key ][] = sprintf( $c, $player_name );
-							}
-						} else {
-							$tmp_array[ $server_key ][] = sprintf( $command, $player_name );
-						}
-					}
-				}
+
+			// If this is a variable product, use that meta, otherwise check for the product data and use it.
+			$product_id = isset( $item['variation_id'] ) && ! empty( $item['variation_id'] ) ? absint( $item['variation_id'] ) : absint( $item['product_id'] );
+			if ( empty( $product_id ) ) {
+				continue;
 			}
 
-			if ( isset( $item['variation_id'] ) ) {
-				$variation_commands = get_post_meta( $item['variation_id'], 'wmc_commands', true );
-				if ( ! empty( $variation_commands ) ) {
-					for ( $n = 0; $n < $item['qty']; $n++ ) {
-						foreach ( $variation_commands as $server_key => $command ) {
-							if ( ! isset( $tmp_array[ $server_key ] ) ) {
-								$tmp_array[ $server_key ] = array();
-							}
+			$item_commands = get_post_meta( $product_id, 'wmc_commands', true );
+			if ( empty( $item_commands ) ) {
+				continue;
+			}
 
-							if ( is_array( $command ) ) {
-								foreach ( $command as $c ) {
-									$tmp_array[ $server_key ][] = sprintf( $c, $player_name );
-								}
-							} else {
-								$tmp_array[ $server_key ][] = sprintf( $command, $player_name );
-							}
+			// Loop over the command set for every 1 qty of the item.
+			for ( $n = 0; $n < absint( $item['qty'] ); $n++ ) {
+				foreach ( $item_commands as $server_key => $command ) {
+					if ( ! isset( $tmp_array[ $server_key ] ) ) {
+						$tmp_array[ $server_key ] = array();
+					}
+
+					if ( is_array( $command ) ) {
+						foreach ( $command as $c ) {
+							$tmp_array[ $server_key ][] = sprintf( $c, $player_name );
 						}
+					} else {
+						$tmp_array[ $server_key ][] = sprintf( $command, $player_name );
 					}
 				}
 			}
