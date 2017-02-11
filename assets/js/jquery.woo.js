@@ -32,7 +32,7 @@ window.WooMinecraft = ( function( window, document, $ ) {
 	 */
 	app.curParent = function( selector ) {
 		var curElement = $( selector );
-		var curParent = curElement.closest( 'table.woominecraft' );
+		var curParent = curElement.closest( 'table.woominecraft, div.wrap.woocommerce tr.woominecraft' );
 		if ( ! curParent.length ) {
 			return false;
 		}
@@ -49,11 +49,13 @@ window.WooMinecraft = ( function( window, document, $ ) {
 		evt.preventDefault();
 
 		var curParent = app.curParent( this );
+		window.console.trace( curParent);
 		if ( ! curParent ) {
 			return false;
 		}
 
 		var $row = curParent.find( 'tbody tr:first' );
+		window.console.trace($row );
 		if ( ! $row ) {
 			return false;
 		}
