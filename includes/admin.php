@@ -249,7 +249,7 @@ class WCM_Admin {
 			),
 		);
 
-		$servers = get_option( $this->option_key, array() );
+		$servers = get_option( $this->option_key, $default_set );
 		if ( empty( $servers ) || ! is_array( $servers ) ) {
 			return $default_set;
 		}
@@ -260,7 +260,7 @@ class WCM_Admin {
 			$name = isset( $server['name'] ) ? esc_attr( $server['name'] ) : false;
 			$key  = isset( $server['key'] ) ? esc_attr( $server['key'] ) : false;
 
-			if ( ! $name || ! $key ) {
+			if ( ! $name ) {
 				continue;
 			}
 
