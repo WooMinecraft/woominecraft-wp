@@ -306,7 +306,7 @@ class WCM_Admin {
 		}
 
 		$commands = get_post_meta( $post->ID, 'wmc_commands', true );
-		$command_key = 'general';
+		$command_key = 'simple';
 		$post_id = $post->ID;
 		include_once 'views/commands.php';
 	}
