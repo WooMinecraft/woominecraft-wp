@@ -67,6 +67,7 @@ payments - [check google](http://lmgtfy.com/?q###Woocommerce+payment+gateways)
 * Fixed command row bug with reindexing
 * Moved server key settings to WooCommerce->Settings ( near the bottom )
 * Resource updates for screenshots etc... 
+* **CHANGED** General command now no-longer run on-top of variation commands
 
 ### 1.0.8
 * Hotfix for [#18](https://github.com/WooMinecraft/woominecraft-wp/issues/18) - Apparently WooCommerce uses the 'key' key as well...
