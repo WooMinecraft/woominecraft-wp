@@ -54,6 +54,7 @@ Yea sure, we've all use to BuyCraft, but well, it doesn't have the flexibility o
 
 1. Adding/removing multiple commands for general products.
 2. Adding commands to single variations.
+3. Adding servers.
 
 == Changelog ==
 
