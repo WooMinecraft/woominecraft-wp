@@ -7,7 +7,7 @@
 $servers = woo_minecraft()->admin->get_servers();
 ?>
 <div class="woo_minecraft">
-	<p class="title"><?php _e( 'WooMinecraft Commands', 'woominecraft' ); ?><span class="woocommerce-help-tip" data-tip="<?php _e( 'Any commands added here, will run on top of variable commands if any; no leading slash is needed.', 'woominecraft' );  ?>"></span></p>
+	<p class="title"><?php _e( 'WooMinecraft Commands', 'woominecraft' ); ?></p>
 	<table class="woominecraft commands" cellpadding="5px">
 		<thead>
 			<tr>
