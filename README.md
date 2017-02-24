@@ -107,3 +107,7 @@ payments - [check google](http://lmgtfy.com/?q###Woocommerce+payment+gateways)
 2. Type "WooMinecraft-WP" into the Search Input and click the "Search" button.
 3. Find WooMinecraft-WP in the list and click "Install Now"
 4. Activate the plugin.
+## Support on Beerpay
+Hey dude! Help me out for a couple of :beers:!
+
+[![Beerpay](https://beerpay.io/WooMinecraft/woominecraft-wp/badge.svg?style=beer-square)](https://beerpay.io/WooMinecraft/woominecraft-wp)  [![Beerpay](https://beerpay.io/WooMinecraft/woominecraft-wp/make-wish.svg?style=flat-square)](https://beerpay.io/WooMinecraft/woominecraft-wp?focus=wish)
