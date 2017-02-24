@@ -36,9 +36,6 @@ Supports the following:
 ### Will you support offline servers?
 * No, under no circumstances will we ever support offline servers.
 
-### Why does the general command run for a variable product?
-This is intended, if you don't want to run the general commands, simply don't fill it in for variable products.
-
 ### What payment gateways does this support?
 * Anything? Well to be honest, this plugin does not mess with gateways at all. It relies solely on WooCommerce for the
 payments - [check google](http://lmgtfy.com/?q###Woocommerce+payment+gateways)
@@ -69,6 +66,7 @@ payments - [check google](http://lmgtfy.com/?q###Woocommerce+payment+gateways)
 * **Added** delivery column in order listing
 * Fixed command row bug with reindexing
 * Moved server key settings to WooCommerce->Settings ( near the bottom )
+* Resource updates for screenshots etc... 
 
 ### 1.0.8
 * Hotfix for [#18](https://github.com/WooMinecraft/woominecraft-wp/issues/18) - Apparently WooCommerce uses the 'key' key as well...
