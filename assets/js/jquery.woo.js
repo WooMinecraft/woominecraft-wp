@@ -84,7 +84,7 @@ window.WooMinecraft = ( function( window, document, $ ) {
 
 		var rowLength = curParent.find( 'tbody tr' ).length;
 
-		if ( 0 == ( rowLength - 1 ) ) {
+		if ( 0 === ( rowLength - 1 ) ) {
 			alert( app.l10n.must_have_single );
 			return false;
 		}
@@ -127,7 +127,7 @@ window.WooMinecraft = ( function( window, document, $ ) {
 		evt.preventDefault();
 
 		var serverSelect = $( 'select.wmc-server-select' );
-		if ( ! serverSelect || '' == serverSelect.val() ) {
+		if ( ! serverSelect || '' === serverSelect.val() ) {
 			return false;
 		}
 
@@ -138,7 +138,7 @@ window.WooMinecraft = ( function( window, document, $ ) {
 				action:    'wmc_resend_donations',
 				order_id:  app.l10n.order_id,
 				player_id: app.l10n.player_id,
-				server:    serverSelect.val(),
+				server:    serverSelect.val()
 			},
 			dataType: 'json',
 			method:   'POST'
@@ -146,7 +146,7 @@ window.WooMinecraft = ( function( window, document, $ ) {
 
 	};
 
-	app.xhrDone = function( data, textStatus, jqXHR ) {
+	app.xhrDone = function( data ) {
 		if ( data.success ) {
 			// TODO: Make a prettier dialog, instead of this crap.
 			alert( app.l10n.donations_resent );
