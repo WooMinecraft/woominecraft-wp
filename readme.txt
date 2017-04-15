@@ -4,15 +4,13 @@ Tags: minecraft, woocommerce, donations
 License: GPLv2 or later
 Requires at least: 4.4.2
 Tested up to: 4.7.2
-Stable tag: 1.1
+Stable tag: 2.0
 
 A FREE Minecraft Donation plugin which works in conjunction with my WooMinecraft java plugin for Minecraft to provide a self-hosted donation platform.
 
 == Description ==
 
 Contribute to this plugins development on [Github](https://github.com/WooMinecraft/woominecraft-wp) if you'd like.
-
-**Version 1.0.5 is only compatible with WooMinecraft Java plugin version 1.0.6-RC1+ and WILL NOT WORK for earlier versions.**
 
 This plugin works in conjunction with our [WooMinecraft JAVA Plugin](https://github.com/WooMinecraft/WooMinecraft) for Minecraft on GitHub
 and is intended for Minecraft servers.  This plugin allows you to add commands to your [WooCommerce](https://wordpress.org/plugins/woocommerce/) products to have
@@ -54,6 +52,10 @@ Yea sure, we've all use to BuyCraft, but well, it doesn't have the flexibility o
 3. Adding servers.
 
 == Changelog ==
+
+= 2.0 =
+* **Added** REST API
+* **REMOVED** Custom JSON endpoint
 
 = 1.1 =
 * **Added** Multi-server support

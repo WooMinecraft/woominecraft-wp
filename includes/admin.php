@@ -1,11 +1,18 @@
 <?php
 
+/**
+ * Class WCM_Admin
+ *
+ * @author JayWood
+ * @since 1.0
+ * @package WooMinecraft-WP
+ */
 class WCM_Admin {
 
 	/**
 	 * @var Woo_Minecraft null
 	 */
-	private $plugin = null;
+	private $plugin;
 
 	/**
 	 * The servers key to store in the database
