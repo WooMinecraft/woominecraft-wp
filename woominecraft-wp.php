@@ -12,7 +12,7 @@ Author URI: http://plugish.com
 */
 
 function wmc_autoload_classes( $class_name ) {
-	if ( 0 != strpos( $class_name, 'WCM_' ) ) {
+	if ( 0 !== strpos( $class_name, 'WCM_' ) ) {
 		return false;
 	}
 
@@ -32,7 +32,7 @@ spl_autoload_register( 'wmc_autoload_classes' );
 /**
  * Class Woo_Minecraft
  *
- * @todo: Create some way of handling orphaned orders. See Below -
+ * @todo   : Create some way of handling orphaned orders. See Below -
  * If an order is created which had commands tied to a specific server, and that server is later deleted, those commands cannot be re-sent at any time.
  *
  * @author JayWood
@@ -89,6 +89,7 @@ class Woo_Minecraft {
 
 	/**
 	 * The transient key
+	 *
 	 * @var string
 	 */
 	private $command_transient = 'wmc-transient-command-feed';
@@ -107,11 +108,22 @@ class Woo_Minecraft {
 	}
 
 	/**
-	 * Plugin Hooks
+	 * Loads all child classes for the plugin.
 	 *
-	 * Contains all WP hooks for the plugin
+	 * @return void
 	 *
-	 * @since 0.1.0
+	 * @author JayWood
+	 * @since  1.0.0
+	 */
+	private function plugin_classes() {
+		$this->admin = new WCM_Admin( $this );
+	}
+
+	/**
+	 * Contains all the necessary hooks for the main plugin file.
+	 *
+	 * @author JayWood
+	 * @return void
 	 */
 	public function hooks() {
 		add_action( 'woocommerce_checkout_process', array( $this, 'check_player' ) );
@@ -123,11 +135,52 @@ class Woo_Minecraft {
 
 		add_action( 'save_post', array( $this, 'bust_command_cache' ) );
 
+		add_action( 'rest_api_init', array( $this, 'rest_setup_routes' ) );
+
 		$this->admin->hooks();
 	}
 
 	/**
+	 * Sets up REST routes for the WP-API
+	 *
+	 * @author JayWood
+	 * @return void
+	 */
+	public function rest_setup_routes() {
+		register_rest_route( 'woominecraft/v1', '/server/(?P<server_key>[a-zA-Z0-9\@\#\!]+)', array(
+			'methods'  => WP_REST_Server::READABLE,
+			'callback' => array( $this, 'get_server_commands' ),
+			'args'     => array(
+				'server_key' => array(
+					'sanitize_callback' => 'esc_attr',
+				),
+			),
+		) );
+	}
+
+	/**
+	 * Retrieves server specific commands for the key provided.
+	 *
+	 * @param WP_Rest_Request $request The rest request object.
+	 *
+	 * @return mixed
+	 *
+	 * @author JayWood
+	 * @since 2.0.0
+	 */
+	public function get_server_commands( WP_Rest_Request $request ) {
+		$server_key = $request->get_param( 'server_key' );
+
+		return rest_ensure_response( new WP_Error( 'testing',' This is a test' ) );
+	}
+
+	/**
 	 * Produces the JSON Feed for Orders Pending Delivery
+	 *
+	 * @return void
+	 *
+	 * @author JayWood
+	 * @since 1.0.0
 	 */
 	public function json_feed() {
 
@@ -159,7 +212,7 @@ class Woo_Minecraft {
 		if ( false === ( $output = get_transient( $this->command_transient ) ) || isset( $_GET['delete-trans'] ) ) {
 
 			$delivered = '_wmc_delivered_' . $key;
-			$meta_key = '_wmc_commands_' . $key;
+			$meta_key  = '_wmc_commands_' . $key;
 
 			$order_query = apply_filters( 'woo_minecraft_json_orders_args', array(
 				'posts_per_page' => '-1',
@@ -168,7 +221,7 @@ class Woo_Minecraft {
 				'meta_query'     => array(
 					'relation' => 'AND',
 					array(
-						'key' => $meta_key,
+						'key'     => $meta_key,
 						'compare' => 'EXISTS',
 					),
 					array(
@@ -210,10 +263,13 @@ class Woo_Minecraft {
 	/**
 	 * Generates the order JSON data for a single order.
 	 *
-	 * @param WP_Post $order_post
-	 * @param string $key Server key to check against
-	 * @author JayWood
+	 * @param WP_Post $order_post The post to get the commands from.
+	 * @param string  $key        The server key to pluck orders with.
+	 *
 	 * @return array|mixed
+	 *
+	 * @author JayWood
+	 * @since  1.0.0
 	 */
 	private function generate_order_json( $order_post, $key ) {
 
@@ -230,8 +286,10 @@ class Woo_Minecraft {
 	/**
 	 * Setup Localization
 	 *
-	 * @since  0.1.0
-	 * @return null
+	 * @return void
+	 *
+	 * @author JayWood
+	 * @since 1.0.0
 	 */
 	public function i18n() {
 		load_plugin_textdomain( 'woominecraft', false, dirname( $this->basename ) . '/languages/' );
@@ -241,12 +299,14 @@ class Woo_Minecraft {
 	 * Take special care to sanitize the incoming post data.
 	 *
 	 * While not as simple as running esc_attr, this is still necessary since the JSON
-	 * from the Java code comes in escaped, so we need some custom sanitization.
+	 * from the Java code comes in escaped, so we need some custom sensitization.
 	 *
-	 * @param $post_data
+	 * @param string $post_data JSON data passed to the server for order processing.
+	 *
+	 * @return array
 	 *
 	 * @author JayWood
-	 * @return array
+	 * @since 1.0.0
 	 */
 	private function sanitized_orders_post( $post_data ) {
 		$decoded = json_decode( stripslashes( urldecode( $post_data ) ) );
@@ -260,9 +320,12 @@ class Woo_Minecraft {
 	/**
 	 * Helper method for transient busting
 	 *
-	 * @param int $post_id
+	 * @param integer $post_id The post ID.
+	 *
+	 * @return void
 	 *
 	 * @author JayWood
+	 * @since 1.0.0
 	 */
 	public function bust_command_cache( $post_id = 0 ) {
 
@@ -276,14 +339,18 @@ class Woo_Minecraft {
 	/**
 	 * Processes all completed commands.
 	 *
+	 * @param string $key The server key to check against.
+	 *
+	 * @return void
+	 *
 	 * @author JayWood
-	 * @param string $key
+	 * @since 1.0.0
 	 */
 	private function process_completed_commands( $key = '' ) {
 		$delivered = '_wmc_delivered_' . $key;
 		$order_ids = (array) $this->sanitized_orders_post( $_POST['processedOrders'] );
 
-		if (  empty( $order_ids ) ) {
+		if ( empty( $order_ids ) ) {
 			wp_send_json_error( array( 'msg' => __( 'Commands was empty', 'woominecraft' ) ) );
 		}
 
@@ -299,9 +366,14 @@ class Woo_Minecraft {
 	/**
 	 * Adds a field to the checkout form, requiring the user to enter their Minecraft Name
 	 *
-	 * @param object $cart WooCommerce Cart Object
+	 * @param object $cart WooCommerce Cart Object.
 	 *
-	 * @return bool  False on failure, true otherwise.
+	 * @return boolean  False on failure, true otherwise.
+	 *
+	 * @TODO If $cart is passed into this function, why access the $woocommerce global at all???
+	 *
+	 * @author JayWood
+	 * @since 1.0.0
 	 */
 	public function additional_checkout_field( $cart ) {
 		global $woocommerce;
@@ -327,32 +399,40 @@ class Woo_Minecraft {
 	/**
 	 * Resets an order from being delivered.
 	 *
-	 * @param int $order_id
-	 * @param string $server_key
+	 * @param integer $order_id   The order ID.
+	 * @param string  $server_key The server key.
+	 *
+	 * @return boolean
 	 *
 	 * @author JayWood
-	 * @return bool
+	 * @since 1.0.0
 	 */
 	public function reset_order( $order_id, $server_key ) {
 		delete_post_meta( $order_id, '_wmc_delivered_' . $server_key );
 		$this->bust_command_cache( $order_id );
+
 		return true;
 	}
 
 	/**
-	 * Caches the results of the mojang API based on player ID
+	 * Caches the results of the Mojang API request, based on player ID
 	 *
-	 * @param String $player_id Minecraft Username
-	 *
-	 * Object is as follows
+	 * Object is as follows:
+	 * <pre>
 	 * {
 	 *    "id": "0d252b7218b648bfb86c2ae476954d32",
 	 *    "name": "CasESensatIveUserName",
 	 *    "legacy": true,
 	 *    "demo": true
 	 * }
+	 * </pre>
 	 *
-	 * @return bool|object False on failure, Object on success
+	 * @param string $player_id Minecraft Username.
+	 *
+	 * @return boolean|object False on failure, Object on success.
+	 *
+	 * @author JayWood
+	 * @since 1.0.0
 	 */
 	public function mojang_player_cache( $player_id ) {
 
@@ -390,6 +470,9 @@ class Woo_Minecraft {
 	 * Checks if Minecraft Username is valid
 	 *
 	 * @return void
+	 *
+	 * @author JayWood
+	 * @since 1.0.0
 	 */
 	public function check_player() {
 		global $woocommerce;
@@ -399,7 +482,7 @@ class Woo_Minecraft {
 		}
 
 		$player_id = isset( $_POST['player_id'] ) ? esc_attr( $_POST['player_id'] ) : false;
-		$items    = $woocommerce->cart->cart_contents;
+		$items     = $woocommerce->cart->cart_contents;
 
 		if ( ! wmc_items_have_commands( $items ) ) {
 			return;
@@ -427,16 +510,21 @@ class Woo_Minecraft {
 	/**
 	 * Updates an order's meta data with the commands hash.
 	 *
-	 * @param $order_id
+	 * @param integer $order_id The order to save command data to.
+	 *
+	 * @return void
 	 *
 	 * @author JayWood
+	 * @since 1.0.0
 	 */
 	public function save_commands_to_order( $order_id ) {
 
-		$order_data   = new WC_Order( $order_id );
-		$items       = $order_data->get_items();
-		$tmp_array   = array();
+		// @TODO Use wc_get_order instead, so one can check if it's a valid ID, instead of assuming we can get_items()
+		$order_data = new WC_Order( $order_id );
+		$items      = $order_data->get_items();
+		$tmp_array  = array();
 
+		// @TODO an empty check is sufficient
 		if ( ! isset( $_POST['player_id'] ) || empty( $_POST['player_id'] ) ) {
 			return;
 		}
@@ -458,7 +546,7 @@ class Woo_Minecraft {
 			}
 
 			// Loop over the command set for every 1 qty of the item.
-			for ( $n = 0; $n < absint( $item['qty'] ); $n++ ) {
+			for ( $n = 0; $n < absint( $item['qty'] ); $n ++ ) {
 				foreach ( $item_commands as $server_key => $command ) {
 					if ( ! isset( $tmp_array[ $server_key ] ) ) {
 						$tmp_array[ $server_key ] = array();
@@ -482,6 +570,16 @@ class Woo_Minecraft {
 		}
 	}
 
+	/**
+	 * Adds the Minecraft username to the thank you page.
+	 *
+	 * @param integer $id The order ID.
+	 *
+	 * @return void
+	 *
+	 * @author JayWood
+	 * @since  1.0.0
+	 */
 	public function thanks( $id ) {
 		$player_name = get_post_meta( $id, 'player_id', true );
 		if ( ! empty( $player_name ) ) {
@@ -493,26 +591,19 @@ class Woo_Minecraft {
 	}
 
 	/**
-	 * Plugin classes
-	 *
-	 * @since 0.1.0
-	 */
-	public function plugin_classes() {
-		$this->admin = new WCM_Admin( $this );
-	}
-
-	/**
 	 * Include a file from the includes directory
 	 *
-	 * @since  0.1.0
+	 * @param  string $filename Name of the file to be included.
 	 *
-	 * @param  string $filename Name of the file to be included
+	 * @return boolean Result of include call.
 	 *
-	 * @return bool    Result of include call.
+	 * @author JayWood
+	 * @since  1.0.0
 	 */
 	public static function include_file( $filename ) {
 		$file = self::dir( 'includes/' . $filename . '.php' );
 		if ( file_exists( $file ) ) {
+			/** @noinspection PhpIncludeInspection */
 			return include_once( $file );
 		}
 
@@ -520,13 +611,14 @@ class Woo_Minecraft {
 	}
 
 	/**
-	 * This plugin's directory
+	 * Returns the plugin's path with an optional appended path.
 	 *
-	 * @since  0.1.0
-	 *
-	 * @param  string $path (optional) appended path
+	 * @param  string $path (optional) appended path.
 	 *
 	 * @return string       Directory and path
+	 *
+	 * @author JayWood
+	 * @since  1.0.0
 	 */
 	public static function dir( $path = '' ) {
 		static $dir;
@@ -540,9 +632,12 @@ class Woo_Minecraft {
 	 *
 	 * @since  0.1.0
 	 *
-	 * @param  string $path (optional) appended path
+	 * @param  string $path The (optional) appended path.
 	 *
-	 * @return string       URL and path
+	 * @return string URL and path.
+	 *
+	 * @author JayWood
+	 * @since  1.0.0
 	 */
 	public static function url( $path = '' ) {
 		static $url;
@@ -554,8 +649,10 @@ class Woo_Minecraft {
 	/**
 	 * Creates or returns an instance of this class.
 	 *
-	 * @since  0.1.0
 	 * @return Woo_Minecraft A single instance of this class.
+	 *
+	 * @author JayWood
+	 * @since  1.0.0
 	 */
 	public static function get_instance() {
 		if ( null === self::$single_instance ) {
@@ -570,10 +667,14 @@ class Woo_Minecraft {
 	 *
 	 * @since  0.1.0
 	 *
-	 * @param string $field
+	 * @param string $field The property being accessed.
+	 *
+	 * @return mixed
 	 *
 	 * @throws Exception Throws an exception if the field is invalid.
-	 * @return mixed
+	 *
+	 * @author JayWood
+	 * @since  1.0.0
 	 */
 	public function __get( $field ) {
 		switch ( $field ) {
@@ -589,6 +690,14 @@ class Woo_Minecraft {
 	}
 }
 
+/**
+ * The main plugin function, can be used to load an instance of the plugin.
+ *
+ * @return Woo_Minecraft
+ *
+ * @author JayWood
+ * @since  1.0.0
+ */
 function woo_minecraft() {
 	return Woo_Minecraft::get_instance();
 }
@@ -597,17 +706,20 @@ add_action( 'plugins_loaded', array( woo_minecraft(), 'hooks' ) );
 add_action( 'plugins_loaded', array( woo_minecraft(), 'i18n' ) );
 
 /**
- * Has Commands
+ * Determines if an item has commands.
  *
- * @param $data
+ * @param array $item_data An array of item data from WooCommerce.
  *
  * @TODO: Move this to helper file
- * @return bool
+ *
+ * @return boolean
+ *
+ * @author JayWood
+ * @since  1.0.0
  */
-function wmc_items_have_commands( $data ) {
-	if ( is_array( $data ) ) {
-		// Assume $data is cart contents
-		foreach ( $data as $item ) {
+function wmc_items_have_commands( $item_data ) {
+	if ( is_array( $item_data ) ) {
+		foreach ( $item_data as $item ) {
 			$post_id = $item['product_id'];
 
 			if ( ! empty( $item['variation_id'] ) ) {
