@@ -193,16 +193,15 @@ class WCM_Admin {
 	private function get_count( $order_id, $type = '' ) {
 		global $wpdb;
 
-		$statement = "select * from {$wpdb->postmeta}";
 		if ( 'delivered' === $type ) {
-			$statement .= $wpdb->prepare( ' where meta_key like %s', '%' . $wpdb->esc_like( '_wmc_delivered' ) . '%' );
+			$wmc_status = '%' . $wpdb->esc_like( '_wmc_delivered' ) . '%';
 		} else {
-			$statement .= $wpdb->prepare( ' where meta_key like %s', '%' . $wpdb->esc_like( '_wmc_commands' ) . '%' );
+			$wmc_status = '%' . $wpdb->esc_like( '_wmc_commands' ) . '%';
 		}
 
-		$statement .= $wpdb->prepare( ' and post_id = %d', intval( $order_id ) );
+		$statement = "select * from {$wpdb->postmeta} where meta_key like %s and post_id = %d";
 
-		return $wpdb->get_results( $statement );
+		return $wpdb->get_results( $wpdb->prepare( $statement, $wmc_status, $order_id ) );
 	}
 
 	/**
