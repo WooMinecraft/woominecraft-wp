@@ -2,7 +2,7 @@
 /**
  * PHPUnit bootstrap file
  *
- * @package Woominecraft_Wp
+ * @package Woominecraft
  */
 
 $_tests_dir = getenv( 'WP_TESTS_DIR' );

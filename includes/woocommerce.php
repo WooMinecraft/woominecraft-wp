@@ -1,5 +1,7 @@
 <?php
 
+namespace WooMinecraft\WooCommerce;
+
 /**
  * The Main class for WooCommerce functionality
  *

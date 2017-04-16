@@ -2,7 +2,7 @@
 /**
  * Class SampleTest
  *
- * @package Woominecraft_Wp
+ * @package Woominecraft
  */
 
 /**

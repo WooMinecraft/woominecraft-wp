@@ -1,0 +1,19 @@
+source: .
+destination: docs
+extensions: [php]
+
+title: WooMinecraft WordPress
+templateTheme: bootstrap
+
+exclude:
+  - tests/
+  - vendor/
+
+accessLevels: [public, protected]
+internal: false
+php: false
+tree: true
+deprecated: false
+todo: true
+noSourceCode: true
+debug: true

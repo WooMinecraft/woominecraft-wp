@@ -1,16 +1,49 @@
 <?php
-/*
-Plugin Name: Minecraft WooCommerce
-Plugin URI: http://woominecraft.com
-Description: To be used in conjunction with the WooMinecraft Bukkit plugin.  If you do not have it you can get it on the repository at <a href="https://github.com/JayWood/WooMinecraft">Github</a>.  Please be sure and fork the repository and make pull requests.
-Author: Jerry Wood
-Version: 2.0
-License: GPLv2
-Text Domain: woominecraft
-Domain Path: /languages
-Author URI: http://plugish.com
-*/
+/**
+ * Plugin Name: Minecraft WooCommerce
+ * Plugin URI: http://woominecraft.com
+ * Description: To be used in conjunction with the WooMinecraft Bukkit plugin.  If you do not have it you can get it on the repository at <a href="https://github.com/JayWood/WooMinecraft">Github</a>.  Please be sure and fork the repository and make pull requests.
+ * Author: Jerry Wood
+ * Version: 2.0
+ * License: GPLv2
+ * Text Domain: woominecraft
+ * Domain Path: /languages
+ * Author URI: http://plugish.com
+ *
+ * @package WooMinecraft
+ * @version 2.0
+ */
 
+/**
+ * Copyright (c) 2017 JayWood (email : jjwood2004@gmail.com)
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License, version 2 or, at
+ * your discretion, any later version, as published by the Free
+ * Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ */
+
+namespace WooMinecraft;
+
+/**
+ * Automatically loads class files when needed.
+ *
+ * @param string $class_name The class attempting to be loaded.
+ *
+ * @return boolean
+ *
+ * @author JayWood
+ * @since  1.0.0
+ */
 function wmc_autoload_classes( $class_name ) {
 	if ( 0 !== strpos( $class_name, 'WCM_' ) ) {
 		return false;
@@ -22,22 +55,22 @@ function wmc_autoload_classes( $class_name ) {
 		$class_name
 	) );
 
-	Woo_Minecraft::include_file( $filename );
+	WooMinecraft::include_file( $filename );
 
 	return true;
 }
-
 spl_autoload_register( 'wmc_autoload_classes' );
 
 /**
  * Class Woo_Minecraft
  *
- * @todo   : Create some way of handling orphaned orders. See Below -
- * If an order is created which had commands tied to a specific server, and that server is later deleted, those commands cannot be re-sent at any time.
+ * @TODO Create some way of handling orphaned orders. If an order is created which had commands tied to a specific server, and that server is later deleted, those commands cannot be re-sent at any time.
  *
  * @author JayWood
+ *
+ * @since 1.0.0
  */
-class Woo_Minecraft {
+class WooMinecraft {
 
 	/**
 	 * Current version
@@ -45,7 +78,7 @@ class Woo_Minecraft {
 	 * @var  string
 	 * @since  0.1.0
 	 */
-	const VERSION = '2.0';
+	private $version = '2.0';
 
 	/**
 	 * URL of plugin directory
@@ -74,7 +107,7 @@ class Woo_Minecraft {
 	/**
 	 * Singleton instance of plugin
 	 *
-	 * @var Woo_Minecraft
+	 * @var WooMinecraft
 	 * @since  0.1.0
 	 */
 	protected static $single_instance = null;
@@ -117,6 +150,18 @@ class Woo_Minecraft {
 	 */
 	private function plugin_classes() {
 		$this->admin = new WCM_Admin( $this );
+	}
+
+	/**
+	 * Gets the current version number of the plugin.
+	 *
+	 * @return string The version string
+	 *
+	 * @author JayWood
+	 * @since  2.0.0
+	 */
+	public function get_version() {
+		return $this->version;
 	}
 
 	/**
@@ -649,7 +694,7 @@ class Woo_Minecraft {
 	/**
 	 * Creates or returns an instance of this class.
 	 *
-	 * @return Woo_Minecraft A single instance of this class.
+	 * @return WooMinecraft A single instance of this class.
 	 *
 	 * @author JayWood
 	 * @since  1.0.0
@@ -678,8 +723,6 @@ class Woo_Minecraft {
 	 */
 	public function __get( $field ) {
 		switch ( $field ) {
-			case 'version':
-				return self::VERSION;
 			case 'basename':
 			case 'url':
 			case 'path':
@@ -693,13 +736,13 @@ class Woo_Minecraft {
 /**
  * The main plugin function, can be used to load an instance of the plugin.
  *
- * @return Woo_Minecraft
+ * @return WooMinecraft
  *
  * @author JayWood
  * @since  1.0.0
  */
 function woo_minecraft() {
-	return Woo_Minecraft::get_instance();
+	return WooMinecraft::get_instance();
 }
 
 add_action( 'plugins_loaded', array( woo_minecraft(), 'hooks' ) );
