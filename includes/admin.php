@@ -75,6 +75,8 @@ class WCM_Admin {
 	 *
 	 * @param \WP_Query $wp_query The WP_Query object.
 	 *
+	 * @return void
+	 *
 	 * @since 1.0.0
 	 * @author JayWood
 	 */
@@ -89,8 +91,7 @@ class WCM_Admin {
 			$wp_query->set( 'orderby', 'meta_value' );
 		}
 
-
-		$player_name = isset( $_GET['wmc-player-name'] ) ? esc_attr( $_GET['wmc-player-name'] ) : false;
+		$player_name = isset( $_GET['wmc-player-name'] ) ? esc_attr( $_GET['wmc-player-name'] ) : false; // @codingStandardsIgnoreLine
 		if ( ! empty( $player_name ) ) {
 			$wp_query->set( 'meta_key', 'player_id' );
 			$wp_query->set( 'meta_value', $player_name );
@@ -124,12 +125,14 @@ class WCM_Admin {
 	 * @since 1.0.0
 	 */
 	public function add_user_and_deliveries_header( $columns ) {
-		$out = array();
-		foreach( $columns as $key => $value ) {
+
+		$out = [];
+
+		foreach ( $columns as $key => $value ) {
 			$out[ $key ] = $value;
 			if ( 'order_status' === $key ) {
-				$out['wmc-delivered'] = __( 'Delivered', 'woominecraft-wp' ) . wc_help_tip( __( 'How many servers delivered versus how many still to be delivered.', 'woominecraft-wp' ) );
-				$out['wmc-player'] = __( 'Player', 'woominecraft-wp' );
+				$out['wmc-delivered'] = esc_attr__( 'Delivered', 'woominecraft-wp' ) . wc_help_tip( esc_attr__( 'How many servers delivered versus how many still to be delivered.', 'woominecraft-wp' ) );
+				$out['wmc-player'] = esc_attr__( 'Player', 'woominecraft-wp' );
 			}
 		}
 
@@ -150,12 +153,13 @@ class WCM_Admin {
 	public function add_users_and_deliveries( $column, $post_id ) {
 		switch ( $column ) {
 			case 'wmc-delivered':
-				printf( '<span class="wmc-orders-delivered">%s</span>', $this->get_delivered_col_output( $post_id ) );
+				printf( '<span class="wmc-orders-delivered">%s</span>', $this->get_delivered_col_output( $post_id ) ); // @codingStandardsIgnoreLine
 				break;
 			case 'wmc-player':
 				$player_id   = get_post_meta( $post_id, 'player_id', true );
 				$href = add_query_arg( 'wmc-player-name', $player_id );
-				printf( '<a class="wmc-player-name" href="%2$s">%1$s</a>', $player_id ? $player_id : ' - ', $href );
+				/** @noinspection HtmlUnknownTarget */
+				printf( '<a class="wmc-player-name" href="%2$s">%1$s</a>', esc_attr( $player_id ) ?: ' - ', esc_url( $href ) );
 				break;
 		}
 	}
@@ -199,9 +203,7 @@ class WCM_Admin {
 			$wmc_status = '%' . $wpdb->esc_like( '_wmc_commands' ) . '%';
 		}
 
-		$statement = "select * from {$wpdb->postmeta} where meta_key like %s and post_id = %d";
-
-		return $wpdb->get_results( $wpdb->prepare( $statement, $wmc_status, $order_id ) );
+		return $wpdb->get_results( $wpdb->prepare( "select * from {$wpdb->postmeta} where meta_key like %s and post_id = %d", $wmc_status, $order_id ) );
 	}
 
 	/**
@@ -213,11 +215,11 @@ class WCM_Admin {
 	 * @since 1.0.0
 	 */
 	public function save_servers() {
-		if ( ! isset( $_POST['wmc_servers'] ) ) {
+		if ( ! isset( $_POST['wmc_servers'] ) ) { // @codingStandardsIgnoreLine
 			return;
 		}
 
-		$servers = (array) $_POST['wmc_servers'];
+		$servers = (array) $_POST['wmc_servers'];  // @codingStandardsIgnoreLine
 		$output  = [];
 		foreach ( $servers as $server ) {
 
@@ -350,9 +352,9 @@ class WCM_Admin {
 	 */
 	public function ajax_handler() {
 
-		$player_id = isset( $_POST['player_id'] ) ? esc_attr( $_POST['player_id'] ) : false;
-		$order_id  = isset( $_POST['order_id'] ) ? intval( $_POST['order_id'] ) : false;
-		$server    = isset( $_POST['server'] ) ? esc_attr( $_POST['server'] ) : false;
+		$player_id = isset( $_POST['player_id'] ) ? esc_attr( $_POST['player_id'] ) : false; // @codingStandardsIgnoreLine
+		$order_id  = isset( $_POST['order_id'] ) ? intval( $_POST['order_id'] ) : false; // @codingStandardsIgnoreLine
+		$server    = isset( $_POST['server'] ) ? esc_attr( $_POST['server'] ) : false; // @codingStandardsIgnoreLine
 
 		if ( $player_id && $order_id && $server ) {
 			$result = $this->plugin->reset_order( $order_id, $server );
@@ -379,9 +381,10 @@ class WCM_Admin {
 			return;
 		}
 
-		$commands = get_post_meta( $post->ID, 'wmc_commands', true );
+		$commands    = get_post_meta( $post->ID, 'wmc_commands', true );
 		$command_key = 'simple';
-		$post_id = $post->ID;
+		$post_id     = $post->ID;
+
 		include_once 'views/commands.php';
 	}
 
@@ -433,7 +436,7 @@ class WCM_Admin {
 		foreach ( $post_custom as $key => $data ) {
 			if ( 0 === stripos( $key, '_wmc_commands_' ) ) {
 				$server_key                = substr( $key, 14, strlen( $key ) );
-				$option_set[ $server_key ] = __( 'Deleted', 'woominecraft' ) . ' ( ' . $server_key . ' )';
+				$option_set[ $server_key ] = esc_attr__( 'Deleted', 'woominecraft' ) . ' ( ' . $server_key . ' )';
 				foreach ( $servers as $server ) {
 					if ( $server_key === $server['key'] ) {
 						$option_set[ $server_key ] = $server['name'];
@@ -446,21 +449,21 @@ class WCM_Admin {
 		?>
 		<div class="woominecraft order-meta">
 			<?php wp_nonce_field( 'woominecraft', 'woo_minecraft_nonce' ); ?>
-			<h3><?php _e( 'WooMinecraft', 'woominecraft' ); ?></h3>
+			<h3><?php esc_attr_e( 'WooMinecraft', 'woominecraft' ); ?></h3>
 			<p>
-				<strong><?php _e( 'Player Name:', 'woominecraft' ); ?></strong>
-				<?php echo $player_id; ?>
+				<strong><?php esc_attr_e( 'Player Name:', 'woominecraft' ); ?></strong>
+				<?php echo esc_attr( $player_id ); ?>
 			</p>
 			<p>
 				<select name="" class="woominecraft wmc-server-select">
-					<option value=""><?php _e( 'Select a Server', 'woominecraft' ); ?></option>
+					<option value=""><?php esc_attr_e( 'Select a Server', 'woominecraft' ); ?></option>
 					<?php foreach ( $option_set as $k => $v ) : ?>
-						<option value="<?php echo $k; ?>"><?php echo $v; ?></option>
+						<option value="<?php echo esc_attr( $k ); ?>"><?php echo esc_attr( $v ); ?></option>
 					<?php endforeach; ?>
 				</select>
 			</p>
 			<p>
-				<input type="button" class="button button-primary" id="resendDonations" value="<?php _e( 'Resend Donations', 'woominecraft' ); ?>" data-id="<?php echo $player_id; ?>" data-orderid="<?php echo $order->get_id(); ?>"/>
+				<input type="button" class="button button-primary" id="resendDonations" value="<?php esc_attr_e( 'Resend Donations', 'woominecraft' ); ?>" data-id="<?php echo esc_attr( $player_id ); ?>" data-orderid="<?php echo absint( $order->get_id() ); ?>"/>
 			</p>
 		</div>
 		<?php
@@ -604,11 +607,11 @@ class WCM_Admin {
 	 * @author JayWood
 	 */
 	private function _save_commands( $post_id, $type ) {
-		if ( ! isset( $_POST['wmc_commands'] ) || ! isset( $_POST['wmc_commands'][ $type ] ) ) {
+		if ( ! isset( $_POST['wmc_commands'] ) || ! isset( $_POST['wmc_commands'][ $type ] ) ) {  // @codingStandardsIgnoreLine
 			return;
 		}
 
-		$variable_commands = $_POST['wmc_commands'][ $type ];
+		$variable_commands = $_POST['wmc_commands'][ $type ];  // @codingStandardsIgnoreLine
 		if ( ! isset( $variable_commands[ 'post_' . $post_id ] ) ) {
 			return;
 		}
