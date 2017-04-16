@@ -156,8 +156,8 @@ class WCM_Admin {
 				printf( '<span class="wmc-orders-delivered">%s</span>', $this->get_delivered_col_output( $post_id ) ); // @codingStandardsIgnoreLine
 				break;
 			case 'wmc-player':
-				$player_id   = get_post_meta( $post_id, 'player_id', true );
-				$href = add_query_arg( 'wmc-player-name', $player_id );
+				$player_id = get_post_meta( $post_id, 'player_id', true );
+				$href      = add_query_arg( 'wmc-player-name', $player_id );
 				/** @noinspection HtmlUnknownTarget */
 				printf( '<a class="wmc-player-name" href="%2$s">%1$s</a>', esc_attr( $player_id ) ?: ' - ', esc_url( $href ) );
 				break;
