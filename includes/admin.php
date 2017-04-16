@@ -218,13 +218,16 @@ class WCM_Admin {
 		}
 
 		$servers = (array) $_POST['wmc_servers'];
-		$output  = [ ];
+		$output  = [];
 		foreach ( $servers as $server ) {
-			$name = array_key_exists( 'name', $server ) && ! empty( $server['name'] ) ? esc_attr( $server['name'] ) : false;
-			$key  = array_key_exists( 'key', $server ) && ! empty( $server['key'] ) ? esc_attr( $server['key'] ) : false;
+
+			$name = ! empty( $server['name'] ) ? esc_attr( $server['name'] ) : false;
+			$key  = ! empty( $server['key'] ) ? esc_attr( $server['key'] ) : false;
+
 			if ( ! $name || ! $key ) {
 				continue;
 			}
+
 			$output[] = array(
 				'name' => $name,
 				'key'  => $key,
