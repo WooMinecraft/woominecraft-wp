@@ -57,10 +57,6 @@
 		<div id="groups">
 				<h3>Namespaces</h3>
 			<ul>
-					<li>
-						<a href="namespace-None.html">
-							None						</a>
-							</li>
 					<li class="active">
 						<a href="namespace-WooMinecraft.html">
 							WooMinecraft<span></span>
@@ -69,6 +65,10 @@
 					<li>
 						<a href="namespace-WooMinecraft.Admin.html">
 							Admin						</a>
+							</li>
+					<li>
+						<a href="namespace-WooMinecraft.WooCommerce.html">
+							WooCommerce						</a>
 							</li>
 								</ul></li>
 			</ul>
@@ -104,7 +104,7 @@
 
 
 	<div class="description">
-	<p>Class Woo_Minecraft</p>
+	<p>Class WooMinecraft</p>
 	</div>
 
 
@@ -286,7 +286,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_get_server_commands">#</a>
-			<code>get_server_commands( <span>WooMinecraft\WP_Rest_Request <var>$request</var></span> )</code>
+			<code>get_server_commands( <span>WP_Rest_Request <var>$request</var></span> )</code>
 
 			<div class="description short">
 				<p>Retrieves server specific commands for the key provided.</p>
@@ -622,6 +622,10 @@
 					<div class="list">
 							1.0.0<br>
 					</div>
+					<h4>Todo</h4>
+					<div class="list">
+							Use the default WC() function instead of grabbing the global here.<br>
+					</div>
 
 
 			</div>
@@ -663,6 +667,10 @@
 					<h4>Since</h4>
 					<div class="list">
 							1.0.0<br>
+					</div>
+					<h4>Todo</h4>
+					<div class="list">
+							Revisit this function and optimize it.<br>
 					</div>
 
 
@@ -1073,7 +1081,7 @@
 		<tr data-order="admin" id="$admin">
 			<td class="attributes"><code>
 				public  
-				WCM_Admin
+				<code><a href="class-WooMinecraft.Admin.WCM_Admin.html">WooMinecraft\Admin\WCM_Admin</a></code>
 			</code></td>
 
 			<td class="name">
