@@ -24,6 +24,8 @@ class WCM_Admin {
 
 	public function __construct( $plugin ) {
 		$this->plugin = $plugin;
+
+		$this->hooks();
 	}
 
 	public function hooks() {

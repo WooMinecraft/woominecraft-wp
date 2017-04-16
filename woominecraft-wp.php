@@ -62,7 +62,7 @@ function wmc_autoload_classes( $class_name ) {
 spl_autoload_register( 'wmc_autoload_classes' );
 
 /**
- * Class Woo_Minecraft
+ * Class WooMinecraft
  *
  * @TODO Create some way of handling orphaned orders. If an order is created which had commands tied to a specific server, and that server is later deleted, those commands cannot be re-sent at any time.
  *
@@ -115,7 +115,7 @@ class WooMinecraft {
 	/**
 	 * Instance of the WCM_Admin class
 	 *
-	 * @var WCM_Admin
+	 * @var Admin\WCM_Admin
 	 * @since 0.1.0
 	 */
 	public $admin = null;
@@ -149,7 +149,7 @@ class WooMinecraft {
 	 * @since  1.0.0
 	 */
 	private function plugin_classes() {
-		$this->admin = new WCM_Admin( $this );
+		$this->admin = new Admin\WCM_Admin( $this );
 	}
 
 	/**
@@ -181,8 +181,6 @@ class WooMinecraft {
 		add_action( 'save_post', array( $this, 'bust_command_cache' ) );
 
 		add_action( 'rest_api_init', array( $this, 'rest_setup_routes' ) );
-
-		$this->admin->hooks();
 	}
 
 	/**
@@ -193,7 +191,7 @@ class WooMinecraft {
 	 */
 	public function rest_setup_routes() {
 		register_rest_route( 'woominecraft/v1', '/server/(?P<server_key>[a-zA-Z0-9\@\#\!]+)', array(
-			'methods'  => WP_REST_Server::READABLE,
+			'methods'  => \WP_REST_Server::READABLE,
 			'callback' => array( $this, 'get_server_commands' ),
 			'args'     => array(
 				'server_key' => array(
@@ -206,17 +204,17 @@ class WooMinecraft {
 	/**
 	 * Retrieves server specific commands for the key provided.
 	 *
-	 * @param WP_Rest_Request $request The rest request object.
+	 * @param \WP_Rest_Request $request The rest request object.
 	 *
 	 * @return mixed
 	 *
 	 * @author JayWood
 	 * @since 2.0.0
 	 */
-	public function get_server_commands( WP_Rest_Request $request ) {
+	public function get_server_commands( \WP_Rest_Request $request ) {
 		$server_key = $request->get_param( 'server_key' );
 
-		return rest_ensure_response( new WP_Error( 'testing',' This is a test' ) );
+		return rest_ensure_response( new \WP_Error( 'testing',' This is a test' ) );
 	}
 
 	/**
@@ -299,7 +297,7 @@ class WooMinecraft {
 			}
 
 			set_transient( $this->command_transient, $output, 60 * 60 ); // Stores the feed in a transient for 1 hour.
-		}
+		} // End if().
 
 		wp_send_json_success( $output );
 
@@ -308,7 +306,7 @@ class WooMinecraft {
 	/**
 	 * Generates the order JSON data for a single order.
 	 *
-	 * @param WP_Post $order_post The post to get the commands from.
+	 * @param \WP_Post $order_post The post to get the commands from.
 	 * @param string  $key        The server key to pluck orders with.
 	 *
 	 * @return array|mixed
@@ -316,7 +314,7 @@ class WooMinecraft {
 	 * @author JayWood
 	 * @since  1.0.0
 	 */
-	private function generate_order_json( $order_post, $key ) {
+	private function generate_order_json( \WP_Post $order_post, $key ) {
 
 		if ( ! isset( $order_post->ID ) ) {
 			return array();
@@ -484,17 +482,17 @@ class WooMinecraft {
 		$key     = md5( 'minecraft_player_' . $player_id );
 		$mc_json = wp_cache_get( $key, 'woominecraft' );
 
-		if ( false == $mc_json ) {
+		if ( false === $mc_json ) {
 
 			$post_config = apply_filters( 'mojang_profile_api_post_args', array(
-				'body'    => json_encode( array( rawurlencode( $player_id ) ) ),
+				'body'    => wp_json_encode( array( rawurlencode( $player_id ) ) ),
 				'method'  => 'POST',
 				'headers' => array( 'content-type' => 'application/json' ),
 			) );
 
 			$minecraft_account = wp_remote_post( 'https://api.mojang.com/profiles/minecraft', $post_config );
 
-			if ( 200 != wp_remote_retrieve_response_code( $minecraft_account ) ) {
+			if ( 200 !== wp_remote_retrieve_response_code( $minecraft_account ) ) {
 				return false;
 			}
 
@@ -516,13 +514,15 @@ class WooMinecraft {
 	 *
 	 * @return void
 	 *
+	 * @TODO Use the default WC() function instead of grabbing the global here.
+	 *
 	 * @author JayWood
 	 * @since 1.0.0
 	 */
 	public function check_player() {
 		global $woocommerce;
 
-		if ( ! $woocommerce instanceof WooCommerce ) {
+		if ( ! $woocommerce instanceof \WooCommerce ) {
 			return;
 		}
 
@@ -561,15 +561,14 @@ class WooMinecraft {
 	 *
 	 * @author JayWood
 	 * @since 1.0.0
+	 *
+	 * @TODO Revisit this function and optimize it.
 	 */
 	public function save_commands_to_order( $order_id ) {
-
-		// @TODO Use wc_get_order instead, so one can check if it's a valid ID, instead of assuming we can get_items()
-		$order_data = new WC_Order( $order_id );
+		$order_data = new \WC_Order( $order_id );
 		$items      = $order_data->get_items();
 		$tmp_array  = array();
 
-		// @TODO an empty check is sufficient
 		if ( ! isset( $_POST['player_id'] ) || empty( $_POST['player_id'] ) ) {
 			return;
 		}
@@ -591,7 +590,8 @@ class WooMinecraft {
 			}
 
 			// Loop over the command set for every 1 qty of the item.
-			for ( $n = 0; $n < absint( $item['qty'] ); $n ++ ) {
+			$qty = absint( $item['qty'] );
+			for ( $n = 0; $n < $qty; $n ++ ) {
 				foreach ( $item_commands as $server_key => $command ) {
 					if ( ! isset( $tmp_array[ $server_key ] ) ) {
 						$tmp_array[ $server_key ] = array();
@@ -629,9 +629,9 @@ class WooMinecraft {
 		$player_name = get_post_meta( $id, 'player_id', true );
 		if ( ! empty( $player_name ) ) {
 			?>
-			<div class="woo_minecraft"><h4><?php _e( 'Minecraft Details', 'woominecraft' ); ?></h4>
+			<div class="woo_minecraft"><h4><?php esc_attr_e( 'Minecraft Details', 'woominecraft' ); ?></h4>
 
-			<p><strong><?php _e( 'Username:', 'woominecraft' ); ?></strong><?php echo $player_name ?></p></div><?php
+			<p><strong><?php esc_attr_e( 'Username:', 'woominecraft' ); ?></strong><?php echo $player_name ?></p></div><?php
 		}
 	}
 
@@ -716,7 +716,7 @@ class WooMinecraft {
 	 *
 	 * @return mixed
 	 *
-	 * @throws Exception Throws an exception if the field is invalid.
+	 * @throws \Exception Throws an exception if the field is invalid.
 	 *
 	 * @author JayWood
 	 * @since  1.0.0
@@ -728,7 +728,7 @@ class WooMinecraft {
 			case 'path':
 				return $this->$field;
 			default:
-				throw new Exception( 'Invalid ' . __CLASS__ . ' property: ' . $field );
+				throw new \Exception( 'Invalid ' . __CLASS__ . ' property: ' . $field );
 		}
 	}
 }
@@ -753,7 +753,7 @@ add_action( 'plugins_loaded', array( woo_minecraft(), 'i18n' ) );
  *
  * @param array $item_data An array of item data from WooCommerce.
  *
- * @TODO: Move this to helper file
+ * @TODO Move this function either to a class or helper file.
  *
  * @return boolean
  *
