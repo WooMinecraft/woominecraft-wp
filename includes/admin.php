@@ -1,18 +1,20 @@
 <?php
 
 namespace WooMinecraft\Admin;
+use WooMinecraft\WooMinecraft;
 
 /**
  * Class WCM_Admin
  *
  * @author JayWood
  * @since 1.0
- * @package WooMinecraft\Admin
+ * @package WooMinecraft
+ * @sub-package: Admin
  */
 class WCM_Admin {
 
 	/**
-	 * @var Woo_Minecraft null
+	 * @var \WooMinecraft\WooMinecraft null
 	 */
 	private $plugin;
 
@@ -22,12 +24,28 @@ class WCM_Admin {
 	 */
 	private $option_key = 'wm_servers';
 
-	public function __construct( $plugin ) {
+	/**
+	 * WCM_Admin constructor.
+	 *
+	 * @param WooMinecraft $plugin Instance of the main class.
+	 *
+	 * @since 1.0.0
+	 * @author JayWood
+	 */
+	public function __construct( WooMinecraft $plugin ) {
 		$this->plugin = $plugin;
 
 		$this->hooks();
 	}
 
+	/**
+	 * Contains all required hooks for this class.
+	 *
+	 * @return void
+	 *
+	 * @author JayWood
+	 * @since  1.0.0
+	 */
 	public function hooks() {
 		add_action( 'admin_enqueue_scripts', array( $this, 'scripts' ) );
 
@@ -49,23 +67,24 @@ class WCM_Admin {
 		add_filter( 'manage_shop_order_posts_columns', array( $this, 'add_user_and_deliveries_header' ), 999 );
 		add_action( 'manage_shop_order_posts_custom_column', array( $this, 'add_users_and_deliveries' ), 10, 2 );
 		add_filter( 'manage_edit-shop_order_sortable_columns', array( $this, 'make_player_sortable' ) );
-		add_action( 'pre_get_posts', array( $this, 'sort_by_player_name' ) );
+		add_action( 'pre_get_posts', array( $this, 'sort_posts_by_player_name' ) );
 	}
 
 	/**
 	 * Sorts by player name, if query arg is present.
 	 *
-	 * @param WP_Query $wp_query
+	 * @param \WP_Query $wp_query The WP_Query object.
 	 *
+	 * @since 1.0.0
 	 * @author JayWood
 	 */
-	public function sort_by_player_name( $wp_query ) {
+	public function sort_posts_by_player_name( $wp_query ) {
 		if ( ! is_admin() ) {
 			return;
 		}
 
 		$orderby = $wp_query->get( 'orderby' );
-		if ( 'wmc-player' == $orderby ) {
+		if ( 'wmc-player' === $orderby ) {
 			$wp_query->set( 'meta_key', 'player_id' );
 			$wp_query->set( 'orderby', 'meta_value' );
 		}
@@ -81,10 +100,12 @@ class WCM_Admin {
 	/**
 	 * Adds the player name to be sorted.
 	 *
-	 * @param array $columns
+	 * @param array $columns The array of columns from the post list.
 	 *
+	 * @return array
+	 *
+	 * @since 1.0.0
 	 * @author JayWood
-	 * @return mixed
 	 */
 	public function make_player_sortable( $columns ) {
 		$columns['wmc-player'] = 'wmc-player';
@@ -95,16 +116,18 @@ class WCM_Admin {
 	/**
 	 * Adds column headers to posts for Delivered and Player data.
 	 *
-	 * @param $columns
+	 * @param array $columns An array of columns from the post list.
+	 *
+	 * @return array
 	 *
 	 * @author JayWood
-	 * @return array
+	 * @since 1.0.0
 	 */
 	public function add_user_and_deliveries_header( $columns ) {
 		$out = array();
 		foreach( $columns as $key => $value ) {
 			$out[ $key ] = $value;
-			if ( 'order_status' == $key ) {
+			if ( 'order_status' === $key ) {
 				$out['wmc-delivered'] = __( 'Delivered', 'woominecraft-wp' ) . wc_help_tip( __( 'How many servers delivered versus how many still to be delivered.', 'woominecraft-wp' ) );
 				$out['wmc-player'] = __( 'Player', 'woominecraft-wp' );
 			}
@@ -116,10 +139,13 @@ class WCM_Admin {
 	/**
 	 * Adds corresponding column data to current row if available.
 	 *
-	 * @param $column
-	 * @param $post_id
+	 * @param string  $column  The column name.
+	 * @param integer $post_id The post id.
+	 *
+	 * @return void
 	 *
 	 * @author JayWood
+	 * @since 1.0.0
 	 */
 	public function add_users_and_deliveries( $column, $post_id ) {
 		switch ( $column ) {
@@ -131,12 +157,21 @@ class WCM_Admin {
 				$href = add_query_arg( 'wmc-player-name', $player_id );
 				printf( '<a class="wmc-player-name" href="%2$s">%1$s</a>', $player_id ? $player_id : ' - ', $href );
 				break;
-				// Ni Hijan
 		}
-
-		return;
 	}
 
+	/**
+	 * Returns a HTML string representing delivered items vs pending items.
+	 *
+	 * Example: 1/5 - means 1 delivered, 5 pending.
+	 *
+	 * @param integer $post_id The post ID to check.
+	 *
+	 * @return string
+	 *
+	 * @author JayWood
+	 * @since  1.0.0
+	 */
 	private function get_delivered_col_output( $post_id ) {
 		$delivered = $this->get_count( $post_id, 'delivered' );
 		$pending   = $this->get_count( $post_id );
@@ -145,33 +180,38 @@ class WCM_Admin {
 	}
 
 	/**
-	 * Pretty much a wrapper for doing multiple get_post_meta() calls
+	 * A wrapper for doing multiple get_post_meta() calls.
 	 *
-	 * @param string $type
-	 * @param int    $order_id
+	 * @param integer $order_id The post ID.
+	 * @param string  $type     The type to check, either delivered or otherwise.
+	 *
+	 * @return array|null|object
 	 *
 	 * @author JayWood
-	 * @return array|null|object
+	 * @since 1.0.0
 	 */
-	private function get_count( $order_id, $type = false ) {
+	private function get_count( $order_id, $type = '' ) {
 		global $wpdb;
 
 		$statement = "select * from {$wpdb->postmeta}";
-		if ( 'delivered' == $type ) {
-			$statement .= $wpdb->prepare( " where meta_key like %s", '%' . $wpdb->esc_like( '_wmc_delivered' ) . '%' );
+		if ( 'delivered' === $type ) {
+			$statement .= $wpdb->prepare( ' where meta_key like %s', '%' . $wpdb->esc_like( '_wmc_delivered' ) . '%' );
 		} else {
-			$statement .= $wpdb->prepare( " where meta_key like %s", '%' . $wpdb->esc_like( '_wmc_commands' ) . '%' );
+			$statement .= $wpdb->prepare( ' where meta_key like %s', '%' . $wpdb->esc_like( '_wmc_commands' ) . '%' );
 		}
 
-		$statement .= $wpdb->prepare( " and post_id = %d", intval( $order_id ) );
+		$statement .= $wpdb->prepare( ' and post_id = %d', intval( $order_id ) );
 
 		return $wpdb->get_results( $statement );
 	}
 
 	/**
-	 * Saves server keys
+	 * Saves server settings.
+	 *
+	 * @return void
 	 *
 	 * @author JayWood
+	 * @since 1.0.0
 	 */
 	public function save_servers() {
 		if ( ! isset( $_POST['wmc_servers'] ) ) {
@@ -205,10 +245,21 @@ class WCM_Admin {
 	/**
 	 * Renders the server section of the settings page.
 	 *
-	 * @param $values
+	 * Example Array:
+	 * <pre>
+	 * array(
+	 * 		array(
+	 * 			'name' => 'Server Name',
+	 * 			'key'  => 'somerandomserverpassword',
+	 * 		),
+	 * )
+	 * </pre>
+	 *
+	 * @param array $values An array of server settings to parse through.
+	 *
+	 * @return void
 	 *
 	 * @since  1.0.7
-	 *
 	 * @author JayWood
 	 */
 	public function render_servers_section( $values ) {
@@ -218,11 +269,12 @@ class WCM_Admin {
 	/**
 	 * Add settings section to woocommerce general settings page
 	 *
-	 * @param array $settings
+	 * @param array $settings An array of WooCommerce settings.
+	 *
+	 * @return array
 	 *
 	 * @since  1.0.7
 	 * @author JayWood
-	 * @return array
 	 */
 	public function wmc_settings( $settings ) {
 
@@ -247,9 +299,10 @@ class WCM_Admin {
 	/**
 	 * Gets all servers and sanitizes their output.
 	 *
+	 * @return array
+	 *
 	 * @since  1.7.0
 	 * @author JayWood
-	 * @return array
 	 */
 	public function get_servers() {
 
@@ -288,6 +341,9 @@ class WCM_Admin {
 	/**
 	 * Re-sends orders to players based on player ID and order ID
 	 *
+	 * @return void
+	 *
+	 * @since  1.7.0
 	 * @author JayWood
 	 */
 	public function ajax_handler() {
@@ -308,11 +364,16 @@ class WCM_Admin {
 
 	/**
 	 * Adds WooMinecraft commands field to the general product meta-box.
+	 *
+	 * @return void
+	 *
+	 * @since  1.7.0
+	 * @author JayWood
 	 */
 	public function add_group_field() {
 		global $post;
 
-		if ( ! isset( $post->ID ) || ! $post instanceof WP_Post ) {
+		if ( ! isset( $post->ID ) || ! $post instanceof \WP_Post ) {
 			return;
 		}
 
@@ -325,13 +386,18 @@ class WCM_Admin {
 	/**
 	 * Fires for each variation section, in-turn this creates a set of 'command rows' for each variation.
 	 *
-	 * @param int     $loop
-	 * @param array   $variation_data
-	 * @param WP_Post $post
+	 * @param integer  $loop           The loop for variation data.
+	 * @param array    $variation_data The variation data from WooCommerce.
+	 * @param \WP_Post $post           The post data from the variation.
+	 *
+	 * @return void
+	 *
+	 * @since  1.7.0
+	 * @author JayWood
 	 */
 	public function add_variation_field( $loop, $variation_data, $post ) {
 
-		if ( ! $post instanceof WP_Post || ! isset( $post->ID ) ) {
+		if ( ! $post instanceof \WP_Post || ! isset( $post->ID ) ) {
 			return;
 		}
 
@@ -344,7 +410,12 @@ class WCM_Admin {
 	/**
 	 * Adds the players ID to the order information screen.
 	 *
-	 * @param WC_Order $order
+	 * @param \WC_Order $order An instance of the current order being displayed.
+	 *
+	 * @return void
+	 *
+	 * @since  1.7.0
+	 * @author JayWood
 	 */
 	public function display_player_name_in_order_meta( $order ) {
 		$player_id   = get_post_meta( $order->get_id(), 'player_id', true );
@@ -362,7 +433,7 @@ class WCM_Admin {
 				$server_key                = substr( $key, 14, strlen( $key ) );
 				$option_set[ $server_key ] = __( 'Deleted', 'woominecraft' ) . ' ( ' . $server_key . ' )';
 				foreach ( $servers as $server ) {
-					if ( $server_key == $server['key'] ) {
+					if ( $server_key === $server['key'] ) {
 						$option_set[ $server_key ] = $server['name'];
 						break;
 					}
@@ -396,7 +467,12 @@ class WCM_Admin {
 	/**
 	 * Sets up scripts for the administrator pages.
 	 *
-	 * @param $hook
+	 * @param string $hook The page we're currently hooking into.
+	 *
+	 * @return void
+	 *
+	 * @since  1.7.0
+	 * @author JayWood
 	 */
 	public function scripts( $hook = '' ) {
 		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
@@ -412,7 +488,7 @@ class WCM_Admin {
 			'please_wait'      => __( 'Please wait...', 'woominecraft' ),
 		);
 
-		if ( 'post.php' == $hook ) {
+		if ( 'post.php' === $hook ) {
 			global $post;
 			if ( isset( $post->ID ) ) {
 				$script_data['order_id']  = $post->ID;
@@ -428,140 +504,24 @@ class WCM_Admin {
 
 	/**
 	 * Registers the setting key, and installs the database.
+	 *
+	 * @return void
+	 *
+	 * @since  1.0.0
+	 * @author JayWood
 	 */
 	public function admin_init() {
 		register_setting( 'woo_minecraft', $this->option_key );
-		$this->maybe_update();
-	}
-
-	/**
-	 * Updates all OLD commands to the new structure.
-	 *
-	 * @param mixed $old_key
-	 *
-	 * @deprecated
-	 * @author JayWood
-	 */
-	private function update_product_commands( $old_key ) {
-
-		$posts = get_posts( array(
-			'post_type'   => array( 'product', 'product_variation' ),
-			'post_status' => 'any',
-			'meta_query'  => array(
-				array(
-					'key'     => 'minecraft_woo',
-					'compare' => 'EXISTS',
-				),
-			)
-		) );
-
-		if ( empty( $posts ) ) {
-			return;
-		}
-
-		foreach ( $posts as $product ) {
-			$meta                  = get_post_meta( $product->ID, 'minecraft_woo', true );
-			$new_array             = array();
-			$new_array[ $old_key ] = $meta;
-			update_post_meta( $product->ID, 'wmc_commands', $new_array );
-			delete_post_meta( $product->ID, 'minecraft_woo' );
-		}
-
-	}
-
-	/**
-	 * Updates all orders to the new order command structure.
-	 *
-	 * @deprecated
-	 *
-	 * @param string $old_key
-	 *
-	 * @author JayWood
-	 */
-	private function update_order_commands( $old_key ) {
-		$posts = get_posts( array(
-			'post_type'   => 'shop_order',
-			'post_status' => 'any',
-			'meta_query'  => array(
-				array(
-					'key'     => 'wmc_commands',
-					'compare' => 'EXISTS',
-				),
-			),
-		) );
-
-		foreach ( $posts as $post_obj ) {
-			$meta = get_post_meta( $post_obj->ID, 'wmc_commands' );
-			update_post_meta( $post_obj->ID, '_wmc_commands_' . $old_key, $meta );
-			delete_post_meta( $post_obj->ID, 'wmc_commands' );
-		}
-	}
-
-	/**
-	 * Updates old DB data to the new layout.
-	 *
-	 * Usable for ONLY 1.0.4 to 1.0.5 update.
-	 * Will remove in 1.0.6
-	 *
-	 * @deprecated This method is used to force update database information
-	 * @internal
-	 * @author     JayWood
-	 */
-	private function maybe_update() {
-
-		$is_old_version = get_option( 'wm_db_version', false );
-		if ( $is_old_version ) {
-			global $wpdb;
-			$results = $wpdb->get_results( "SELECT orderid,delivered FROM {$wpdb->prefix}woo_minecraft" );
-			if ( empty( $results ) ) {
-				delete_option( 'wm_db_version' );
-			} else {
-				foreach ( $results as $command_object ) {
-					$order_id     = $command_object->orderid;
-					$is_delivered = (bool) $command_object->delivered;
-					if ( get_post_meta( $order_id, 'wmc_commands' ) ) {
-						continue;
-					}
-
-					$this->plugin->save_commands_to_order( $order_id );
-					if ( $is_delivered ) {
-						update_post_meta( $order_id, 'wmc_delivered', 1 );
-					}
-				}
-
-				delete_option( 'wm_db_version' );
-
-				// Drop the entire table now.
-				$query = 'DROP TABLE IF EXISTS ' . $wpdb->prefix . 'woo_minecraft';
-				$wpdb->query( $query );
-			}
-		}
-
-		// Migrate old options to new array set
-		if ( $old_key = get_option( 'wm_key' ) ) {
-
-			$old_key = esc_attr( $old_key );
-
-			$new_options = array(
-				array(
-					'name' => __( 'Main', 'woominecraft' ),
-					'key'  => $old_key,
-				),
-			);
-
-			$this->update_product_commands( $old_key );
-			$this->update_order_commands( $old_key );
-
-			update_option( $this->option_key, $new_options );
-			delete_option( 'wm_key' );
-		}
 	}
 
 	/**
 	 * Saves Simple commands
 	 *
-	 * @param int $post_id
+	 * @param integer $post_id The post ID.
 	 *
+	 * @return void
+	 *
+	 * @since 1.0.0
 	 * @author JayWood
 	 */
 	public function save_simple_commands( $post_id = 0 ) {
@@ -575,8 +535,11 @@ class WCM_Admin {
 	/**
 	 * Saves variable-based commands
 	 *
-	 * @param int $post_id
+	 * @param integer $post_id The post id.
 	 *
+	 * @return void
+	 *
+	 * @since 1.0.0
 	 * @author JayWood
 	 */
 	public function save_variable_commands( $post_id = 0 ) {
@@ -590,8 +553,13 @@ class WCM_Admin {
 	/**
 	 * Saves the general commands to post meta data.
 	 *
-	 * @param int $post_id The post ID to save commands against
-	 * @param array $commands A linear array of commands to be saved
+	 * @param integer $post_id     The post ID to save commands against.
+	 * @param array   $command_set A linear array of commands to be saved.
+	 *
+	 * @return void
+	 *
+	 * @since  1.0.0
+	 * @author JayWood
 	 */
 	private function _save_product_commands( $post_id = 0, $command_set = array() ) {
 
@@ -623,9 +591,14 @@ class WCM_Admin {
 	}
 
 	/**
-	 * @param int $post_id
-	 * @param string $type
+	 * Saves the commands on a per-product basis.
 	 *
+	 * @param integer $post_id The post id.
+	 * @param string  $type    The type of command to save.
+	 *
+	 * @return void
+	 *
+	 * @since 1.0.0
 	 * @author JayWood
 	 */
 	private function _save_commands( $post_id, $type ) {
