@@ -113,12 +113,14 @@
 		
 		
 		<b>Namespace:</b> <a href="namespace-WooMinecraft.html">WooMinecraft</a>\<a href="namespace-WooMinecraft.Admin.html">Admin</a><br>
-		<b>Package:</b> WooMinecraft\Admin<br>
+		<b>Package:</b> WooMinecraft<br>
 
 				<b>Author:</b>
 				JayWood<br>
 				<b>Since:</b>
 				1.0<br>
+				<b>Sub-package::</b>
+				Admin<br>
 			<b>Located at</b> includes/admin.php		<br>
 	</div>
 
@@ -138,19 +140,32 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#___construct">#</a>
-			<code>__construct( <span> <var>$plugin</var></span> )</code>
+			<code>__construct( <span><code><a href="class-WooMinecraft.WooMinecraft.html">WooMinecraft\WooMinecraft</a></code> <var>$plugin</var></span> )</code>
 
 			<div class="description short">
-				
+				<p>WCM_Admin constructor.</p>
 			</div>
 
 			<div class="description detailed hidden">
-				
+				<p>WCM_Admin constructor.</p>
+
+
+					<h4>Parameters</h4>
+					<div class="list"><dl>
+						<dt><var>$plugin</var></dt>
+						<dd>Instance of the main class.</dd>
+					</dl></div>
 
 
 
-
-
+					<h4>Author</h4>
+					<div class="list">
+							JayWood<br>
+					</div>
+					<h4>Since</h4>
+					<div class="list">
+							1.0.0<br>
+					</div>
 
 
 			</div>
@@ -170,22 +185,30 @@
 			<code>hooks( )</code>
 
 			<div class="description short">
-				
+				<p>Contains all required hooks for this class.</p>
 			</div>
 
 			<div class="description detailed hidden">
-				
+				<p>Contains all required hooks for this class.</p>
 
 
 
 
 
+					<h4>Author</h4>
+					<div class="list">
+							JayWood<br>
+					</div>
+					<h4>Since</h4>
+					<div class="list">
+							1.0.0<br>
+					</div>
 
 
 			</div>
 			</div></td>
 		</tr>
-		<tr data-order="sort_by_player_name" id="_sort_by_player_name">
+		<tr data-order="sort_posts_by_player_name" id="_sort_posts_by_player_name">
 
 			<td class="attributes"><code>
 				 public 
@@ -195,8 +218,8 @@
 			</td>
 
 			<td class="name"><div>
-			<a class="anchor" href="#_sort_by_player_name">#</a>
-			<code>sort_by_player_name( <span>WP_Query <var>$wp_query</var></span> )</code>
+			<a class="anchor" href="#_sort_posts_by_player_name">#</a>
+			<code>sort_posts_by_player_name( <span>WP_Query <var>$wp_query</var></span> )</code>
 
 			<div class="description short">
 				<p>Sorts by player name, if query arg is present.</p>
@@ -209,7 +232,7 @@
 					<h4>Parameters</h4>
 					<div class="list"><dl>
 						<dt><var>$wp_query</var></dt>
-						<dd></dd>
+						<dd>The WP_Query object.</dd>
 					</dl></div>
 
 
@@ -217,6 +240,10 @@
 					<h4>Author</h4>
 					<div class="list">
 							JayWood<br>
+					</div>
+					<h4>Since</h4>
+					<div class="list">
+							1.0.0<br>
 					</div>
 
 
@@ -227,7 +254,7 @@
 
 			<td class="attributes"><code>
 				 public 
-				mixed
+				array
 				
 				</code>
 			</td>
@@ -247,18 +274,22 @@
 					<h4>Parameters</h4>
 					<div class="list"><dl>
 						<dt><var>$columns</var></dt>
-						<dd></dd>
+						<dd>The array of columns from the post list.</dd>
 					</dl></div>
 
 					<h4>Returns</h4>
 					<div class="list">
-						mixed
+						array
 					</div>
 
 
 					<h4>Author</h4>
 					<div class="list">
 							JayWood<br>
+					</div>
+					<h4>Since</h4>
+					<div class="list">
+							1.0.0<br>
 					</div>
 
 
@@ -276,7 +307,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_add_user_and_deliveries_header">#</a>
-			<code>add_user_and_deliveries_header( <span> <var>$columns</var></span> )</code>
+			<code>add_user_and_deliveries_header( <span>array <var>$columns</var></span> )</code>
 
 			<div class="description short">
 				<p>Adds column headers to posts for Delivered and Player data.</p>
@@ -289,7 +320,7 @@
 					<h4>Parameters</h4>
 					<div class="list"><dl>
 						<dt><var>$columns</var></dt>
-						<dd></dd>
+						<dd>An array of columns from the post list.</dd>
 					</dl></div>
 
 					<h4>Returns</h4>
@@ -301,6 +332,10 @@
 					<h4>Author</h4>
 					<div class="list">
 							JayWood<br>
+					</div>
+					<h4>Since</h4>
+					<div class="list">
+							1.0.0<br>
 					</div>
 
 
@@ -318,7 +353,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_add_users_and_deliveries">#</a>
-			<code>add_users_and_deliveries( <span> <var>$column</var></span>, <span> <var>$post_id</var></span> )</code>
+			<code>add_users_and_deliveries( <span>string <var>$column</var></span>, <span>integer <var>$post_id</var></span> )</code>
 
 			<div class="description short">
 				<p>Adds corresponding column data to current row if available.</p>
@@ -331,9 +366,9 @@
 					<h4>Parameters</h4>
 					<div class="list"><dl>
 						<dt><var>$column</var></dt>
-						<dd></dd>
+						<dd>The column name.</dd>
 						<dt><var>$post_id</var></dt>
-						<dd></dd>
+						<dd>The post id.</dd>
 					</dl></div>
 
 
@@ -341,6 +376,10 @@
 					<h4>Author</h4>
 					<div class="list">
 							JayWood<br>
+					</div>
+					<h4>Since</h4>
+					<div class="list">
+							1.0.0<br>
 					</div>
 
 
@@ -361,11 +400,11 @@
 			<code>save_servers( )</code>
 
 			<div class="description short">
-				<p>Saves server keys</p>
+				<p>Saves server settings.</p>
 			</div>
 
 			<div class="description detailed hidden">
-				<p>Saves server keys</p>
+				<p>Saves server settings.</p>
 
 
 
@@ -374,6 +413,10 @@
 					<h4>Author</h4>
 					<div class="list">
 							JayWood<br>
+					</div>
+					<h4>Since</h4>
+					<div class="list">
+							1.0.0<br>
 					</div>
 
 
@@ -391,7 +434,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_render_servers_section">#</a>
-			<code>render_servers_section( <span> <var>$values</var></span> )</code>
+			<code>render_servers_section( <span>array <var>$values</var></span> )</code>
 
 			<div class="description short">
 				<p>Renders the server section of the settings page.</p>
@@ -400,11 +443,20 @@
 			<div class="description detailed hidden">
 				<p>Renders the server section of the settings page.</p>
 
+<p>Example Array:</p>
+
+<pre><span class="php-keyword1">array</span>(
+        <span class="php-keyword1">array</span>(
+            <span class="php-quote">'name'</span> =&gt; <span class="php-quote">'Server Name'</span>,
+            <span class="php-quote">'key'</span>  =&gt; <span class="php-quote">'somerandomserverpassword'</span>,
+        ),
+)</pre>
+
 
 					<h4>Parameters</h4>
 					<div class="list"><dl>
 						<dt><var>$values</var></dt>
-						<dd></dd>
+						<dd>An array of server settings to parse through.</dd>
 					</dl></div>
 
 
@@ -446,7 +498,7 @@
 					<h4>Parameters</h4>
 					<div class="list"><dl>
 						<dt><var>$settings</var></dt>
-						<dd></dd>
+						<dd>An array of WooCommerce settings.</dd>
 					</dl></div>
 
 					<h4>Returns</h4>
@@ -537,6 +589,10 @@
 					<div class="list">
 							JayWood<br>
 					</div>
+					<h4>Since</h4>
+					<div class="list">
+							1.7.0<br>
+					</div>
 
 
 			</div>
@@ -566,6 +622,14 @@
 
 
 
+					<h4>Author</h4>
+					<div class="list">
+							JayWood<br>
+					</div>
+					<h4>Since</h4>
+					<div class="list">
+							1.7.0<br>
+					</div>
 
 
 			</div>
@@ -595,15 +659,23 @@
 					<h4>Parameters</h4>
 					<div class="list"><dl>
 						<dt><var>$loop</var></dt>
-						<dd></dd>
+						<dd>The loop for variation data.</dd>
 						<dt><var>$variation_data</var></dt>
-						<dd></dd>
+						<dd>The variation data from WooCommerce.</dd>
 						<dt><var>$post</var></dt>
-						<dd></dd>
+						<dd>The post data from the variation.</dd>
 					</dl></div>
 
 
 
+					<h4>Author</h4>
+					<div class="list">
+							JayWood<br>
+					</div>
+					<h4>Since</h4>
+					<div class="list">
+							1.7.0<br>
+					</div>
 
 
 			</div>
@@ -633,11 +705,19 @@
 					<h4>Parameters</h4>
 					<div class="list"><dl>
 						<dt><var>$order</var></dt>
-						<dd></dd>
+						<dd>An instance of the current order being displayed.</dd>
 					</dl></div>
 
 
 
+					<h4>Author</h4>
+					<div class="list">
+							JayWood<br>
+					</div>
+					<h4>Since</h4>
+					<div class="list">
+							1.7.0<br>
+					</div>
 
 
 			</div>
@@ -654,7 +734,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#_scripts">#</a>
-			<code>scripts( <span> <var>$hook</var> = <span class="php-quote">''</span> </span> )</code>
+			<code>scripts( <span>string <var>$hook</var> = <span class="php-quote">''</span> </span> )</code>
 
 			<div class="description short">
 				<p>Sets up scripts for the administrator pages.</p>
@@ -667,11 +747,19 @@
 					<h4>Parameters</h4>
 					<div class="list"><dl>
 						<dt><var>$hook</var></dt>
-						<dd></dd>
+						<dd>The page we're currently hooking into.</dd>
 					</dl></div>
 
 
 
+					<h4>Author</h4>
+					<div class="list">
+							JayWood<br>
+					</div>
+					<h4>Since</h4>
+					<div class="list">
+							1.7.0<br>
+					</div>
 
 
 			</div>
@@ -701,6 +789,14 @@
 
 
 
+					<h4>Author</h4>
+					<div class="list">
+							JayWood<br>
+					</div>
+					<h4>Since</h4>
+					<div class="list">
+							1.0.0<br>
+					</div>
 
 
 			</div>
@@ -730,7 +826,7 @@
 					<h4>Parameters</h4>
 					<div class="list"><dl>
 						<dt><var>$post_id</var></dt>
-						<dd></dd>
+						<dd>The post ID.</dd>
 					</dl></div>
 
 
@@ -738,6 +834,10 @@
 					<h4>Author</h4>
 					<div class="list">
 							JayWood<br>
+					</div>
+					<h4>Since</h4>
+					<div class="list">
+							1.0.0<br>
 					</div>
 
 
@@ -768,7 +868,7 @@
 					<h4>Parameters</h4>
 					<div class="list"><dl>
 						<dt><var>$post_id</var></dt>
-						<dd></dd>
+						<dd>The post id.</dd>
 					</dl></div>
 
 
@@ -776,6 +876,10 @@
 					<h4>Author</h4>
 					<div class="list">
 							JayWood<br>
+					</div>
+					<h4>Since</h4>
+					<div class="list">
+							1.0.0<br>
 					</div>
 
 
