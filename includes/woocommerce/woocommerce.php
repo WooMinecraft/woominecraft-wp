@@ -1,7 +1,6 @@
 <?php
 
 namespace WooMinecraft\WooCommerce;
-use WooMinecraft\WooMinecraft;
 
 /**
  * The Main class for WooCommerce functionality
@@ -33,6 +32,8 @@ class WCM_WooCommerce {
 		add_action( 'woocommerce_checkout_update_order_meta', array( $this, 'save_commands_to_order' ) );
 		add_action( 'woocommerce_before_checkout_billing_form', array( $this, 'additional_checkout_field' ) );
 		add_action( 'woocommerce_thankyou', array( $this, 'thanks' ) );
+
+		add_action( 'template_redirect', array( $this, 'json_feed' ) );
 	}
 
 	/**

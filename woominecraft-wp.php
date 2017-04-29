@@ -184,12 +184,7 @@ class WooMinecraft {
 	 * @return void
 	 */
 	public function hooks() {
-
-
-		add_action( 'template_redirect', array( $this, 'json_feed' ) );
-
 		add_action( 'save_post', array( $this, 'bust_command_cache' ) );
-
 		add_action( 'rest_api_init', array( $this, 'rest_setup_routes' ) );
 	}
 
