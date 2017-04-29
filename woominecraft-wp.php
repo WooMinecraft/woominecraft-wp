@@ -39,27 +39,39 @@ namespace WooMinecraft;
  *
  * @param string $class_name The class attempting to be loaded.
  *
- * @return boolean
+ * @return void
  *
  * @author JayWood
  * @since  1.0.0
  */
 function wmc_autoload_classes( $class_name ) {
-	if ( 0 !== strpos( $class_name, 'WCM_' ) ) {
-		return false;
+
+	if ( false === strpos( $class_name, 'WooMinecraft' ) ) {
+		return;
 	}
 
+	// Break everything into parts.
+	$class_array = explode( '\\', $class_name );
+
+	// Build the filename from the last item in the array.
 	$filename = strtolower( str_ireplace(
 		array( 'WCM_', '_' ),
 		array( '', '-' ),
-		$class_name
+		end( $class_array )
 	) );
 
-	WooMinecraft::include_file( $filename );
+	// Cut off the first, and last item from the array
+	$new_dir = array_slice( $class_array, 1, count( $class_array ) - 2 );
 
-	return true;
+	// Glue the pieces back together.
+	$new_dir = implode( '/', array_map( 'strtolower', $new_dir ) );
+
+	// Build the directory.
+	$new_dir = trailingslashit( $new_dir ) . $filename;
+
+	WooMinecraft::include_file( $new_dir );
 }
-spl_autoload_register( 'wmc_autoload_classes' );
+spl_autoload_register( '\WooMinecraft\wmc_autoload_classes' );
 
 /**
  * Class WooMinecraft
@@ -149,7 +161,7 @@ class WooMinecraft {
 	 * @since  1.0.0
 	 */
 	private function plugin_classes() {
-		$this->admin = new Admin\WCM_Admin( $this );
+		$this->admin = new \WooMinecraft\Admin\WCM_Admin( $this );
 	}
 
 	/**
@@ -658,7 +670,7 @@ class WooMinecraft {
 	/**
 	 * Returns the plugin's path with an optional appended path.
 	 *
-	 * @param  string $path (optional) appended path.
+	 * @param  string $path The path to append to the main plugin directory.
 	 *
 	 * @return string       Directory and path
 	 *
