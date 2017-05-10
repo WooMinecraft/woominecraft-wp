@@ -117,7 +117,7 @@
 
 				<b>Since:</b>
 				2.0 Rest API integration.<br>
-			<b>Located at</b> includes/woocommerce.php		<br>
+			<b>Located at</b> includes/woocommerce/woocommerce.php		<br>
 	</div>
 
 
@@ -136,7 +136,7 @@
 
 			<td class="name"><div>
 			<a class="anchor" href="#___construct">#</a>
-			<code>__construct( <span>Woo_Minecraft <var>$plugin</var></span> )</code>
+			<code>__construct( <span><code><a href="class-WooMinecraft.WooMinecraft.html">WooMinecraft\WooMinecraft</a></code> <var>$plugin</var></span> )</code>
 
 			<div class="description short">
 				<p>WCM_WooCommerce constructor.</p>
@@ -188,6 +188,270 @@
 			</div>
 			</div></td>
 		</tr>
+		<tr data-order="thanks" id="_thanks">
+
+			<td class="attributes"><code>
+				 public 
+				
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_thanks">#</a>
+			<code>thanks( <span>integer <var>$id</var></span> )</code>
+
+			<div class="description short">
+				<p>Adds the Minecraft username to the thank you page.</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Adds the Minecraft username to the thank you page.</p>
+
+
+					<h4>Parameters</h4>
+					<div class="list"><dl>
+						<dt><var>$id</var></dt>
+						<dd>The order ID.</dd>
+					</dl></div>
+
+
+
+					<h4>Author</h4>
+					<div class="list">
+							JayWood<br>
+					</div>
+					<h4>Since</h4>
+					<div class="list">
+							1.0.0<br>
+					</div>
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="save_commands_to_order" id="_save_commands_to_order">
+
+			<td class="attributes"><code>
+				 public 
+				
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_save_commands_to_order">#</a>
+			<code>save_commands_to_order( <span>integer <var>$order_id</var></span> )</code>
+
+			<div class="description short">
+				<p>Updates an order's meta data with the commands hash.</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Updates an order's meta data with the commands hash.</p>
+
+
+					<h4>Parameters</h4>
+					<div class="list"><dl>
+						<dt><var>$order_id</var></dt>
+						<dd>The order to save command data to.</dd>
+					</dl></div>
+
+
+
+					<h4>Author</h4>
+					<div class="list">
+							JayWood<br>
+					</div>
+					<h4>Since</h4>
+					<div class="list">
+							1.0.0<br>
+					</div>
+					<h4>Todo</h4>
+					<div class="list">
+							Revisit this function and optimize it.<br>
+					</div>
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="check_player" id="_check_player">
+
+			<td class="attributes"><code>
+				 public 
+				
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_check_player">#</a>
+			<code>check_player( )</code>
+
+			<div class="description short">
+				<p>Checks if Minecraft Username is valid</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Checks if Minecraft Username is valid</p>
+
+
+
+
+
+					<h4>Author</h4>
+					<div class="list">
+							JayWood<br>
+					</div>
+					<h4>Since</h4>
+					<div class="list">
+							1.0.0<br>
+					</div>
+					<h4>Todo</h4>
+					<div class="list">
+							Use the default WC() function instead of grabbing the global here.<br>
+					</div>
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="additional_checkout_field" id="_additional_checkout_field">
+
+			<td class="attributes"><code>
+				 public 
+				boolean
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_additional_checkout_field">#</a>
+			<code>additional_checkout_field( <span>object <var>$cart</var></span> )</code>
+
+			<div class="description short">
+				<p>Adds a field to the checkout form, requiring the user to enter their Minecraft Name</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Adds a field to the checkout form, requiring the user to enter their Minecraft Name</p>
+
+
+					<h4>Parameters</h4>
+					<div class="list"><dl>
+						<dt><var>$cart</var></dt>
+						<dd>WooCommerce Cart Object.</dd>
+					</dl></div>
+
+					<h4>Returns</h4>
+					<div class="list">
+						boolean<br>False on failure, true otherwise.
+					</div>
+
+
+					<h4>Author</h4>
+					<div class="list">
+							JayWood<br>
+					</div>
+					<h4>Since</h4>
+					<div class="list">
+							1.0.0<br>
+					</div>
+					<h4>Todo</h4>
+					<div class="list">
+							If $cart is passed into this function, why access the $woocommerce global at all???<br>
+					</div>
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="reset_order" id="_reset_order">
+
+			<td class="attributes"><code>
+				 public 
+				boolean
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_reset_order">#</a>
+			<code>reset_order( <span>integer <var>$order_id</var></span>, <span>string <var>$server_key</var></span> )</code>
+
+			<div class="description short">
+				<p>Resets an order from being delivered.</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Resets an order from being delivered.</p>
+
+
+					<h4>Parameters</h4>
+					<div class="list"><dl>
+						<dt><var>$order_id</var></dt>
+						<dd>The order ID.</dd>
+						<dt><var>$server_key</var></dt>
+						<dd>The server key.</dd>
+					</dl></div>
+
+					<h4>Returns</h4>
+					<div class="list">
+						boolean
+					</div>
+
+
+					<h4>Author</h4>
+					<div class="list">
+							JayWood<br>
+					</div>
+					<h4>Since</h4>
+					<div class="list">
+							1.0.0<br>
+					</div>
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="json_feed" id="_json_feed">
+
+			<td class="attributes"><code>
+				 public 
+				
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_json_feed">#</a>
+			<code>json_feed( )</code>
+
+			<div class="description short">
+				<p>Produces the JSON Feed for Orders Pending Delivery</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Produces the JSON Feed for Orders Pending Delivery</p>
+
+
+
+
+
+					<h4>Author</h4>
+					<div class="list">
+							JayWood<br>
+					</div>
+					<h4>Since</h4>
+					<div class="list">
+							1.0.0<br>
+					</div>
+
+
+			</div>
+			</div></td>
+		</tr>
 			</table>
 		</div>
 
@@ -207,7 +471,7 @@
 		<tr data-order="plugin" id="$plugin">
 			<td class="attributes"><code>
 				protected  
-				Woo_Minecraft
+				<code><a href="class-WooMinecraft.WooMinecraft.html">WooMinecraft\WooMinecraft</a></code>
 			</code></td>
 
 			<td class="name">
