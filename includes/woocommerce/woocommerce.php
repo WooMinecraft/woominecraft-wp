@@ -1,7 +1,6 @@
 <?php
 
 namespace WooMinecraft\WooCommerce;
-use WC_Order;
 use WooCommerce;
 use WP_Post;
 
