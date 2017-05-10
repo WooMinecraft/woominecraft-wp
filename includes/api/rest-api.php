@@ -131,15 +131,15 @@ class WCM_Rest_API {
 
 		foreach ( $order_ids as $order_id ) {
 			if ( 'shop_order' !== get_post_type( $order_id ) ) {
-				$response['orders']['skipped'][] = $order_id;
+				$response['result']['skipped'][] = $order_id;
 				continue;
 			}
 
 			$updated = update_post_meta( $order_id, $delivered, true );
 			if ( $updated ) {
-				$response['orders']['processed'][] = $order_id;
+				$response['result']['processed'][] = $order_id;
 			} else {
-				$response['orders']['skipped'][] = $order_id;
+				$response['result']['skipped'][] = $order_id;
 			}
 		}
 
