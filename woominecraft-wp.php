@@ -185,7 +185,7 @@ class WooMinecraft {
 	 * @return string The version string
 	 *
 	 * @author JayWood
-	 * @since  NEXT
+	 * @since  2.0.0
 	 */
 	public function get_version() {
 		return $this->version;
@@ -212,7 +212,7 @@ class WooMinecraft {
 	 * @return bool|WP_Error
 	 *
 	 * @author JayWood
-	 * @since  NEXT
+	 * @since  2.0.0
 	 */
 	public function validate_key( $server_key ) {
 

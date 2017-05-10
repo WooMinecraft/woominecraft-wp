@@ -86,7 +86,7 @@ class WCM_Rest_API {
 	 * @return boolean|WP_Error True if they can manage_options, WP_Error otherwise.
 	 *
 	 * @author JayWood
-	 * @since  NEXT
+	 * @since  2.0.0
 	 */
 	public function get_server_settings_permission_check() {
 		if ( ! current_user_can( 'manage_options' ) ) {
@@ -104,7 +104,7 @@ class WCM_Rest_API {
 	 * @return WP_Error|mixed
 	 *
 	 * @author JayWood
-	 * @since  NEXT
+	 * @since  2.0.0
 	 */
 	public function process_order_updates( WP_REST_Request $request ) {
 
