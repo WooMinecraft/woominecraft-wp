@@ -122,13 +122,25 @@ class WCM_Rest_API {
 		$order_ids = array_filter( array_map( 'absint', $update_data['order_data'] ) );
 		$delivered = '_wmc_delivered_' . $server_key;
 
-	/*	foreach ( $order_ids as $order_id ) {
-			update_post_meta( $order_id, $delivered, true );
-		}*/
+		$response = array(
+			'msg' => esc_html__( 'Successfully updated orders.', 'woominecraft' ),
+		);
 
-		$response =  rest_ensure_response( esc_html__( 'Successfully updated orders.', 'woominecraft' ) );
+		foreach ( $order_ids as $order_id ) {
+			if ( 'shop_order' !== get_post_type( $order_id ) ) {
+				$response['orders']['skipped'][] = $order_id;
+				continue;
+			}
 
-		return $response;
+			$updated = update_post_meta( $order_id, $delivered, true );
+			if ( $updated ) {
+				$response['orders']['processed'][] = $order_id;
+			} else {
+				$response['orders']['skipped'][] = $order_id;
+			}
+		}
+
+		return rest_ensure_response( $response );
 	}
 
 	/**
