@@ -204,14 +204,39 @@ class WooMinecraft {
 	 */
 	public function rest_setup_routes() {
 		register_rest_route( 'woominecraft/v1', '/server/(?P<server_key>[a-zA-Z0-9\@\#\!]+)', array(
-			'methods'  => \WP_REST_Server::READABLE,
-			'callback' => array( $this, 'get_server_commands' ),
-			'args'     => array(
-				'server_key' => array(
-					'sanitize_callback' => 'esc_attr',
+			array(
+				'methods'  => \WP_REST_Server::READABLE,
+				'callback' => array( $this, 'get_server_commands' ),
+				'args'     => array(
+					'server_key' => array(
+						'sanitize_callback' => 'esc_attr',
+					),
 				),
 			),
+			array(
+				'methods'  => \WP_REST_Server::EDITABLE,
+				'callback' => array( $this, 'process_server_commands' ),
+				'args'     => array(
+					'server_key' => array(
+						'sanitize_callback' => 'esc_attr',
+					),
+				),
+			)
 		) );
+	}
+
+	/**
+	 *
+	 *
+	 * @param \WP_REST_Request $request
+	 *
+	 * @return void
+	 *
+	 * @author JayWood
+	 * @since  2.0.0
+	 */
+	public function process_server_commands( \WP_REST_Request $request ) {
+
 	}
 
 	/**
