@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>Class WooMinecraft\API\WCM_Rest_API | WooMinecraft WordPress</title>
+
+	<link rel="stylesheet" href="resources/bootstrap.min.css?973e37a8502921d56bc02bb55321f45b072b6f71">
+	<link rel="stylesheet" href="resources/style.css?70c1d062672daa3f906b72e4f5d03d4bc5c4174d">
+
+</head>
+
+<body>
+	<nav id="navigation" class="navbar navbar-default navbar-fixed-top">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a href="index.html" class="navbar-brand">WooMinecraft WordPress</a>
+			</div>
+			<div class="collapse navbar-collapse">
+
+                <form id="search" class="navbar-form navbar-left" role="search">
+                    <input type="hidden" name="cx" value="">
+                    <input type="hidden" name="ie" value="UTF-8">
+                    <div class="form-group">
+                        <input type="text" name="q" class="search-query form-control" placeholder="Search">
+					</div>
+				</form>
+
+				<ul class="nav navbar-nav">
+					<li>
+						<a href="namespace-WooMinecraft.API.html" title="Summary of WooMinecraft\API"><span>Namespace</span></a>
+					</li>
+					<li class="active">
+<span>Class</span>					</li>
+
+					<li class="divider-vertical"></li>
+
+					<li>
+						<a href="tree.html" title="Tree view of classes, interfaces, traits and exceptions"><span>Tree</span></a>
+					</li>
+
+						<li>
+							<a href="annotation-group-todo.html" title="List of elements with todo annotation">
+								<span>Todo</span>
+							</a>
+						</li>
+
+
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<div id="left">
+	<div id="menu">
+
+		<div id="groups">
+				<h3>Namespaces</h3>
+			<ul>
+					<li class="active">
+						<a href="namespace-WooMinecraft.html">
+							WooMinecraft<span></span>
+						</a>
+							<ul>
+					<li>
+						<a href="namespace-WooMinecraft.Admin.html">
+							Admin						</a>
+							</li>
+					<li class="active">
+						<a href="namespace-WooMinecraft.API.html">
+							API						</a>
+							</li>
+					<li>
+						<a href="namespace-WooMinecraft.WooCommerce.html">
+							WooCommerce						</a>
+							</li>
+								</ul></li>
+			</ul>
+		</div>
+
+
+		<div id="elements">
+			<h3>Classes</h3>
+			<ul>
+				<li class="active"><a href="class-WooMinecraft.API.WCM_Rest_API.html">WCM_Rest_API</a></li>
+			</ul>
+
+
+
+
+
+		</div>
+	</div>
+</div>
+
+<div id="splitter"></div>
+
+<div id="right">
+	<div id="rightInner">
+<div id="content" class="class">
+	<h1>Class WCM_Rest_API</h1>
+
+
+	<div class="description">
+	<p>Class WCM_Rest_API</p>
+
+<p>This class contains all API related methods and hooks</p>
+	</div>
+
+
+
+
+
+
+
+
+
+	<div class="alert alert-info">
+		
+		
+		<b>Namespace:</b> <a href="namespace-WooMinecraft.html">WooMinecraft</a>\<a href="namespace-WooMinecraft.API.html">API</a><br>
+		<b>Package:</b> WooMinecraft\API<br>
+
+				<b>Author:</b>
+				JayWood<br>
+				<b>Since:</b>
+				NEXT<br>
+			<b>Located at</b> includes/api/rest-api.php		<br>
+	</div>
+
+
+
+		<div class="panel panel-default">
+			<div class="panel-heading"><h2>Methods summary</h2></div>
+			<table class="summary table table-bordered table-striped methods" id="methods">
+		<tr data-order="__construct" id="___construct">
+
+			<td class="attributes"><code>
+				 public 
+				
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#___construct">#</a>
+			<code>__construct( <span><code><a href="class-WooMinecraft.WooMinecraft.html">WooMinecraft\WooMinecraft</a></code> <var>$plugin</var></span> )</code>
+
+			<div class="description short">
+				<p>protected $plugin;</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>protected $plugin;</p>
+
+<p>/**
+WCM_Rest constructor.</p>
+
+
+					<h4>Parameters</h4>
+					<div class="list"><dl>
+						<dt><var>$plugin</var></dt>
+						<dd></dd>
+					</dl></div>
+
+
+
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="rest_setup_routes" id="_rest_setup_routes">
+
+			<td class="attributes"><code>
+				 public 
+				
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_rest_setup_routes">#</a>
+			<code>rest_setup_routes( )</code>
+
+			<div class="description short">
+				<p>Sets up REST routes for the WP-API</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Sets up REST routes for the WP-API</p>
+
+
+
+
+
+					<h4>Author</h4>
+					<div class="list">
+							JayWood<br>
+					</div>
+					<h4>Since</h4>
+					<div class="list">
+							NEXT<br>
+					</div>
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="get_server_settings_permission_check" id="_get_server_settings_permission_check">
+
+			<td class="attributes"><code>
+				 public 
+				boolean|WP_Error
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_get_server_settings_permission_check">#</a>
+			<code>get_server_settings_permission_check( )</code>
+
+			<div class="description short">
+				<p>Determines rather or not a user can view the list of servers.</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Determines rather or not a user can view the list of servers.</p>
+
+
+
+					<h4>Returns</h4>
+					<div class="list">
+						boolean|WP_Error<br>True if they can manage_options, WP_Error otherwise.
+					</div>
+
+
+					<h4>Author</h4>
+					<div class="list">
+							JayWood<br>
+					</div>
+					<h4>Since</h4>
+					<div class="list">
+							NEXT<br>
+					</div>
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="process_order_updates" id="_process_order_updates">
+
+			<td class="attributes"><code>
+				 public 
+				WP_Error|mixed
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_process_order_updates">#</a>
+			<code>process_order_updates( <span>WP_REST_Request <var>$request</var></span> )</code>
+
+			<div class="description short">
+				<p>Processes all order updates</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Processes all order updates</p>
+
+
+					<h4>Parameters</h4>
+					<div class="list"><dl>
+						<dt><var>$request</var></dt>
+						<dd>The rest request object.</dd>
+					</dl></div>
+
+					<h4>Returns</h4>
+					<div class="list">
+						WP_Error|mixed
+					</div>
+
+
+					<h4>Author</h4>
+					<div class="list">
+							JayWood<br>
+					</div>
+					<h4>Since</h4>
+					<div class="list">
+							NEXT<br>
+					</div>
+
+
+			</div>
+			</div></td>
+		</tr>
+		<tr data-order="get_server_commands" id="_get_server_commands">
+
+			<td class="attributes"><code>
+				 public 
+				mixed
+				
+				</code>
+			</td>
+
+			<td class="name"><div>
+			<a class="anchor" href="#_get_server_commands">#</a>
+			<code>get_server_commands( <span>WP_REST_Request <var>$request</var></span> )</code>
+
+			<div class="description short">
+				<p>Retrieves server specific commands for the key provided.</p>
+			</div>
+
+			<div class="description detailed hidden">
+				<p>Retrieves server specific commands for the key provided.</p>
+
+
+					<h4>Parameters</h4>
+					<div class="list"><dl>
+						<dt><var>$request</var></dt>
+						<dd>The rest request object.</dd>
+					</dl></div>
+
+					<h4>Returns</h4>
+					<div class="list">
+						mixed
+					</div>
+
+
+					<h4>Author</h4>
+					<div class="list">
+							JayWood<br>
+					</div>
+					<h4>Since</h4>
+					<div class="list">
+							NEXT<br>
+					</div>
+					<h4>Todo</h4>
+					<div class="list">
+							Support paging, and include that in the output.<br>
+					</div>
+
+
+			</div>
+			</div></td>
+		</tr>
+			</table>
+		</div>
+
+
+
+
+
+
+
+
+
+
+
+</div>
+	</div>
+
+	<div id="footer">
+		WooMinecraft WordPress API documentation generated by <a href="http://apigen.org">ApiGen</a>
+	</div>
+</div>
+<script src="resources/combined.js"></script>
+<script src="elementlist.js"></script>
+</body>
+</html>

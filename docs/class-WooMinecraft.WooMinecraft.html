@@ -67,6 +67,10 @@
 							Admin						</a>
 							</li>
 					<li>
+						<a href="namespace-WooMinecraft.API.html">
+							API						</a>
+							</li>
+					<li>
 						<a href="namespace-WooMinecraft.WooCommerce.html">
 							WooCommerce						</a>
 							</li>
@@ -202,7 +206,7 @@
 					</div>
 					<h4>Since</h4>
 					<div class="list">
-							2.0.0<br>
+							NEXT<br>
 					</div>
 
 
@@ -237,12 +241,16 @@
 					<div class="list">
 							JayWood<br>
 					</div>
+					<h4>Since</h4>
+					<div class="list">
+							1.0.0<br>
+					</div>
 
 
 			</div>
 			</div></td>
 		</tr>
-		<tr data-order="get_server_settings_Permission_check" id="_get_server_settings_Permission_check">
+		<tr data-order="validate_key" id="_validate_key">
 
 			<td class="attributes"><code>
 				 public 
@@ -252,17 +260,22 @@
 			</td>
 
 			<td class="name"><div>
-			<a class="anchor" href="#_get_server_settings_Permission_check">#</a>
-			<code>get_server_settings_Permission_check( )</code>
+			<a class="anchor" href="#_validate_key">#</a>
+			<code>validate_key( <span>string <var>$server_key</var></span> )</code>
 
 			<div class="description short">
-				<p>A</p>
+				<p>Validates the server key provided against a list of stored keys.</p>
 			</div>
 
 			<div class="description detailed hidden">
-				<p>A</p>
+				<p>Validates the server key provided against a list of stored keys.</p>
 
 
+					<h4>Parameters</h4>
+					<div class="list"><dl>
+						<dt><var>$server_key</var></dt>
+						<dd>The server key provided.</dd>
+					</dl></div>
 
 					<h4>Returns</h4>
 					<div class="list">
@@ -277,135 +290,6 @@
 					<h4>Since</h4>
 					<div class="list">
 							NEXT<br>
-					</div>
-
-
-			</div>
-			</div></td>
-		</tr>
-		<tr data-order="rest_setup_routes" id="_rest_setup_routes">
-
-			<td class="attributes"><code>
-				 public 
-				
-				
-				</code>
-			</td>
-
-			<td class="name"><div>
-			<a class="anchor" href="#_rest_setup_routes">#</a>
-			<code>rest_setup_routes( )</code>
-
-			<div class="description short">
-				<p>Sets up REST routes for the WP-API</p>
-			</div>
-
-			<div class="description detailed hidden">
-				<p>Sets up REST routes for the WP-API</p>
-
-
-
-
-
-					<h4>Author</h4>
-					<div class="list">
-							JayWood<br>
-					</div>
-					<h4>Since</h4>
-					<div class="list">
-							NEXT<br>
-					</div>
-
-
-			</div>
-			</div></td>
-		</tr>
-		<tr data-order="process_order_updates" id="_process_order_updates">
-
-			<td class="attributes"><code>
-				 public 
-				
-				
-				</code>
-			</td>
-
-			<td class="name"><div>
-			<a class="anchor" href="#_process_order_updates">#</a>
-			<code>process_order_updates( <span>WP_REST_Request <var>$request</var></span> )</code>
-
-			<div class="description short">
-				<p>Processes all order updates</p>
-			</div>
-
-			<div class="description detailed hidden">
-				<p>Processes all order updates</p>
-
-
-					<h4>Parameters</h4>
-					<div class="list"><dl>
-						<dt><var>$request</var></dt>
-						<dd></dd>
-					</dl></div>
-
-
-
-					<h4>Author</h4>
-					<div class="list">
-							JayWood<br>
-					</div>
-					<h4>Since</h4>
-					<div class="list">
-							NEXT<br>
-					</div>
-
-
-			</div>
-			</div></td>
-		</tr>
-		<tr data-order="get_server_commands" id="_get_server_commands">
-
-			<td class="attributes"><code>
-				 public 
-				mixed
-				
-				</code>
-			</td>
-
-			<td class="name"><div>
-			<a class="anchor" href="#_get_server_commands">#</a>
-			<code>get_server_commands( <span>WooMinecraft\WP_Rest_Request <var>$request</var></span> )</code>
-
-			<div class="description short">
-				<p>Retrieves server specific commands for the key provided.</p>
-			</div>
-
-			<div class="description detailed hidden">
-				<p>Retrieves server specific commands for the key provided.</p>
-
-
-					<h4>Parameters</h4>
-					<div class="list"><dl>
-						<dt><var>$request</var></dt>
-						<dd>The rest request object.</dd>
-					</dl></div>
-
-					<h4>Returns</h4>
-					<div class="list">
-						mixed
-					</div>
-
-
-					<h4>Author</h4>
-					<div class="list">
-							JayWood<br>
-					</div>
-					<h4>Since</h4>
-					<div class="list">
-							NEXT<br>
-					</div>
-					<h4>Todo</h4>
-					<div class="list">
-							Support paging, and include that in the output.<br>
 					</div>
 
 
