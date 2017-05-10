@@ -194,6 +194,8 @@ class WooMinecraft {
 	/**
 	 * Contains all the necessary hooks for the main plugin file.
 	 *
+	 * @since 1.0.0
+	 *
 	 * @author JayWood
 	 * @return void
 	 */

@@ -37,22 +37,6 @@ class WCM_Rest_API {
 	}
 
 	/**
-	 * A
-	 *
-	 * @return bool|WP_Error
-	 *
-	 * @author JayWood
-	 * @since  NEXT
-	 */
-	public function get_server_settings_Permission_check() {
-		if ( ! current_user_can( 'manage_options' ) ) {
-			return new WP_Error( 'rest_forbidden', esc_html__( 'Only administrators can view server keys.', 'woominecraft' ) );
-		}
-
-		return true;
-	}
-
-	/**
 	 * Sets up REST routes for the WP-API
 	 *
 	 * @since NEXT
@@ -94,6 +78,22 @@ class WCM_Rest_API {
 				),
 			)
 		) );
+	}
+
+	/**
+	 * A
+	 *
+	 * @return bool|WP_Error
+	 *
+	 * @author JayWood
+	 * @since  NEXT
+	 */
+	public function get_server_settings_Permission_check() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return new WP_Error( 'rest_forbidden', esc_html__( 'Only administrators can view server keys.', 'woominecraft' ) );
+		}
+
+		return true;
 	}
 
 	/**
