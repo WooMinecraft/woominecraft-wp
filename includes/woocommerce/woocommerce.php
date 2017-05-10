@@ -66,11 +66,14 @@ class WCM_WooCommerce {
 	 *
 	 * @author JayWood
 	 * @since 1.0.0
-	 *
-	 * @TODO Revisit this function and optimize it.
 	 */
 	public function save_commands_to_order( $order_id ) {
-		$order_data = new WC_Order( $order_id );
+
+		$order_data = wc_get_order( $order_id );
+		if ( ! $order_data ) {
+			return;
+		}
+
 		$items      = $order_data->get_items();
 		$tmp_array  = array();
 
