@@ -141,7 +141,7 @@ class WooMinecraft {
 	 * Instance of the WCM_WooCommerce class
 	 *
 	 * @var WooCommerce\WCM_WooCommerce
-	 * @since NEXT
+	 * @since  2.0 Rest API Integration
 	 */
 	public $woocommerce = null;
 
@@ -185,7 +185,7 @@ class WooMinecraft {
 	 * @return string The version string
 	 *
 	 * @author JayWood
-	 * @since  2.0.0
+	 * @since  2.0 Rest API Integration
 	 */
 	public function get_version() {
 		return $this->version;
@@ -212,7 +212,7 @@ class WooMinecraft {
 	 * @return bool|WP_Error
 	 *
 	 * @author JayWood
-	 * @since  2.0.0
+	 * @since  2.0 Rest API Integration
 	 */
 	public function validate_key( $server_key ) {
 
