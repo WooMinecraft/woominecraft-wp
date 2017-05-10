@@ -33,6 +33,12 @@
  */
 
 namespace WooMinecraft;
+use Exception;
+use WooMinecraft\Admin\WCM_Admin;
+use WooMinecraft\WooCommerce\WCM_WooCommerce;
+use WP_Error;
+use WP_REST_Request;
+use WP_REST_Server;
 
 /**
  * Automatically loads class files when needed.
@@ -169,8 +175,8 @@ class WooMinecraft {
 	 * @since  1.0.0
 	 */
 	private function plugin_classes() {
-		$this->admin       = new \WooMinecraft\Admin\WCM_Admin( $this );
-		$this->woocommerce = new \WooMinecraft\WooCommerce\WCM_WooCommerce( $this );
+		$this->admin       = new WCM_Admin( $this );
+		$this->woocommerce = new WCM_WooCommerce( $this );
 	}
 
 	/**
@@ -197,15 +203,40 @@ class WooMinecraft {
 	}
 
 	/**
+	 * A
+	 *
+	 * @return bool|\WP_Error
+	 *
+	 * @author JayWood
+	 * @since  NEXT
+	 */
+	public function get_server_settings_Permission_check() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return new WP_Error( 'rest_forbidden', esc_html__( 'Only administrators can view server keys.', 'woominecraft' ) );
+		}
+
+		return true;
+	}
+
+	/**
 	 * Sets up REST routes for the WP-API
 	 *
 	 * @author JayWood
 	 * @return void
 	 */
 	public function rest_setup_routes() {
+
+		register_rest_route( 'woominecraft/v1', '/server', array(
+			'methods'             => WP_REST_Server::READABLE,
+			'callback'            => array( $this, 'get_server_settings' ),
+			'permission_callback' => array( $this, 'get_server_settings_permission_check' ),
+		) );
+
+
+
 		register_rest_route( 'woominecraft/v1', '/server/(?P<server_key>[a-zA-Z0-9\@\#\!]+)', array(
 			array(
-				'methods'  => \WP_REST_Server::READABLE,
+				'methods'  => WP_REST_Server::READABLE,
 				'callback' => array( $this, 'get_server_commands' ),
 				'args'     => array(
 					'server_key' => array(
@@ -214,7 +245,7 @@ class WooMinecraft {
 				),
 			),
 			array(
-				'methods'  => \WP_REST_Server::EDITABLE,
+				'methods'  => WP_REST_Server::EDITABLE,
 				'callback' => array( $this, 'process_server_commands' ),
 				'args'     => array(
 					'server_key' => array(
@@ -228,31 +259,31 @@ class WooMinecraft {
 	/**
 	 *
 	 *
-	 * @param \WP_REST_Request $request
+	 * @param WP_REST_Request $request
 	 *
 	 * @return void
 	 *
 	 * @author JayWood
 	 * @since  2.0.0
 	 */
-	public function process_server_commands( \WP_REST_Request $request ) {
+	public function process_server_commands( WP_REST_Request $request ) {
 
 	}
 
 	/**
 	 * Retrieves server specific commands for the key provided.
 	 *
-	 * @param \WP_Rest_Request $request The rest request object.
+	 * @param WP_Rest_Request $request The rest request object.
 	 *
 	 * @return mixed
 	 *
 	 * @author JayWood
 	 * @since 2.0.0
 	 */
-	public function get_server_commands( \WP_Rest_Request $request ) {
+	public function get_server_commands( WP_Rest_Request $request ) {
 		$server_key = $request->get_param( 'server_key' );
 
-		return rest_ensure_response( new \WP_Error( 'testing',' This is a test' ) );
+		return rest_ensure_response( new WP_Error( 'testing',' This is a test' ) );
 	}
 
 	/**
@@ -453,7 +484,7 @@ class WooMinecraft {
 			case 'path':
 				return $this->$field;
 			default:
-				throw new \Exception( 'Invalid ' . __CLASS__ . ' property: ' . $field );
+				throw new Exception( 'Invalid ' . __CLASS__ . ' property: ' . $field );
 		}
 	}
 }
