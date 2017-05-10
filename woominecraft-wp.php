@@ -217,27 +217,27 @@ class WooMinecraft {
 	public function validate_key( $server_key ) {
 
 		if ( ! $server_key ) {
-			$response = rest_ensure_response( new WP_Error( 'invalid_key', esc_html__( 'Invalid Key specified, or no key provided', 'woominecraft' ) ) );
+			$response = rest_ensure_response( array( 'msg' => esc_html__( 'Invalid Key specified, or no key provided', 'woominecraft' ) ) );
 			$response->set_status( 400 );
 			return $response;
 		}
 
 		$servers = get_option( 'wm_servers', array() );
 		if ( empty( $servers ) ) {
-			$response = rest_ensure_response( new WP_Error( 'no_servers', esc_html__( 'No servers have been setup for this resource.', 'woominecraft' ) ) );
+			$response = rest_ensure_response( array( 'msg' => esc_html__( 'No servers have been setup for this resource.', 'woominecraft' ) ) );
 			$response->set_status( 500 );
 			return $response;
 		}
 
 		$keys = wp_list_pluck( $servers, 'key' );
 		if ( ! $keys ) {
-			$response = rest_ensure_response( new WP_Error( 'no_keys', esc_html__( 'Unknown error, no keys are available.', 'woominecraft' ) ) );
+			$response = rest_ensure_response( array( 'msg' => esc_html__( 'Unknown error, no keys are available.', 'woominecraft' ) ) );
 			$response->set_status( 500 );
 			return $response;
 		}
 
 		if ( false === array_search( $server_key, $keys, true ) ) {
-			$response = rest_ensure_response( new WP_Error( 'invalid_key', esc_html__( 'The key provided is invalid.', 'woominecraft' ) ) );
+			$response = rest_ensure_response( array( 'msg' => esc_html__( 'The key provided is invalid.', 'woominecraft' ) ) );
 			$response->set_status( 403 );
 			return $response;
 		}
