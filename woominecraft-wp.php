@@ -252,7 +252,7 @@ class WooMinecraft {
 			),
 			array(
 				'methods'  => WP_REST_Server::EDITABLE,
-				'callback' => array( $this, 'process_server_commands' ),
+				'callback' => array( $this, 'process_order_updates' ),
 				'args'     => array(
 					'server_key' => array(
 						'sanitize_callback' => 'esc_attr',
@@ -263,16 +263,16 @@ class WooMinecraft {
 	}
 
 	/**
-	 *
+	 * Processes all order updates
 	 *
 	 * @param WP_REST_Request $request
 	 *
 	 * @return void
 	 *
 	 * @author JayWood
-	 * @since  2.0.0
+	 * @since  NEXT
 	 */
-	public function process_server_commands( WP_REST_Request $request ) {
+	public function process_order_updates( WP_REST_Request $request ) {
 
 	}
 
@@ -287,6 +287,11 @@ class WooMinecraft {
 	 * @since  NEXT
 	 */
 	private function validate_key( $server_key ) {
+
+		if ( ! $server_key ) {
+			return new WP_Error( 'invalid_key', esc_html__( 'Invalid Key specified, or no key provided', 'woominecraft' ) );
+		}
+
 		$servers = get_option( 'wm_servers', array() );
 		if ( empty( $servers ) ) {
 			return new WP_Error( 'no_servers', esc_html__( 'No servers have been setup for this resource.', 'woominecraft' ) );
@@ -312,7 +317,7 @@ class WooMinecraft {
 	 * @return mixed
 	 *
 	 * @author JayWood
-	 * @since 2.0.
+	 * @since NEXT
 	 */
 	public function get_server_commands( WP_Rest_Request $request ) {
 		$server_key = $request->get_param( 'server_key' );
@@ -322,7 +327,49 @@ class WooMinecraft {
 			return $is_valid_key;
 		}
 
-		return rest_ensure_response( new WP_Error( 'testing',' This is a test' ) );
+		$delivered = '_wmc_delivered_' . $server_key;
+		$meta_key  = '_wmc_commands_' . $server_key;
+
+		$order_query = apply_filters( 'woo_minecraft_json_orders_args', array(
+			'posts_per_page' => '-1',
+			'post_status'    => 'wc-completed',
+			'post_type'      => 'shop_order',
+			'meta_query'     => array(
+				'relation' => 'AND',
+				array(
+					'key'     => $meta_key,
+					'compare' => 'EXISTS',
+				),
+				array(
+					'key'     => $delivered,
+					'compare' => 'NOT EXISTS',
+				),
+			),
+		) );
+
+		$orders = get_posts( $order_query );
+
+		$output = array();
+
+		if ( ! empty( $orders ) ) {
+			foreach ( $orders as $wc_order ) {
+				if ( ! isset( $wc_order->ID ) ) {
+					continue;
+				}
+
+				$player_id   = get_post_meta( $wc_order->ID, 'player_id', true );
+				$order_array = $this->woocommerce->generate_order_json( $wc_order, $server_key );
+
+				if ( ! empty( $order_array ) ) {
+					if ( ! isset( $output[ $player_id ] ) ) {
+						$output[ $player_id ] = array();
+					}
+					$output[ $player_id ][ $wc_order->ID ] = $order_array;
+				}
+			}
+		}
+
+		return rest_ensure_response( $output );
 	}
 
 	/**
