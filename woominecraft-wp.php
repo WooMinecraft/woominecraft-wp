@@ -205,7 +205,7 @@ class WooMinecraft {
 	/**
 	 * A
 	 *
-	 * @return bool|\WP_Error
+	 * @return bool|WP_Error
 	 *
 	 * @author JayWood
 	 * @since  NEXT
@@ -277,6 +277,34 @@ class WooMinecraft {
 	}
 
 	/**
+	 * Validates the server key provided against a list of stored keys.
+	 *
+	 * @param string $server_key The server key provided.
+	 *
+	 * @return bool|WP_Error True on success, WP_Error otherwise.
+	 *
+	 * @author JayWood
+	 * @since  NEXT
+	 */
+	private function validate_key( $server_key ) {
+		$servers = get_option( 'wm_servers', array() );
+		if ( empty( $servers ) ) {
+			return new WP_Error( 'no_servers', esc_html__( 'No servers have been setup for this resource.', 'woominecraft' ) );
+		}
+
+		$keys = wp_list_pluck( $servers, 'key' );
+		if ( ! $keys ) {
+			return new WP_Error( 'no_keys', esc_html__( 'Unknown error, no keys are available.', 'woominecraft' ) );
+		}
+
+		if ( false === array_search( $server_key, $keys, true ) ) {
+			return new WP_Error( 'invalid_key', esc_html__( 'The key provided is invalid.', 'woominecraft' ) );
+		}
+
+		return true;
+	}
+
+	/**
 	 * Retrieves server specific commands for the key provided.
 	 *
 	 * @param WP_Rest_Request $request The rest request object.
@@ -288,6 +316,11 @@ class WooMinecraft {
 	 */
 	public function get_server_commands( WP_Rest_Request $request ) {
 		$server_key = $request->get_param( 'server_key' );
+
+		$is_valid_key = $this->validate_key( $server_key );
+		if ( is_wp_error( $is_valid_key ) ) {
+			return $is_valid_key;
+		}
 
 		return rest_ensure_response( new WP_Error( 'testing',' This is a test' ) );
 	}
