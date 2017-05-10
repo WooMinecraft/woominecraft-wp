@@ -228,13 +228,11 @@ class WooMinecraft {
 	 */
 	public function rest_setup_routes() {
 
-		register_rest_route( 'woominecraft/v1', '/server', array(
+		register_rest_route( 'woominecraft/v1', '/servers', array(
 			'methods'             => WP_REST_Server::READABLE,
-			'callback'            => array( $this, 'get_server_settings' ),
+			'callback'            => array( $this->admin, 'get_servers' ),
 			'permission_callback' => array( $this, 'get_server_settings_permission_check' ),
 		) );
-
-
 
 		register_rest_route( 'woominecraft/v1', '/server/(?P<server_key>[a-zA-Z0-9\@\#\!]+)', array(
 			array(
