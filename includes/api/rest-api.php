@@ -99,7 +99,7 @@ class WCM_Rest_API {
 	/**
 	 * Processes all order updates
 	 *
-	 * @param WP_REST_Request $request
+	 * @param \WP_REST_Request $request The rest request object.
 	 *
 	 * @return WP_Error|mixed
 	 *
@@ -149,7 +149,8 @@ class WCM_Rest_API {
 	/**
 	 * Retrieves server specific commands for the key provided.
 	 *
-	 * @param WP_Rest_Request $request The rest request object.
+	 * @param WP_REST_Request $request The rest request object.
+	 *
 	 * @todo Support paging, and include that in the output.
 	 *
 	 * @return mixed
@@ -157,7 +158,7 @@ class WCM_Rest_API {
 	 * @author JayWood
 	 * @since NEXT
 	 */
-	public function get_server_commands( WP_Rest_Request $request ) {
+	public function get_server_commands( WP_REST_Request $request ) {
 
 		$url_params   = $request->get_url_params();
 		$server_key   = empty( $url_params['server_key'] ) ? '' : $url_params['server_key'];
