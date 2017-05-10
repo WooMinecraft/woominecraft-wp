@@ -238,30 +238,4 @@ class WCM_WooCommerce {
 
 		return true;
 	}
-
-	/**
-	 * Processes all completed commands.
-	 *
-	 * @param string $key The server key to check against.
-	 *
-	 * @return void
-	 *
-	 * @author JayWood
-	 * @since 1.0.0
-	 */
-	private function process_completed_commands( $key = '' ) {
-		$delivered = '_wmc_delivered_' . $key;
-		$order_ids = (array) $this->plugin->sanitized_orders_post( $_POST['processedOrders'] );
-
-		if ( empty( $order_ids ) ) {
-			wp_send_json_error( array( 'msg' => __( 'Commands was empty', 'woominecraft' ) ) );
-		}
-
-		// Set the orders to delivered
-		foreach ( $order_ids as $order_id ) {
-			update_post_meta( $order_id, $delivered, true );
-		}
-
-		$this->plugin->bust_command_cache();
-	}
 }
