@@ -1,6 +1,9 @@
 <?php
 
 namespace WooMinecraft\WooCommerce;
+use WC_Order;
+use WooCommerce;
+use WP_Post;
 
 /**
  * The Main class for WooCommerce functionality
@@ -32,8 +35,6 @@ class WCM_WooCommerce {
 		add_action( 'woocommerce_checkout_update_order_meta', array( $this, 'save_commands_to_order' ) );
 		add_action( 'woocommerce_before_checkout_billing_form', array( $this, 'additional_checkout_field' ) );
 		add_action( 'woocommerce_thankyou', array( $this, 'thanks' ) );
-
-		add_action( 'template_redirect', array( $this, 'json_feed' ) );
 	}
 
 	/**
@@ -69,7 +70,7 @@ class WCM_WooCommerce {
 	 * @TODO Revisit this function and optimize it.
 	 */
 	public function save_commands_to_order( $order_id ) {
-		$order_data = new \WC_Order( $order_id );
+		$order_data = new WC_Order( $order_id );
 		$items      = $order_data->get_items();
 		$tmp_array  = array();
 
@@ -132,7 +133,7 @@ class WCM_WooCommerce {
 	public function check_player() {
 		global $woocommerce;
 
-		if ( ! $woocommerce instanceof \WooCommerce ) {
+		if ( ! $woocommerce instanceof WooCommerce ) {
 			return;
 		}
 
@@ -198,7 +199,7 @@ class WCM_WooCommerce {
 	/**
 	 * Generates the order JSON data for a single order.
 	 *
-	 * @param \WP_Post $order_post The post to get the commands from.
+	 * @param WP_Post $order_post The post to get the commands from.
 	 * @param string  $key        The server key to pluck orders with.
 	 *
 	 * @return array|mixed
@@ -206,7 +207,7 @@ class WCM_WooCommerce {
 	 * @author JayWood
 	 * @since  1.0.0
 	 */
-	public function generate_order_json( \WP_Post $order_post, $key ) {
+	public function generate_order_json( WP_Post $order_post, $key ) {
 
 		if ( ! isset( $order_post->ID ) ) {
 			return array();
@@ -259,93 +260,5 @@ class WCM_WooCommerce {
 		}
 
 		$this->plugin->bust_command_cache();
-	}
-
-	/**
-	 * Produces the JSON Feed for Orders Pending Delivery
-	 *
-	 * @return void
-	 *
-	 * @TODO remove in favor of new rest API endpoint
-	 *
-	 * @author JayWood
-	 * @since 1.0.0
-	 */
-	public function json_feed() {
-
-		if ( ! isset( $_REQUEST['wmc_key'] ) ) {
-			// Bail if no key
-			return;
-		}
-
-		$servers = get_option( 'wm_servers', array() );
-		if ( empty( $servers ) ) {
-			wp_send_json_error( array( 'msg' => 'No servers setup, check WordPress config.' ) );
-		}
-		$keys = wp_list_pluck( $servers, 'key' );
-		if ( empty( $keys ) ) {
-			wp_send_json_error( array( 'msg' => 'WordPress keys are not set.' ) );
-		}
-
-		if ( false === array_search( $_GET['wmc_key'], $keys ) ) {
-			wp_send_json_error( array( 'msg' => 'Invalid key supplied to WordPress, compare your keys.' ) );
-		}
-
-		$key = esc_attr( $_GET['wmc_key'] );
-
-		if ( isset( $_REQUEST['processedOrders'] ) ) {
-
-			$this->process_completed_commands( $key );
-		}
-
-		if ( false === ( $output = get_transient( $this->plugin->command_transient ) ) || isset( $_GET['delete-trans'] ) ) {
-
-			$delivered = '_wmc_delivered_' . $key;
-			$meta_key  = '_wmc_commands_' . $key;
-
-			$order_query = apply_filters( 'woo_minecraft_json_orders_args', array(
-				'posts_per_page' => '-1',
-				'post_status'    => 'wc-completed',
-				'post_type'      => 'shop_order',
-				'meta_query'     => array(
-					'relation' => 'AND',
-					array(
-						'key'     => $meta_key,
-						'compare' => 'EXISTS',
-					),
-					array(
-						'key'     => $delivered,
-						'compare' => 'NOT EXISTS',
-					),
-				),
-			) );
-
-			$orders = get_posts( $order_query );
-
-			$output = array();
-
-			if ( ! empty( $orders ) ) {
-				foreach ( $orders as $wc_order ) {
-					if ( ! isset( $wc_order->ID ) ) {
-						continue;
-					}
-
-					$player_id   = get_post_meta( $wc_order->ID, 'player_id', true );
-					$order_array = $this->generate_order_json( $wc_order, $key );
-
-					if ( ! empty( $order_array ) ) {
-						if ( ! isset( $output[ $player_id ] ) ) {
-							$output[ $player_id ] = array();
-						}
-						$output[ $player_id ][ $wc_order->ID ] = $order_array;
-					}
-				}
-			}
-
-			set_transient( $this->plugin->command_transient, $output, 60 * 60 ); // Stores the feed in a transient for 1 hour.
-		} // End if().
-
-		wp_send_json_success( $output );
-
 	}
 }
