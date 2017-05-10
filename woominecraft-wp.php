@@ -35,6 +35,7 @@
 namespace WooMinecraft;
 use Exception;
 use WooMinecraft\Admin\WCM_Admin;
+use WooMinecraft\API\WCM_Rest_API;
 use WooMinecraft\WooCommerce\WCM_WooCommerce;
 use WP_Error;
 use WP_REST_Request;
@@ -177,6 +178,7 @@ class WooMinecraft {
 	private function plugin_classes() {
 		$this->admin       = new WCM_Admin( $this );
 		$this->woocommerce = new WCM_WooCommerce( $this );
+		$this->rest        = new WCM_Rest_API( $this );
 	}
 
 	/**
