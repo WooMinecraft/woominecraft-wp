@@ -133,6 +133,14 @@ class WooMinecraft {
 	public $admin = null;
 
 	/**
+	 * Instance of the WCM_WooCommerce class
+	 *
+	 * @var WooCommerce\WCM_WooCommerce
+	 * @since 2.0.0 Rest API Integration
+	 */
+	public $woocommerce = null;
+
+	/**
 	 * The transient key
 	 *
 	 * @var string

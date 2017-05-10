@@ -267,7 +267,7 @@ class WCM_Admin {
 	 * @author JayWood
 	 */
 	public function render_servers_section( $values ) {
-		require_once 'views/server-section.php';
+		 WooMinecraft::include_file( 'views/server-section' );
 	}
 
 	/**
@@ -357,7 +357,7 @@ class WCM_Admin {
 		$server    = isset( $_POST['server'] ) ? esc_attr( $_POST['server'] ) : false; // @codingStandardsIgnoreLine
 
 		if ( $player_id && $order_id && $server ) {
-			$result = $this->plugin->reset_order( $order_id, $server );
+			$result = $this->plugin->woocommerce->reset_order( $order_id, $server );
 			if ( $result > 0 ) {
 				wp_send_json_success();
 			}
