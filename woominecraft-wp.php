@@ -38,8 +38,6 @@ use WooMinecraft\Admin\WCM_Admin;
 use WooMinecraft\API\WCM_Rest_API;
 use WooMinecraft\WooCommerce\WCM_WooCommerce;
 use WP_Error;
-use WP_REST_Request;
-use WP_REST_Server;
 
 /**
  * Automatically loads class files when needed.
