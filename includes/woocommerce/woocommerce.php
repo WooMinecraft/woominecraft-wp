@@ -206,7 +206,7 @@ class WCM_WooCommerce {
 	 * @author JayWood
 	 * @since  1.0.0
 	 */
-	private function generate_order_json( \WP_Post $order_post, $key ) {
+	public function generate_order_json( \WP_Post $order_post, $key ) {
 
 		if ( ! isset( $order_post->ID ) ) {
 			return array();
@@ -265,6 +265,8 @@ class WCM_WooCommerce {
 	 * Produces the JSON Feed for Orders Pending Delivery
 	 *
 	 * @return void
+	 *
+	 * @TODO remove in favor of new rest API endpoint
 	 *
 	 * @author JayWood
 	 * @since 1.0.0
