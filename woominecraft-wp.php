@@ -313,6 +313,7 @@ class WooMinecraft {
 	 * Retrieves server specific commands for the key provided.
 	 *
 	 * @param WP_Rest_Request $request The rest request object.
+	 * @todo Support paging, and include that in the output.
 	 *
 	 * @return mixed
 	 *
@@ -349,7 +350,7 @@ class WooMinecraft {
 
 		$orders = get_posts( $order_query );
 
-		$output = array();
+		$order_data = array();
 
 		if ( ! empty( $orders ) ) {
 			foreach ( $orders as $wc_order ) {
@@ -361,15 +362,15 @@ class WooMinecraft {
 				$order_array = $this->woocommerce->generate_order_json( $wc_order, $server_key );
 
 				if ( ! empty( $order_array ) ) {
-					if ( ! isset( $output[ $player_id ] ) ) {
-						$output[ $player_id ] = array();
+					if ( ! isset( $order_data[ $player_id ] ) ) {
+						$order_data[ $player_id ] = array();
 					}
-					$output[ $player_id ][ $wc_order->ID ] = $order_array;
+					$order_data[ $player_id ][ $wc_order->ID ] = $order_array;
 				}
 			}
 		}
 
-		return rest_ensure_response( $output );
+		return rest_ensure_response( compact( 'server_key', 'order_data' ) );
 	}
 
 	/**
