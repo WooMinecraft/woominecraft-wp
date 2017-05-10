@@ -101,13 +101,34 @@ class WCM_Rest_API {
 	 *
 	 * @param WP_REST_Request $request
 	 *
-	 * @return void
+	 * @return WP_Error|mixed
 	 *
 	 * @author JayWood
 	 * @since  NEXT
 	 */
 	public function process_order_updates( WP_REST_Request $request ) {
 
+		$server_key   = $request->get_param( 'server_key' );
+		$is_valid_key = $this->plugin->validate_key( $server_key );
+		if ( is_wp_error( $is_valid_key ) ) {
+			return $is_valid_key;
+		}
+
+		$update_data = $request->get_json_params();
+		if ( empty( $update_data['order_data'] ) ) {
+			return new WP_Error( 'no_updates', esc_html__( 'Order data must be set', 'woominecraft' ) );
+		}
+
+		$order_ids = array_filter( array_map( 'absint', $update_data['order_data'] ) );
+		$delivered = '_wmc_delivered_' . $server_key;
+
+	/*	foreach ( $order_ids as $order_id ) {
+			update_post_meta( $order_id, $delivered, true );
+		}*/
+
+		$response =  rest_ensure_response( esc_html__( 'Successfully updated orders.', 'woominecraft' ) );
+
+		return $response;
 	}
 
 	/**
@@ -122,8 +143,8 @@ class WCM_Rest_API {
 	 * @since NEXT
 	 */
 	public function get_server_commands( WP_Rest_Request $request ) {
-		$server_key = $request->get_param( 'server_key' );
 
+		$server_key   = $request->get_param( 'server_key' );
 		$is_valid_key = $this->plugin->validate_key( $server_key );
 		if ( is_wp_error( $is_valid_key ) ) {
 			return $is_valid_key;
