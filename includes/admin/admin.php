@@ -8,8 +8,7 @@ use WooMinecraft\WooMinecraft;
  *
  * @author JayWood
  * @since 1.0
- * @package WooMinecraft
- * @sub-package: Admin
+ * @package WooMinecraft\Admin
  */
 class WCM_Admin {
 
