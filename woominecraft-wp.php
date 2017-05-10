@@ -216,7 +216,6 @@ class WooMinecraft {
 	 */
 	public function validate_key( $server_key ) {
 
-		$response = true;
 		if ( ! $server_key ) {
 			$response = rest_ensure_response( new WP_Error( 'invalid_key', esc_html__( 'Invalid Key specified, or no key provided', 'woominecraft' ) ) );
 			$response->set_status( 400 );
