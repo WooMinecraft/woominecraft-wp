@@ -209,7 +209,7 @@ class WooMinecraft {
 	 *
 	 * @param string $server_key The server key provided.
 	 *
-	 * @return bool|WP_Error True on success, WP_Error otherwise.
+	 * @return boolean|WP_Error True on success, WP_Error otherwise.
 	 *
 	 * @author JayWood
 	 * @since  NEXT

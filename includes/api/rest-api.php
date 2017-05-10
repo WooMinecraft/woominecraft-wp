@@ -81,14 +81,14 @@ class WCM_Rest_API {
 	}
 
 	/**
-	 * A
+	 * Determines rather or not a user can view the list of servers.
 	 *
-	 * @return bool|WP_Error
+	 * @return boolean|WP_Error True if they can manage_options, WP_Error otherwise.
 	 *
 	 * @author JayWood
 	 * @since  NEXT
 	 */
-	public function get_server_settings_Permission_check() {
+	public function get_server_settings_permission_check() {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			return new WP_Error( 'rest_forbidden', esc_html__( 'Only administrators can view server keys.', 'woominecraft' ) );
 		}
