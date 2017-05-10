@@ -228,6 +228,12 @@ class WooMinecraft {
 	 */
 	public function rest_setup_routes() {
 
+		/*
+		 * This registers an endpoint which allows Administrators to view server labels and keys.
+		 *
+		 * NOTE: Some WordPress installs will need a secondary plugin in order to utilize this endpoint.
+		 * @link https://wordpress.org/plugins/oauth2-provider/
+		 */
 		register_rest_route( 'woominecraft/v1', '/servers', array(
 			'methods'             => WP_REST_Server::READABLE,
 			'callback'            => array( $this->admin, 'get_servers' ),
