@@ -142,7 +142,7 @@ class WooMinecraft {
 	 * Instance of the WCM_WooCommerce class
 	 *
 	 * @var WooCommerce\WCM_WooCommerce
-	 * @since 2.0.0 Rest API Integration
+	 * @since NEXT
 	 */
 	public $woocommerce = null;
 
@@ -221,6 +221,8 @@ class WooMinecraft {
 	/**
 	 * Sets up REST routes for the WP-API
 	 *
+	 * @since NEXT
+	 *
 	 * @author JayWood
 	 * @return void
 	 */
@@ -278,7 +280,7 @@ class WooMinecraft {
 	 * @return mixed
 	 *
 	 * @author JayWood
-	 * @since 2.0.0
+	 * @since 2.0.
 	 */
 	public function get_server_commands( WP_Rest_Request $request ) {
 		$server_key = $request->get_param( 'server_key' );
