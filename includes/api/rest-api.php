@@ -161,14 +161,14 @@ class WCM_Rest_API {
 	public function get_server_commands( WP_REST_Request $request ) {
 
 		$url_params   = $request->get_url_params();
-		$server_key   = empty( $url_params['server_key'] ) ? '' : $url_params['server_key'];
-		$is_valid_key = $this->plugin->validate_key( $server_key );
+		$serverKey   = empty( $url_params['server_key'] ) ? '' : $url_params['server_key'];
+		$is_valid_key = $this->plugin->validate_key( $serverKey );
 		if ( true !== $is_valid_key ) {
 			return $is_valid_key;
 		}
 
-		$delivered = '_wmc_delivered_' . $server_key;
-		$meta_key  = '_wmc_commands_' . $server_key;
+		$delivered = '_wmc_delivered_' . $serverKey;
+		$meta_key  = '_wmc_commands_' . $serverKey;
 
 		$order_query = apply_filters( 'woo_minecraft_json_orders_args', array(
 			'posts_per_page' => '-1',
@@ -189,7 +189,7 @@ class WCM_Rest_API {
 
 		$orders = get_posts( $order_query );
 
-		$order_data = array();
+		$orderData = array();
 
 		if ( ! empty( $orders ) ) {
 			foreach ( $orders as $wc_order ) {
@@ -198,17 +198,23 @@ class WCM_Rest_API {
 				}
 
 				$player_id   = get_post_meta( $wc_order->ID, 'player_id', true );
-				$order_array = $this->plugin->woocommerce->generate_order_json( $wc_order, $server_key );
+				$order_array = $this->plugin->woocommerce->generate_order_json( $wc_order, $serverKey );
 
-				if ( ! empty( $order_array ) ) {
-					if ( ! isset( $order_data[ $player_id ] ) ) {
-						$order_data[ $player_id ] = array();
-					}
-					$order_data[ $player_id ][ $wc_order->ID ] = $order_array;
-				}
+				$orderData[] = array(
+					'player' => $player_id,
+					'orderID' => $wc_order->ID,
+					'commands' => $order_array
+				);
+
+				// if ( ! empty( $order_array ) ) {
+				// 	if ( ! isset( $order_data[ $player_id ] ) ) {
+				// 		$order_data[ $player_id ] = array();
+				// 	}
+				// 	$order_data[ $player_id ][ $wc_order->ID ] = $order_array;
+				// }
 			}
 		}
 
-		return rest_ensure_response( compact( 'server_key', 'order_data' ) );
+		return rest_ensure_response( compact( 'serverKey', 'orderData' ) );
 	}
 }
