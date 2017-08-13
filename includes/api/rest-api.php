@@ -206,13 +206,6 @@ class WCM_Rest_API {
 					'orderID' => $wc_order->ID,
 					'commands' => $order_array
 				);
-
-				// if ( ! empty( $order_array ) ) {
-				// 	if ( ! isset( $order_data[ $player_id ] ) ) {
-				// 		$order_data[ $player_id ] = array();
-				// 	}
-				// 	$order_data[ $player_id ][ $wc_order->ID ] = $order_array;
-				// }
 			}
 		}
 
