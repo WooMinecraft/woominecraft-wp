@@ -116,30 +116,31 @@ class WCM_Rest_API {
 		}
 
 		$update_data = $request->get_json_params();
-		if ( empty( $update_data['order_data'] ) ) {
-			$response = rest_ensure_response( esc_html__( 'Order data must be set', 'woominecraft' ) );
+		if ( empty( $update_data['Orders'] ) ) {
+			$response = rest_ensure_response( array( 'message' => esc_html__( 'Order data must be set', 'woominecraft' ) ) );
 			$response->set_status( 400 );
 			return $response;
 		}
 
-		$order_ids = array_filter( array_map( 'absint', $update_data['order_data'] ) );
+		$order_ids = array_filter( array_map( 'absint', $update_data['Orders'] ) );
 		$delivered = '_wmc_delivered_' . $server_key;
-
-		$response = array(
-			'msg' => esc_html__( 'Successfully updated orders.', 'woominecraft' ),
+		$response  = array(
+			'message'   => esc_html__( 'Successfully updated orders.', 'woominecraft' ),
+			'skipped'   => array(),
+			'processed' => array(),
 		);
 
 		foreach ( $order_ids as $order_id ) {
 			if ( 'shop_order' !== get_post_type( $order_id ) ) {
-				$response['result']['skipped'][] = $order_id;
+				$response['skipped'][] = $order_id;
 				continue;
 			}
 
 			$updated = update_post_meta( $order_id, $delivered, true );
 			if ( $updated ) {
-				$response['result']['processed'][] = $order_id;
+				$response['processed'][] = $order_id;
 			} else {
-				$response['result']['skipped'][] = $order_id;
+				$response['skipped'][] = $order_id;
 			}
 		}
 
