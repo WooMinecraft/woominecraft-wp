@@ -10,8 +10,6 @@ A FREE Minecraft Donation plugin which works in conjunction with my WooMinecraft
 
 ## Description
 
-> **Version 1.0.5 is only compatible with WooMinecraft Java plugin version 1.0.6-RC1+ and WILL NOT WORK for earlier versions.**
-
 Contribute to this plugin's development on [Github](https://github.com/WooMinecraft/woominecraft-wp) if you'd like.
 
 This plugin works in conjunction with our [WooMinecraft JAVA Plugin](https://github.com/WooMinecraft/WooMinecraft) for Minecraft on GitHub
@@ -61,6 +59,10 @@ payments - [check google](http://lmgtfy.com/?q###Woocommerce+payment+gateways)
 
 ### 1.1.1
 * Update for WooCommerce 3.3.3
+* Testing on WordPress 4.9.2
+* Added tooltips to product panel.
+* Restored previous placeholder of `give %s apple 1` in command slots.
+
 
 ### 1.1
 * **Added** Multi-server support

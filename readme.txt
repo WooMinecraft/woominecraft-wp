@@ -12,8 +12,6 @@ A FREE Minecraft Donation plugin which works in conjunction with my WooMinecraft
 
 Contribute to this plugins development on [Github](https://github.com/WooMinecraft/woominecraft-wp) if you'd like.
 
-**Version 1.0.5 is only compatible with WooMinecraft Java plugin version 1.0.6-RC1+ and WILL NOT WORK for earlier versions.**
-
 This plugin works in conjunction with our [WooMinecraft JAVA Plugin](https://github.com/WooMinecraft/WooMinecraft) for Minecraft on GitHub
 and is intended for Minecraft servers.  This plugin allows you to add commands to your [WooCommerce](https://wordpress.org/plugins/woocommerce/) products to have
 them executed on your server, once a user purchases that product.
@@ -57,6 +55,9 @@ Yea sure, we've all use to BuyCraft, but well, it doesn't have the flexibility o
 
 = 1.1.1 =
 * Update for WooCommerce 3.3.3
+* Testing on WordPress 4.9.2
+* Added tooltips to product panel.
+* Restored previous placeholder of `give %s apple 1` in command slots.
 
 = 1.1 =
 * **Added** Multi-server support
