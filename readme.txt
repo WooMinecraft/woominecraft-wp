@@ -55,6 +55,9 @@ Yea sure, we've all use to BuyCraft, but well, it doesn't have the flexibility o
 
 == Changelog ==
 
+= 1.1.1 =
+* Update for WooCommerce 3.3.3
+
 = 1.1 =
 * **Added** Multi-server support
 * **Added** multiple error messages to send back to the client of any errors.
