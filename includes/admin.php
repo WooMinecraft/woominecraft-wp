@@ -136,8 +136,8 @@ class WCM_Admin {
 	/**
 	 * Pretty much a wrapper for doing multiple get_post_meta() calls
 	 *
-	 * @param string $type
 	 * @param int    $order_id
+	 * @param string $type
 	 *
 	 * @author JayWood
 	 * @return array|null|object
@@ -581,7 +581,7 @@ class WCM_Admin {
 	 * Saves the general commands to post meta data.
 	 *
 	 * @param int $post_id The post ID to save commands against
-	 * @param array $commands A linear array of commands to be saved
+	 * @param array $command_set A linear array of commands to be saved
 	 */
 	private function _save_product_commands( $post_id = 0, $command_set = array() ) {
 
