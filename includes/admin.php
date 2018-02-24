@@ -337,9 +337,9 @@ class WCM_Admin {
 	 */
 	public function display_player_name_in_order_meta( $order ) {
 
-		$player_id   = get_post_meta( $order->id, 'player_id', true );
+		$player_id   = get_post_meta( $order->get_id(), 'player_id', true );
 		$servers     = get_option( $this->option_key );
-		$post_custom = get_post_custom( $order->id );
+		$post_custom = get_post_custom( $order->get_id() );
 
 		if ( empty( $player_id ) || empty( $post_custom ) ) {
 			// Just show nothing if there's no player ID
@@ -377,7 +377,7 @@ class WCM_Admin {
 				</select>
 			</p>
 			<p>
-				<input type="button" class="button button-primary" id="resendDonations" value="<?php _e( 'Resend Donations', 'woominecraft' ); ?>" data-id="<?php echo $player_id; ?>" data-orderid="<?php echo $order->id; ?>"/>
+				<input type="button" class="button button-primary" id="resendDonations" value="<?php _e( 'Resend Donations', 'woominecraft' ); ?>" data-id="<?php echo $player_id; ?>" data-orderid="<?php echo $order->get_id(); ?>"/>
 			</p>
 		</div>
 		<?php
