@@ -3,8 +3,8 @@
 **Tags:** minecraft, woocommerce, donations   
 **License:** GPLv2 or later   
 **Requires at least:** 4.4.2   
-**Tested up to:** 4.7.2   
-**Stable tag:** 1.1  
+**Tested up to:** 4.9.4   
+**Stable tag:** 1.1.1  
 
 A FREE Minecraft Donation plugin which works in conjunction with my WooMinecraft java plugin for Minecraft to provide a self-hosted donation platform.
 
@@ -15,8 +15,6 @@ Enjoy the plugin, or want to see a feature come to life, buy me a few :beers: an
 [![Beerpay](https://beerpay.io/WooMinecraft/woominecraft-wp/badge.svg?style=beer-square)](https://beerpay.io/WooMinecraft/woominecraft-wp)  [![Beerpay](https://beerpay.io/WooMinecraft/woominecraft-wp/make-wish.svg?style=flat-square)](https://beerpay.io/WooMinecraft/woominecraft-wp?focus=wish)
 
 ## Description
-
-> **Version 1.0.5 is only compatible with WooMinecraft Java plugin version 1.0.6-RC1+ and WILL NOT WORK for earlier versions.**
 
 Contribute to this plugin's development on [Github](https://github.com/WooMinecraft/woominecraft-wp) if you'd like.
 
@@ -64,6 +62,13 @@ payments - [check google](http://lmgtfy.com/?q###Woocommerce+payment+gateways)
    _( Multi-server Support )_
 
 ## Changelog
+
+### 1.1.1
+* Update for WooCommerce 3.3.3
+* Testing on WordPress 4.9.2
+* Added tooltips to product panel.
+* Restored previous placeholder of `give %s apple 1` in command slots.
+
 
 ### 1.1
 * **Added** Multi-server support

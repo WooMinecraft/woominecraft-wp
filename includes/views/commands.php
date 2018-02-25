@@ -11,15 +11,21 @@ $servers = woo_minecraft()->admin->get_servers();
 	<table class="woominecraft commands" cellpadding="5px">
 		<thead>
 			<tr>
-				<th class="command"><?php _e( 'Command', 'woominecraft' ); ?></th>
-				<th class="server"><?php _e( 'Server', 'woominecraft' ); ?></th>
+				<th class="command">
+					<?php _e( 'Command', 'woominecraft' ); ?>
+					<?php echo wc_help_tip( __( 'The player name will be put in place of %s.  You also do not have to use a slash to start the command.', 'woominecraft' ) ); ?>
+				</th>
+				<th class="server">
+					<?php _e( 'Server', 'woominecraft' ); ?>
+					<?php echo wc_help_tip( __( 'Servers are managed under WooCommerce General Settings', 'woominecraft' ) ); ?>
+				</th>
 				<th class="buttons"><input type="button" class="button button-small button-primary wmc_add_server" value="<?php _e( 'Add Command', 'woominecraft' ); ?>" /></th>
 			</tr>
 		</thead>
 		<tbody>
 			<?php if ( ! isset( $commands ) || empty( $commands ) ) : ?>
 			<tr class="row">
-				<td><input type="text" name="wmc_commands[<?php echo $command_key; ?>][post_<?php echo $post_id; ?>][0][command]" class="widefat" placeholder="<?php _x( 'give %s apple 1', 'Sample Command', 'woominecraft' ); ?>" /> </td>
+				<td><input type="text" name="wmc_commands[<?php echo $command_key; ?>][post_<?php echo $post_id; ?>][0][command]" class="widefat" placeholder="<?php echo _x( 'give %s apple 1', 'Sample Command', 'woominecraft' ); ?>" /> </td>
 				<td>
 					<select name="wmc_commands[<?php echo $command_key; ?>][post_<?php echo $post_id; ?>][0][server]" >
 					<?php
