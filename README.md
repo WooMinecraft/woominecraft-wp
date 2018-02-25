@@ -9,10 +9,8 @@
 A FREE Minecraft Donation plugin which works in conjunction with my WooMinecraft java plugin for Minecraft to provide a self-hosted donation platform.
 
 
-## Support on Beerpay
-Enjoy the plugin, or want to see a feature come to life, buy me a few :beers: and let's do this!
-
-[![Beerpay](https://beerpay.io/WooMinecraft/woominecraft-wp/badge.svg?style=beer-square)](https://beerpay.io/WooMinecraft/woominecraft-wp)  [![Beerpay](https://beerpay.io/WooMinecraft/woominecraft-wp/make-wish.svg?style=flat-square)](https://beerpay.io/WooMinecraft/woominecraft-wp?focus=wish)
+## Support
+If you enjoy this plugin and want to buy me a coffee sometime [feel free](https://www.paypal.me/jaywood) to tip your neighborly programmer.
 
 ## Description
 
