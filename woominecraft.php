@@ -231,7 +231,7 @@ class Woo_Minecraft {
 	 * Setup Localization
 	 *
 	 * @since  0.1.0
-	 * @return null
+	 * @return void
 	 */
 	public function i18n() {
 		load_plugin_textdomain( 'woominecraft', false, dirname( $this->basename ) . '/languages/' );
