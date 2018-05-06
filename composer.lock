@@ -1,0 +1,29 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "650d56bb9dd0e32702ce141aadbe67e7",
+    "packages": [],
+    "packages-dev": [
+        {
+            "name": "minecraft/forge",
+            "version": "1.12.2",
+            "dist": {
+                "type": "file",
+                "url": "https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.12.2-14.23.3.2678/forge-1.12.2-14.23.3.2678-universal.jar",
+                "reference": null,
+                "shasum": null
+            },
+            "type": "library"
+        }
+    ],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": []
+}

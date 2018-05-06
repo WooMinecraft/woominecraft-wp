@@ -1,0 +1,23 @@
+{
+    "name": "jaywood/woominecraft-wp",
+    "description": "A minecraft donation plugin for WordPress",
+    "type": "project",
+    "license": "GPLv2",
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "minecraft/forge",
+                "version": "1.12.2",
+                "dist": {
+                    "url": "https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.12.2-14.23.3.2678/forge-1.12.2-14.23.3.2678-universal.jar",
+                    "type": "file"
+                }
+            }
+        }
+    ],
+    "require": {},
+    "require-dev": {
+        "minecraft/forge": "^1.12"
+    }
+}
