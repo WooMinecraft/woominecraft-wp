@@ -2,3 +2,5 @@ node_modules
 .sass_cache
 .idea
 /vendor/
+docker/minecraft/*
+!docker/minecraft/Readme.md

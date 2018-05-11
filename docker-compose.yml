@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  java:
+    image: nimmis/spigot
+    volumes:
+      - ./docker/minecraft:/minecraft
+    environment:
+      EULA: 'true'
+      SPIGOT_VER: '1.12.2'
+      MC_MAXMEM: '2g'
+      MC_MINMEM: '512m'
