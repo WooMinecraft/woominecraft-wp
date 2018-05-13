@@ -4,3 +4,5 @@ node_modules
 /vendor/
 docker/minecraft/*
 !docker/minecraft/Readme.md
+docker/mysql/*
+!docker/mysql/readme.md
