@@ -44,7 +44,8 @@ services:
       - 3306:3306
     restart: always
     volumes:
-      - "./docker/mysql:/var/lib/mysql"
+      - ./docker/mysql:/var/lib/mysql
+      - ./docker/init/setup.sql:/docker-entrypoint-initdb.d/setup.sql
     environment:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: wordpress

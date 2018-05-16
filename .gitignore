@@ -5,4 +5,4 @@ node_modules
 docker/minecraft/*
 !docker/minecraft/Readme.md
 docker/mysql/*
-!docker/mysql/readme.md
+!docker/mysql/.gitkeep
