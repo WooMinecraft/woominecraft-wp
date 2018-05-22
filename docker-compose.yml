@@ -13,6 +13,18 @@ services:
       MC_MAXMEM: '2g'
       MC_MINMEM: '512m'
 
+  minecraft2:
+    image: nimmis/spigot
+    ports:
+      - 25566:25565
+    volumes:
+      - ./docker/minecraft2:/minecraft
+    environment:
+      EULA: 'true'
+      SPIGOT_VER: '1.12.2'
+      MC_MAXMEM: '2g'
+      MC_MINMEM: '512m'
+
   nginx:
     image: nginx:stable-alpine
     depends_on:
