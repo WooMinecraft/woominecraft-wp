@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "7614332bcdb24dafab6c88aecac27ec3",
+    "content-hash": "d034597b64d1e54e83f4db7c4f61a949",
     "packages": [],
     "packages-dev": [
         {
@@ -129,16 +129,16 @@
         },
         {
             "name": "woocommerce/woocommerce",
-            "version": "3.3.5",
+            "version": "3.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/woocommerce/woocommerce.git",
-                "reference": "4a99d00615ff48c90cf7d4116ed4a9cd84b5c5ba"
+                "reference": "56acb05521e25b17765514e5ea7407aa7682316e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/woocommerce/woocommerce/zipball/4a99d00615ff48c90cf7d4116ed4a9cd84b5c5ba",
-                "reference": "4a99d00615ff48c90cf7d4116ed4a9cd84b5c5ba",
+                "url": "https://api.github.com/repos/woocommerce/woocommerce/zipball/56acb05521e25b17765514e5ea7407aa7682316e",
+                "reference": "56acb05521e25b17765514e5ea7407aa7682316e",
                 "shasum": ""
             },
             "require": {
@@ -148,7 +148,7 @@
                 "apigen/apigen": "^4",
                 "dealerdirect/phpcodesniffer-composer-installer": "^0.4.3",
                 "nette/utils": "~2.3.0",
-                "phpunit/phpunit": "6.2.3",
+                "phpunit/phpunit": "6.*",
                 "squizlabs/php_codesniffer": "*",
                 "wimg/php-compatibility": "^8.0",
                 "woocommerce/woocommerce-git-hooks": "*",
@@ -169,7 +169,18 @@
             ],
             "description": "An eCommerce toolkit that helps you sell anything. Beautifully.",
             "homepage": "https://woocommerce.com/",
-            "time": "2018-04-10T17:08:58+00:00"
+            "time": "2018-05-29T17:54:17+00:00"
+        },
+        {
+            "name": "woominecraft/woominecraft",
+            "version": "1.1.2",
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/WooMinecraft/WooMinecraft/releases/download/1.1.2/WooMinecraft-1.1.2.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "type": "library"
         }
     ],
     "aliases": [],
