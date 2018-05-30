@@ -6,7 +6,8 @@ services:
     ports:
       - 25565:25565
     volumes:
-      - ./docker/minecraft:/minecraft
+      - ./minecraft:/minecraft
+      - ./vendor/woominecraft/woominecraft/WooMinecraft-1.1.2-S1.12.1-R0.1.jar:/minecraft/plugins/wmc.jar
     environment:
       EULA: 'true'
       SPIGOT_VER: '1.12.2'
@@ -18,7 +19,8 @@ services:
     ports:
       - 25566:25565
     volumes:
-      - ./docker/minecraft2:/minecraft
+      - ./minecraft2:/minecraft
+      - ./vendor/woominecraft/woominecraft/WooMinecraft-1.1.2-S1.12.1-R0.1.jar:/minecraft/plugins/wmc.jar
     environment:
       EULA: 'true'
       SPIGOT_VER: '1.12.2'
