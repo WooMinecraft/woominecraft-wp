@@ -6,7 +6,8 @@ services:
     ports:
       - 25565:25565
     volumes:
-      - ./minecraft:/minecraft
+      - ./docker/minecraft:/minecraft
+      - ./docker/init/mc.yml:/minecraft/plugins/WooMinecraft/config.yml
       - ./vendor/woominecraft/woominecraft/WooMinecraft-1.1.2-S1.12.1-R0.1.jar:/minecraft/plugins/wmc.jar
     environment:
       EULA: 'true'
@@ -19,7 +20,8 @@ services:
     ports:
       - 25566:25565
     volumes:
-      - ./minecraft2:/minecraft
+      - ./docker/minecraft2:/minecraft
+      - ./docker/init/mc2.yml:/minecraft/plugins/WooMinecraft/config.yml
       - ./vendor/woominecraft/woominecraft/WooMinecraft-1.1.2-S1.12.1-R0.1.jar:/minecraft/plugins/wmc.jar
     environment:
       EULA: 'true'
