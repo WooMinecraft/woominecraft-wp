@@ -159,7 +159,7 @@ class Woo_Minecraft {
 		if ( false === ( $output = get_transient( $this->command_transient ) ) || isset( $_GET['delete-trans'] ) ) {
 
 			$delivered = '_wmc_delivered_' . $key;
-			$meta_key = '_wmc_commands_' . $key;
+			$meta_key  = '_wmc_commands_' . $key;
 
 			$order_query = apply_filters( 'woo_minecraft_json_orders_args', array(
 				'posts_per_page' => '-1',
@@ -168,7 +168,7 @@ class Woo_Minecraft {
 				'meta_query'     => array(
 					'relation' => 'AND',
 					array(
-						'key' => $meta_key,
+						'key'     => $meta_key,
 						'compare' => 'EXISTS',
 					),
 					array(
@@ -212,6 +212,7 @@ class Woo_Minecraft {
 	 *
 	 * @param WP_Post $order_post
 	 * @param string $key Server key to check against
+	 *
 	 * @author JayWood
 	 * @return array|mixed
 	 */
@@ -277,13 +278,14 @@ class Woo_Minecraft {
 	 * Processes all completed commands.
 	 *
 	 * @author JayWood
+	 *
 	 * @param string $key
 	 */
 	private function process_completed_commands( $key = '' ) {
 		$delivered = '_wmc_delivered_' . $key;
 		$order_ids = (array) $this->sanitized_orders_post( $_POST['processedOrders'] );
 
-		if (  empty( $order_ids ) ) {
+		if ( empty( $order_ids ) ) {
 			wp_send_json_error( array( 'msg' => __( 'Commands was empty', 'woominecraft' ) ) );
 		}
 
@@ -312,7 +314,7 @@ class Woo_Minecraft {
 		}
 
 		?>
-		<div id="woo_minecraft"><?php
+        <div id="woo_minecraft"><?php
 		woocommerce_form_field( 'player_id', array(
 			'type'        => 'text',
 			'class'       => array(),
@@ -336,6 +338,7 @@ class Woo_Minecraft {
 	public function reset_order( $order_id, $server_key ) {
 		delete_post_meta( $order_id, '_wmc_delivered_' . $server_key );
 		$this->bust_command_cache( $order_id );
+
 		return true;
 	}
 
@@ -399,7 +402,7 @@ class Woo_Minecraft {
 		}
 
 		$player_id = isset( $_POST['player_id'] ) ? esc_attr( $_POST['player_id'] ) : false;
-		$items    = $woocommerce->cart->cart_contents;
+		$items     = $woocommerce->cart->cart_contents;
 
 		if ( ! wmc_items_have_commands( $items ) ) {
 			return;
@@ -433,9 +436,9 @@ class Woo_Minecraft {
 	 */
 	public function save_commands_to_order( $order_id ) {
 
-		$order_data   = new WC_Order( $order_id );
-		$items       = $order_data->get_items();
-		$tmp_array   = array();
+		$order_data = new WC_Order( $order_id );
+		$items      = $order_data->get_items();
+		$tmp_array  = array();
 
 		if ( ! isset( $_POST['player_id'] ) || empty( $_POST['player_id'] ) ) {
 			return;
@@ -486,9 +489,9 @@ class Woo_Minecraft {
 		$player_name = get_post_meta( $id, 'player_id', true );
 		if ( ! empty( $player_name ) ) {
 			?>
-			<div class="woo_minecraft"><h4><?php _e( 'Minecraft Details', 'woominecraft' ); ?></h4>
+            <div class="woo_minecraft"><h4><?php _e( 'Minecraft Details', 'woominecraft' ); ?></h4>
 
-			<p><strong><?php _e( 'Username:', 'woominecraft' ); ?></strong><?php echo $player_name ?></p></div><?php
+            <p><strong><?php _e( 'Username:', 'woominecraft' ); ?></strong><?php echo $player_name ?></p></div><?php
 		}
 	}
 
