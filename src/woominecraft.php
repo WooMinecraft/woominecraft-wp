@@ -149,7 +149,7 @@ class Woo_Minecraft {
 
 		$key = sanitize_text_field( $_GET['wmc_key'] ); // @codingStandardsIgnoreLine Just sanitize, no nonce needed.
 
-		if ( ! isset( $key ) ) { // @codingStandardsIgnoreLine No nonce validation needed.
+		if ( ! $key ) { // @codingStandardsIgnoreLine No nonce validation needed.
 			// Bail if no key
 			return;
 		}
@@ -519,9 +519,9 @@ class Woo_Minecraft {
 		$player_name = get_post_meta( $id, 'player_id', true );
 		if ( ! empty( $player_name ) ) {
 			?>
-			<div class="woo_minecraft"><h4><?php _e( 'Minecraft Details', 'woominecraft' ); ?></h4>
+			<div class="woo_minecraft"><h4><?php esc_html_e( 'Minecraft Details', 'woominecraft' ); ?></h4>
 
-			<p><strong><?php _e( 'Username:', 'woominecraft' ); ?></strong><?php echo $player_name ?></p></div><?php
+			<p><strong><?php esc_html_e( 'Username:', 'woominecraft' ); ?></strong><?php echo esc_html( $player_name ); ?></p></div><?php
 		}
 	}
 
