@@ -12,7 +12,7 @@ Author URI: http://plugish.com
 */
 
 function wmc_autoload_classes( $class_name ) {
-	if ( 0 != strpos( $class_name, 'WCM_' ) ) {
+	if ( 0 !== strpos( $class_name, 'WCM_' ) ) {
 		return false;
 	}
 
