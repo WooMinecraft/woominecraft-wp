@@ -127,18 +127,19 @@ class Woo_Minecraft {
 	}
 
 	/**
-     * Creates a transient based on the wmc_key variable
-     *
-     * @since 1.2
-     *
+	 * Creates a transient based on the wmc_key variable
+	 *
+	 * @since 1.2
+	 *
 	 * @return string|false The key on success, false if no GET param can be found.
 	 */
 	private function get_transient_key() {
 		$key = sanitize_text_field( $_GET['wmc_key'] ); // @codingStandardsIgnoreLine we don't care, just escape the data.
-        if ( ! $key ) {
-            return false;
-        }
-        return $this->command_transient . '_' . $key;
+		if ( ! $key ) {
+			return false;
+		}
+
+		return $this->command_transient . '_' . $key;
 	}
 
 	/**
@@ -146,7 +147,7 @@ class Woo_Minecraft {
 	 */
 	public function json_feed() {
 
-	    $key = sanitize_text_field( $_GET['wmc_key'] ); // @codingStandardsIgnoreLine Just sanitize, no nonce needed.
+		$key = sanitize_text_field( $_GET['wmc_key'] ); // @codingStandardsIgnoreLine Just sanitize, no nonce needed.
 
 		if ( ! isset( $key ) ) { // @codingStandardsIgnoreLine No nonce validation needed.
 			// Bail if no key
@@ -282,7 +283,7 @@ class Woo_Minecraft {
 	 * @author JayWood
 	 */
 	public function bust_command_cache( $post_id = 0 ) {
-	    global $wpdb;
+		global $wpdb;
 
 		if ( ! empty( $post_id ) && 'shop_order' !== get_post_type( $post_id ) ) {
 			return;
@@ -290,13 +291,13 @@ class Woo_Minecraft {
 
 		$keys = $wpdb->get_col( $wpdb->prepare( "select distinct option_name from {$wpdb->options} where option_name like '%s'", '%' . $this->command_transient . '%' ) );
 		if ( ! $keys ) {
-		    return;
-        }
+			return;
+		}
 
-        foreach ( $keys as $key ) {
-		    $key = str_replace( '_transient_', '', $key );
-		    delete_transient( $key );
-        }
+		foreach ( $keys as $key ) {
+			$key = str_replace( '_transient_', '', $key );
+			delete_transient( $key );
+		}
 	}
 
 	/**
@@ -486,7 +487,7 @@ class Woo_Minecraft {
 			}
 
 			// Loop over the command set for every 1 qty of the item.
-			for ( $n = 0; $n < absint( $item['qty'] ); $n++ ) {
+			for ( $n = 0; $n < absint( $item['qty'] ); $n ++ ) {
 				foreach ( $item_commands as $server_key => $command ) {
 					if ( ! isset( $tmp_array[ $server_key ] ) ) {
 						$tmp_array[ $server_key ] = array();
