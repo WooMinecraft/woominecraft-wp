@@ -45,7 +45,7 @@ class Woo_Minecraft {
 	 * @var  string
 	 * @since  0.1.0
 	 */
-	const VERSION = '1.1.1';
+	const VERSION = '1.1.';
 
 	/**
 	 * URL of plugin directory
@@ -217,7 +217,7 @@ class Woo_Minecraft {
 				}
 			}
 
-			set_transient( $this->command_transient, $output, 60 * 60 ); // Stores the feed in a transient for 1 hour.
+			set_transient( $this->get_transient_key(), $output, 60 * 60 ); // Stores the feed in a transient for 1 hour.
 		}
 
 		wp_send_json_success( $output );
@@ -283,12 +283,21 @@ class Woo_Minecraft {
 	 * @author JayWood
 	 */
 	public function bust_command_cache( $post_id = 0 ) {
+	    global $wpdb;
 
 		if ( ! empty( $post_id ) && 'shop_order' !== get_post_type( $post_id ) ) {
 			return;
 		}
 
-		delete_transient( $this->command_transient );
+		$keys = $wpdb->get_col( $wpdb->prepare( "select distinct option_name from {$wpdb->options} where option_name like '%s'", '%' . $this->command_transient . '%' ) );
+		if ( ! $keys ) {
+		    return;
+        }
+
+        foreach ( $keys as $key ) {
+		    $key = str_replace( '_transient_', '', $key );
+		    delete_transient( $key );
+        }
 	}
 
 	/**
