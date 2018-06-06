@@ -7,51 +7,51 @@
 $servers = woo_minecraft()->admin->get_servers();
 ?>
 <div class="woo_minecraft">
-	<p class="title"><?php _e( 'WooMinecraft Commands', 'woominecraft' ); ?></p>
+	<p class="title"><?php esc_html_e( 'WooMinecraft Commands', 'woominecraft' ); ?></p>
 	<table class="woominecraft commands" cellpadding="5px">
 		<thead>
 			<tr>
 				<th class="command">
-					<?php _e( 'Command', 'woominecraft' ); ?>
-					<?php echo wc_help_tip( __( 'The player name will be put in place of %s.  You also do not have to use a slash to start the command.', 'woominecraft' ) ); ?>
+					<?php esc_html_e( 'Command', 'woominecraft' ); ?>
+					<?php echo wc_help_tip( esc_html__( 'The player name will be put in place of %s.  You also do not have to use a slash to start the command.', 'woominecraft' ) ); ?>
 				</th>
 				<th class="server">
-					<?php _e( 'Server', 'woominecraft' ); ?>
-					<?php echo wc_help_tip( __( 'Servers are managed under WooCommerce General Settings', 'woominecraft' ) ); ?>
+					<?php esc_html_e( 'Server', 'woominecraft' ); ?>
+					<?php echo wc_help_tip( esc_html__( 'Servers are managed under WooCommerce General Settings', 'woominecraft' ) ); ?>
 				</th>
-				<th class="buttons"><input type="button" class="button button-small button-primary wmc_add_server" value="<?php _e( 'Add Command', 'woominecraft' ); ?>" /></th>
+				<th class="buttons"><input type="button" class="button button-small button-primary wmc_add_server" value="<?php esc_html_e( 'Add Command', 'woominecraft' ); ?>" /></th>
 			</tr>
 		</thead>
 		<tbody>
 			<?php if ( ! isset( $commands ) || empty( $commands ) ) : ?>
 			<tr class="row">
-				<td><input type="text" name="wmc_commands[<?php echo $command_key; ?>][post_<?php echo $post_id; ?>][0][command]" class="widefat" placeholder="<?php echo _x( 'give %s apple 1', 'Sample Command', 'woominecraft' ); ?>" /> </td>
+				<td><input type="text" name="wmc_commands[<?php echo esc_attr( $command_key ); ?>][post_<?php echo (int) $post_id; ?>][0][command]" class="widefat" placeholder="<?php echo esc_attr_x( 'give %s apple 1', 'Sample Command', 'woominecraft' ); ?>" /> </td>
 				<td>
-					<select name="wmc_commands[<?php echo $command_key; ?>][post_<?php echo $post_id; ?>][0][server]" >
+					<select name="wmc_commands[<?php echo esc_attr( $command_key ); ?>][post_<?php echo (int) $post_id; ?>][0][server]" >
 					<?php
 					foreach ( $servers as $server ) {
-						printf( '<option value="%s">%s</option>', $server['key'], $server['name'] );
+						printf( '<option value="%s">%s</option>', esc_attr( $server['key'] ), esc_html( $server['name'] ) );
 					}
 					?>
 					</select>
 				</td>
-				<td><input type="button" class="button button-small wmc_delete_server" value="<?php _e( 'Delete Command', 'woominecraft' ); ?>" /></td>
+				<td><input type="button" class="button button-small wmc_delete_server" value="<?php esc_html_e( 'Delete Command', 'woominecraft' ); ?>" /></td>
 			</tr>
 			<?php else : ?>
 				<?php $offset = 0; foreach ( $commands as $server_key => $command ) : ?>
-					<?php foreach( $command as $player_command ) : ?>
+					<?php foreach ( $command as $player_command ) : ?>
 					<tr class="row">
-						<td><input type="text" name="wmc_commands[<?php echo $command_key; ?>][post_<?php echo $post_id; ?>][<?php echo $offset; ?>][command]" class="widefat" placeholder="<?php _e( 'give %s apple 1', 'woominecraft' ); ?>" value="<?php echo $player_command; ?>" /> </td>
+						<td><input type="text" name="wmc_commands[<?php echo esc_attr( $command_key ); ?>][post_<?php echo (int) $post_id; ?>][<?php echo (int) $offset; ?>][command]" class="widefat" placeholder="<?php esc_html_e( 'give %s apple 1', 'woominecraft' ); ?>" value="<?php echo esc_attr( $player_command ); ?>" /> </td>
 						<td>
-							<select name="wmc_commands[<?php echo $command_key; ?>][post_<?php echo $post_id; ?>][<?php echo $offset; ?>][server]" >
+							<select name="wmc_commands[<?php echo esc_attr( $command_key ); ?>][post_<?php echo (int) $post_id; ?>][<?php echo (int) $offset; ?>][server]" >
 								<?php
 								foreach ( $servers as $server ) {
-									printf( '<option value="%s" %s>%s</option>', $server['key'], selected( $server['key'], $server_key, false ), $server['name'] );
+									printf( '<option value="1%$s" %2$s>%3$s</option>', esc_attr( $server['key'] ), selected( $server['key'], $server_key, false ), esc_html( $server['name'] ) );
 								}
 								?>
 							</select>
 						</td>
-						<td><input type="button" class="button button-small wmc_delete_server" value="<?php _e( 'Delete Command', 'woominecraft' ); ?>" /></td>
+						<td><input type="button" class="button button-small wmc_delete_server" value="<?php esc_html_e( 'Delete Command', 'woominecraft' ); ?>" /></td>
 					</tr>
 					<?php $offset++; endforeach; ?>
 				<?php endforeach; ?>
