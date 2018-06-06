@@ -289,7 +289,7 @@ class Woo_Minecraft {
 			return;
 		}
 
-		$keys = $wpdb->get_col( $wpdb->prepare( "select distinct option_name from {$wpdb->options} where option_name like '%s'", '%' . $this->command_transient . '%' ) );
+		$keys = $wpdb->get_col( $wpdb->prepare( "select distinct option_name from {$wpdb->options} where option_name like '%s'", '%' . $this->command_transient . '%' ) ); // @codingStandardsIgnoreLine Have to use this.
 		if ( ! $keys ) {
 			return;
 		}
@@ -309,7 +309,7 @@ class Woo_Minecraft {
 	 */
 	private function process_completed_commands( $key = '' ) {
 		$delivered = '_wmc_delivered_' . $key;
-		$order_ids = (array) $this->sanitized_orders_post( $_POST['processedOrders'] );
+		$order_ids = (array) $this->sanitized_orders_post( $_POST['processedOrders'] ); // @codingStandardsIgnoreLine No need for a nonce.
 
 		if ( empty( $order_ids ) ) {
 			wp_send_json_error( array( 'msg' => __( 'Commands was empty', 'woominecraft' ) ) );
@@ -340,14 +340,17 @@ class Woo_Minecraft {
 		}
 
 		?>
-        <div id="woo_minecraft"><?php
-		woocommerce_form_field( 'player_id', array(
-			'type'        => 'text',
-			'class'       => array(),
-			'label'       => __( 'Player ID ( Minecraft Username ):', 'woominecraft' ),
-			'placeholder' => __( 'Required Field', 'woominecraft' ),
-		), $cart->get_value( 'player_id' ) );
-		?></div><?php
+		<div id="woo_minecraft">
+			<?php
+			woocommerce_form_field( 'player_id', array(
+				'type'        => 'text',
+				'class'       => array(),
+				'label'       => __( 'Player ID ( Minecraft Username ):', 'woominecraft' ),
+				'placeholder' => __( 'Required Field', 'woominecraft' ),
+			), $cart->get_value( 'player_id' ) );
+			?>
+		</div>
+		<?php
 
 		return true;
 	}
@@ -388,17 +391,17 @@ class Woo_Minecraft {
 		$key     = md5( 'minecraft_player_' . $player_id );
 		$mc_json = wp_cache_get( $key, 'woominecraft' );
 
-		if ( false == $mc_json ) {
+		if ( false == $mc_json ) { // @codingStandardsIgnoreLine Lose compare is fine here.
 
 			$post_config = apply_filters( 'mojang_profile_api_post_args', array(
-				'body'    => json_encode( array( rawurlencode( $player_id ) ) ),
+				'body'    => json_encode( array( rawurlencode( $player_id ) ) ), // @codingStandardsIgnoreLine Nope, need this.
 				'method'  => 'POST',
 				'headers' => array( 'content-type' => 'application/json' ),
 			) );
 
 			$minecraft_account = wp_remote_post( 'https://api.mojang.com/profiles/minecraft', $post_config );
 
-			if ( 200 != wp_remote_retrieve_response_code( $minecraft_account ) ) {
+			if ( 200 !== wp_remote_retrieve_response_code( $minecraft_account ) ) {
 				return false;
 			}
 
@@ -427,7 +430,7 @@ class Woo_Minecraft {
 			return;
 		}
 
-		$player_id = isset( $_POST['player_id'] ) ? esc_attr( $_POST['player_id'] ) : false;
+		$player_id = isset( $_POST['player_id'] ) ? sanitize_text_field( $_POST['player_id'] ) : false; // @codingStandardsIgnoreLine No nonce needed.
 		$items     = $woocommerce->cart->cart_contents;
 
 		if ( ! wmc_items_have_commands( $items ) ) {
@@ -466,11 +469,11 @@ class Woo_Minecraft {
 		$items      = $order_data->get_items();
 		$tmp_array  = array();
 
-		if ( ! isset( $_POST['player_id'] ) || empty( $_POST['player_id'] ) ) {
+		if ( ! isset( $_POST['player_id'] ) || empty( $_POST['player_id'] ) ) { // @codingStandardsIgnoreLine No nonce needed.
 			return;
 		}
 
-		$player_name = esc_attr( $_POST['player_id'] );
+		$player_name = sanitize_text_field( $_POST['player_id'] ); // @codingStandardsIgnoreLine No nonce needed.
 		update_post_meta( $order_id, 'player_id', $player_name );
 
 		foreach ( $items as $item ) {
@@ -487,7 +490,8 @@ class Woo_Minecraft {
 			}
 
 			// Loop over the command set for every 1 qty of the item.
-			for ( $n = 0; $n < absint( $item['qty'] ); $n ++ ) {
+			$qty = absint( $item['qty'] );
+			for ( $n = 0; $n < $qty; $n ++ ) {
 				foreach ( $item_commands as $server_key => $command ) {
 					if ( ! isset( $tmp_array[ $server_key ] ) ) {
 						$tmp_array[ $server_key ] = array();
@@ -515,9 +519,9 @@ class Woo_Minecraft {
 		$player_name = get_post_meta( $id, 'player_id', true );
 		if ( ! empty( $player_name ) ) {
 			?>
-            <div class="woo_minecraft"><h4><?php _e( 'Minecraft Details', 'woominecraft' ); ?></h4>
+			<div class="woo_minecraft"><h4><?php _e( 'Minecraft Details', 'woominecraft' ); ?></h4>
 
-            <p><strong><?php _e( 'Username:', 'woominecraft' ); ?></strong><?php echo $player_name ?></p></div><?php
+			<p><strong><?php _e( 'Username:', 'woominecraft' ); ?></strong><?php echo $player_name ?></p></div><?php
 		}
 	}
 
