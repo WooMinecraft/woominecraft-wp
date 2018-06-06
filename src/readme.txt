@@ -55,6 +55,7 @@ Yea sure, we've all use to BuyCraft, but well, it doesn't have the flexibility o
 
 = 1.2 =
 * Fix major bug in multiple-server setups with transient keys.
+* Fix major vulnerability in build tools, updated gulp in package.json
 
 = 1.1.1 =
 * Update for WooCommerce 3.3.3
