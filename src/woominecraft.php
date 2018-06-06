@@ -146,7 +146,9 @@ class Woo_Minecraft {
 	 */
 	public function json_feed() {
 
-		if ( ! isset( $_REQUEST['wmc_key'] ) ) { // @codingStandardsIgnoreLine No nonce validation needed.
+	    $key = sanitize_text_field( $_GET['wmc_key'] ); // @codingStandardsIgnoreLine Just sanitize, no nonce needed.
+
+		if ( ! isset( $key ) ) { // @codingStandardsIgnoreLine No nonce validation needed.
 			// Bail if no key
 			return;
 		}
@@ -160,14 +162,11 @@ class Woo_Minecraft {
 			wp_send_json_error( array( 'msg' => 'WordPress keys are not set.' ) );
 		}
 
-		if ( false === array_search( $_GET['wmc_key'], $keys ) ) { // @codingStandardsIgnoreLine I really hate this standard of nonce validation in this context...
+		if ( false === array_search( $key, $keys ) ) { // @codingStandardsIgnoreLine I really hate this standard of nonce validation in this context...
 			wp_send_json_error( array( 'msg' => 'Invalid key supplied to WordPress, compare your keys.' ) );
 		}
 
-		$key = esc_attr( $_GET['wmc_key'] ); // @codingStandardsIgnoreLine Just sanitizing.
-
 		if ( isset( $_REQUEST['processedOrders'] ) ) { // @codingStandardsIgnoreLine No need for nonce here.
-
 			$this->process_completed_commands( $key );
 		}
 
