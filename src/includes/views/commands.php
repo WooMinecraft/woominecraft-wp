@@ -46,7 +46,7 @@ $servers = woo_minecraft()->admin->get_servers();
 							<select name="wmc_commands[<?php echo esc_attr( $command_key ); ?>][post_<?php echo (int) $post_id; ?>][<?php echo (int) $offset; ?>][server]" >
 								<?php
 								foreach ( $servers as $server ) {
-									printf( '<option value="1%$s" %2$s>%3$s</option>', esc_attr( $server['key'] ), selected( $server['key'], $server_key, false ), esc_html( $server['name'] ) );
+									printf( '<option value="%1$s" %2$s>%3$s</option>', esc_attr( $server['key'] ), selected( $server['key'], $server_key, false ), esc_html( $server['name'] ) );
 								}
 								?>
 							</select>
