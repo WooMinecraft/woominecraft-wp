@@ -127,11 +127,26 @@ class Woo_Minecraft {
 	}
 
 	/**
+     * Creates a transient based on the wmc_key variable
+     *
+     * @since 1.2
+     *
+	 * @return string|false The key on success, false if no GET param can be found.
+	 */
+	private function get_transient_key() {
+		$key = sanitize_text_field( $_GET['wmc_key'] ); // @codingStandardsIgnoreLine we don't care, just escape the data.
+        if ( ! $key ) {
+            return false;
+        }
+        return $this->command_transient . '_' . $key;
+	}
+
+	/**
 	 * Produces the JSON Feed for Orders Pending Delivery
 	 */
 	public function json_feed() {
 
-		if ( ! isset( $_REQUEST['wmc_key'] ) ) {
+		if ( ! isset( $_REQUEST['wmc_key'] ) ) { // @codingStandardsIgnoreLine No nonce validation needed.
 			// Bail if no key
 			return;
 		}
@@ -145,18 +160,20 @@ class Woo_Minecraft {
 			wp_send_json_error( array( 'msg' => 'WordPress keys are not set.' ) );
 		}
 
-		if ( false === array_search( $_GET['wmc_key'], $keys ) ) {
+		if ( false === array_search( $_GET['wmc_key'], $keys ) ) { // @codingStandardsIgnoreLine I really hate this standard of nonce validation in this context...
 			wp_send_json_error( array( 'msg' => 'Invalid key supplied to WordPress, compare your keys.' ) );
 		}
 
-		$key = esc_attr( $_GET['wmc_key'] );
+		$key = esc_attr( $_GET['wmc_key'] ); // @codingStandardsIgnoreLine Just sanitizing.
 
-		if ( isset( $_REQUEST['processedOrders'] ) ) {
+		if ( isset( $_REQUEST['processedOrders'] ) ) { // @codingStandardsIgnoreLine No need for nonce here.
 
 			$this->process_completed_commands( $key );
 		}
 
-		if ( false === ( $output = get_transient( $this->command_transient ) ) || isset( $_GET['delete-trans'] ) ) {
+		$output = get_transient( $this->get_transient_key() );
+
+		if ( false === $output || isset( $_GET['delete-trans'] ) ) { // @codingStandardsIgnoreLine Not verifying because we don't need to, just checking if isset.
 
 			$delivered = '_wmc_delivered_' . $key;
 			$meta_key  = '_wmc_commands_' . $key;
