@@ -11,6 +11,5 @@ cache:
     - src/node_modules
 install:
   - cd src && npm install
-scripts:
+script:
   - cd src && gulp
-script: "No phpunit tests yet"
