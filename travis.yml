@@ -1,4 +1,6 @@
 language: php
+rvm:
+  - 5.6
 install:
   - cd src && npm install
 scripts:
