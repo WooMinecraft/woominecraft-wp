@@ -10,6 +10,7 @@ cache:
     - vendor
     - src/node_modules
 before_install:
+  - npm install -g npm
   - npm install -g gulp
 install:
   - cd "src" && npm install
