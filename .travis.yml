@@ -3,6 +3,10 @@ php:
   - '5.6'
   - '7.1'
   - '7.2'
+cache:
+  directories:
+    - vendor
+    - src/node_modules
 install:
   - cd src && npm install
 scripts:
