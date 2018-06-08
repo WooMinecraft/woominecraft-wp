@@ -1,2 +1,11 @@
 node_modules
 .sass_cache
+.idea
+/vendor/
+docker/minecraft/*
+!docker/minecraft/Readme.md
+docker/minecraft2/*
+!docker/minecraft2/Readme.md
+docker/mysql/*
+!docker/mysql/.gitkeep
+dist/*

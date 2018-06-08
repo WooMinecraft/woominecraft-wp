@@ -6,8 +6,8 @@
 **Tags:** minecraft, woocommerce, donations   
 **License:** GPLv2 or later   
 **Requires at least:** 4.4.2   
-**Tested up to:** 4.9.4   
-**Stable tag:** 1.1.1  
+**Tested up to:** 4.9.6   
+**Stable tag:** 1.2  
 
 A FREE Minecraft Donation plugin which works in conjunction with my WooMinecraft java plugin for Minecraft to provide a self-hosted donation platform.
 
@@ -63,6 +63,10 @@ payments - [check google](http://lmgtfy.com/?q###Woocommerce+payment+gateways)
    _( Multi-server Support )_
 
 ## Changelog
+
+### 1.2
+* Fix major bug in multiple-server setups with transient keys.
+* Fix major vulnerability in build tools, updated gulp in package.json
 
 ### 1.1.1
 * Update for WooCommerce 3.3.3

@@ -13,21 +13,21 @@ var sass_options = {
 };
 
 gulp.task( 'scripts', function() {
-	gulp.src( 'assets/js/jquery.woo.js' )
+	return gulp.src( 'assets/js/jquery.woo.js' )
 		.pipe( gp_uglify() )
 		.pipe( gp_rename( 'jquery.woo.min.js' ) )
 		.pipe( gulp.dest( 'assets/js' ) );
 } );
 
 gulp.task( 'sass', function() {
-	gulp.src( 'assets/sass/*.scss' )
+	return gulp.src( 'assets/sass/*.scss' )
 		.pipe( gp_sass( sass_options ) )
 		.pipe( gp_rename( 'style.css' ) )
 		.pipe( gulp.dest( './' ) );
 } );
 
 gulp.task( 'cssmin', function() {
-	gulp.src( 'style.css' )
+	return gulp.src( 'style.css' )
 		.pipe( gp_cssmin() )
 		.pipe( gp_rename( 'style.min.css' ) )
 		.pipe( gulp.dest( './' ) );
@@ -38,5 +38,17 @@ gulp.task( 'watch', function() {
 	gulp.watch( 'assets/sass/*.scss', [ 'sass', 'cssmin' ] );
 } );
 
-gulp.task( 'default', ['scripts', 'sass', 'cssmin'] );
-gulp.task( 'styles', [ 'sass', 'cssmin' ] );
+gulp.task( 'build', function() {
+	return gulp.src([
+		'*.php',
+		'*.png',
+		'*.css',
+		'LICENSE',
+		'readme.txt',
+		'assets',
+		'includes',
+		'languages',
+	]).pipe( gulp.dest( '../dist/woominecraft/trunk' ) );
+} );
+
+gulp.task( 'default', gulp.series( 'scripts', 'sass', 'cssmin' ) );

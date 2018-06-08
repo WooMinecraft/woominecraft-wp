@@ -1,0 +1,1 @@
+This directory will hold your MySQL data for persistent storage.

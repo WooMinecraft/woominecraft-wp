@@ -4,7 +4,7 @@ Plugin Name: Minecraft WooCommerce
 Plugin URI: http://woominecraft.com
 Description: To be used in conjunction with the WooMinecraft Bukkit plugin.  If you do not have it you can get it on the repository at <a href="https://github.com/JayWood/WooMinecraft">Github</a>.  Please be sure and fork the repository and make pull requests.
 Author: Jerry Wood
-Version: 1.1.1
+Version: 1.2
 License: GPLv2
 Text Domain: woominecraft
 Domain Path: /languages
@@ -12,7 +12,7 @@ Author URI: http://plugish.com
 */
 
 function wmc_autoload_classes( $class_name ) {
-	if ( 0 != strpos( $class_name, 'WCM_' ) ) {
+	if ( 0 !== strpos( $class_name, 'WCM_' ) ) {
 		return false;
 	}
 
@@ -45,7 +45,7 @@ class Woo_Minecraft {
 	 * @var  string
 	 * @since  0.1.0
 	 */
-	const VERSION = '1.1.1';
+	const VERSION = '1.2';
 
 	/**
 	 * URL of plugin directory
@@ -127,11 +127,29 @@ class Woo_Minecraft {
 	}
 
 	/**
+	 * Creates a transient based on the wmc_key variable
+	 *
+	 * @since 1.2
+	 *
+	 * @return string|false The key on success, false if no GET param can be found.
+	 */
+	private function get_transient_key() {
+		$key = sanitize_text_field( $_GET['wmc_key'] ); // @codingStandardsIgnoreLine we don't care, just escape the data.
+		if ( ! $key ) {
+			return false;
+		}
+
+		return $this->command_transient . '_' . $key;
+	}
+
+	/**
 	 * Produces the JSON Feed for Orders Pending Delivery
 	 */
 	public function json_feed() {
 
-		if ( ! isset( $_REQUEST['wmc_key'] ) ) {
+		$key = sanitize_text_field( $_GET['wmc_key'] ); // @codingStandardsIgnoreLine Just sanitize, no nonce needed.
+
+		if ( ! $key ) { // @codingStandardsIgnoreLine No nonce validation needed.
 			// Bail if no key
 			return;
 		}
@@ -145,21 +163,20 @@ class Woo_Minecraft {
 			wp_send_json_error( array( 'msg' => 'WordPress keys are not set.' ) );
 		}
 
-		if ( false === array_search( $_GET['wmc_key'], $keys ) ) {
+		if ( false === array_search( $key, $keys ) ) { // @codingStandardsIgnoreLine I really hate this standard of nonce validation in this context...
 			wp_send_json_error( array( 'msg' => 'Invalid key supplied to WordPress, compare your keys.' ) );
 		}
 
-		$key = esc_attr( $_GET['wmc_key'] );
-
-		if ( isset( $_REQUEST['processedOrders'] ) ) {
-
+		if ( isset( $_REQUEST['processedOrders'] ) ) { // @codingStandardsIgnoreLine No need for nonce here.
 			$this->process_completed_commands( $key );
 		}
 
-		if ( false === ( $output = get_transient( $this->command_transient ) ) || isset( $_GET['delete-trans'] ) ) {
+		$output = get_transient( $this->get_transient_key() );
+
+		if ( false === $output || isset( $_GET['delete-trans'] ) ) { // @codingStandardsIgnoreLine Not verifying because we don't need to, just checking if isset.
 
 			$delivered = '_wmc_delivered_' . $key;
-			$meta_key = '_wmc_commands_' . $key;
+			$meta_key  = '_wmc_commands_' . $key;
 
 			$order_query = apply_filters( 'woo_minecraft_json_orders_args', array(
 				'posts_per_page' => '-1',
@@ -168,7 +185,7 @@ class Woo_Minecraft {
 				'meta_query'     => array(
 					'relation' => 'AND',
 					array(
-						'key' => $meta_key,
+						'key'     => $meta_key,
 						'compare' => 'EXISTS',
 					),
 					array(
@@ -200,7 +217,7 @@ class Woo_Minecraft {
 				}
 			}
 
-			set_transient( $this->command_transient, $output, 60 * 60 ); // Stores the feed in a transient for 1 hour.
+			set_transient( $this->get_transient_key(), $output, 60 * 60 ); // Stores the feed in a transient for 1 hour.
 		}
 
 		wp_send_json_success( $output );
@@ -212,6 +229,7 @@ class Woo_Minecraft {
 	 *
 	 * @param WP_Post $order_post
 	 * @param string $key Server key to check against
+	 *
 	 * @author JayWood
 	 * @return array|mixed
 	 */
@@ -265,25 +283,35 @@ class Woo_Minecraft {
 	 * @author JayWood
 	 */
 	public function bust_command_cache( $post_id = 0 ) {
+		global $wpdb;
 
 		if ( ! empty( $post_id ) && 'shop_order' !== get_post_type( $post_id ) ) {
 			return;
 		}
 
-		delete_transient( $this->command_transient );
+		$keys = $wpdb->get_col( $wpdb->prepare( "select distinct option_name from {$wpdb->options} where option_name like '%s'", '%' . $this->command_transient . '%' ) ); // @codingStandardsIgnoreLine Have to use this.
+		if ( ! $keys ) {
+			return;
+		}
+
+		foreach ( $keys as $key ) {
+			$key = str_replace( '_transient_', '', $key );
+			delete_transient( $key );
+		}
 	}
 
 	/**
 	 * Processes all completed commands.
 	 *
 	 * @author JayWood
+	 *
 	 * @param string $key
 	 */
 	private function process_completed_commands( $key = '' ) {
 		$delivered = '_wmc_delivered_' . $key;
-		$order_ids = (array) $this->sanitized_orders_post( $_POST['processedOrders'] );
+		$order_ids = (array) $this->sanitized_orders_post( $_POST['processedOrders'] ); // @codingStandardsIgnoreLine No need for a nonce.
 
-		if (  empty( $order_ids ) ) {
+		if ( empty( $order_ids ) ) {
 			wp_send_json_error( array( 'msg' => __( 'Commands was empty', 'woominecraft' ) ) );
 		}
 
@@ -312,14 +340,17 @@ class Woo_Minecraft {
 		}
 
 		?>
-		<div id="woo_minecraft"><?php
-		woocommerce_form_field( 'player_id', array(
-			'type'        => 'text',
-			'class'       => array(),
-			'label'       => __( 'Player ID ( Minecraft Username ):', 'woominecraft' ),
-			'placeholder' => __( 'Required Field', 'woominecraft' ),
-		), $cart->get_value( 'player_id' ) );
-		?></div><?php
+		<div id="woo_minecraft">
+			<?php
+			woocommerce_form_field( 'player_id', array(
+				'type'        => 'text',
+				'class'       => array(),
+				'label'       => __( 'Player ID ( Minecraft Username ):', 'woominecraft' ),
+				'placeholder' => __( 'Required Field', 'woominecraft' ),
+			), $cart->get_value( 'player_id' ) );
+			?>
+		</div>
+		<?php
 
 		return true;
 	}
@@ -336,6 +367,7 @@ class Woo_Minecraft {
 	public function reset_order( $order_id, $server_key ) {
 		delete_post_meta( $order_id, '_wmc_delivered_' . $server_key );
 		$this->bust_command_cache( $order_id );
+
 		return true;
 	}
 
@@ -359,17 +391,17 @@ class Woo_Minecraft {
 		$key     = md5( 'minecraft_player_' . $player_id );
 		$mc_json = wp_cache_get( $key, 'woominecraft' );
 
-		if ( false == $mc_json ) {
+		if ( false == $mc_json ) { // @codingStandardsIgnoreLine Lose compare is fine here.
 
 			$post_config = apply_filters( 'mojang_profile_api_post_args', array(
-				'body'    => json_encode( array( rawurlencode( $player_id ) ) ),
+				'body'    => json_encode( array( rawurlencode( $player_id ) ) ), // @codingStandardsIgnoreLine Nope, need this.
 				'method'  => 'POST',
 				'headers' => array( 'content-type' => 'application/json' ),
 			) );
 
 			$minecraft_account = wp_remote_post( 'https://api.mojang.com/profiles/minecraft', $post_config );
 
-			if ( 200 != wp_remote_retrieve_response_code( $minecraft_account ) ) {
+			if ( 200 !== wp_remote_retrieve_response_code( $minecraft_account ) ) {
 				return false;
 			}
 
@@ -398,8 +430,8 @@ class Woo_Minecraft {
 			return;
 		}
 
-		$player_id = isset( $_POST['player_id'] ) ? esc_attr( $_POST['player_id'] ) : false;
-		$items    = $woocommerce->cart->cart_contents;
+		$player_id = isset( $_POST['player_id'] ) ? sanitize_text_field( $_POST['player_id'] ) : false; // @codingStandardsIgnoreLine No nonce needed.
+		$items     = $woocommerce->cart->cart_contents;
 
 		if ( ! wmc_items_have_commands( $items ) ) {
 			return;
@@ -433,15 +465,15 @@ class Woo_Minecraft {
 	 */
 	public function save_commands_to_order( $order_id ) {
 
-		$order_data   = new WC_Order( $order_id );
-		$items       = $order_data->get_items();
-		$tmp_array   = array();
+		$order_data = new WC_Order( $order_id );
+		$items      = $order_data->get_items();
+		$tmp_array  = array();
 
-		if ( ! isset( $_POST['player_id'] ) || empty( $_POST['player_id'] ) ) {
+		if ( ! isset( $_POST['player_id'] ) || empty( $_POST['player_id'] ) ) { // @codingStandardsIgnoreLine No nonce needed.
 			return;
 		}
 
-		$player_name = esc_attr( $_POST['player_id'] );
+		$player_name = sanitize_text_field( $_POST['player_id'] ); // @codingStandardsIgnoreLine No nonce needed.
 		update_post_meta( $order_id, 'player_id', $player_name );
 
 		foreach ( $items as $item ) {
@@ -458,7 +490,8 @@ class Woo_Minecraft {
 			}
 
 			// Loop over the command set for every 1 qty of the item.
-			for ( $n = 0; $n < absint( $item['qty'] ); $n++ ) {
+			$qty = absint( $item['qty'] );
+			for ( $n = 0; $n < $qty; $n ++ ) {
 				foreach ( $item_commands as $server_key => $command ) {
 					if ( ! isset( $tmp_array[ $server_key ] ) ) {
 						$tmp_array[ $server_key ] = array();
@@ -486,9 +519,9 @@ class Woo_Minecraft {
 		$player_name = get_post_meta( $id, 'player_id', true );
 		if ( ! empty( $player_name ) ) {
 			?>
-			<div class="woo_minecraft"><h4><?php _e( 'Minecraft Details', 'woominecraft' ); ?></h4>
+			<div class="woo_minecraft"><h4><?php esc_html_e( 'Minecraft Details', 'woominecraft' ); ?></h4>
 
-			<p><strong><?php _e( 'Username:', 'woominecraft' ); ?></strong><?php echo $player_name ?></p></div><?php
+			<p><strong><?php esc_html_e( 'Username:', 'woominecraft' ); ?></strong><?php echo esc_html( $player_name ); ?></p></div><?php
 		}
 	}
 

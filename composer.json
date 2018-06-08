@@ -1,0 +1,29 @@
+{
+    "name": "jaywood/woominecraft-wp",
+    "description": "A minecraft donation plugin for WordPress",
+    "type": "project",
+    "license": "GPLv2",
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "woominecraft/woominecraft",
+                "version": "1.1.2",
+                "dist": {
+                    "type": "zip",
+                    "url": "https://github.com/WooMinecraft/WooMinecraft/releases/download/1.1.2/WooMinecraft-1.1.2.zip"
+                }
+            }
+        }
+    ],
+    "require-dev": {
+        "woocommerce/woocommerce": "^3.3",
+        "composer/installers": "^1.5",
+        "woominecraft/woominecraft": "1.1.2"
+    },
+    "extra": {
+        "installer-paths": {
+            "vendor/wp-plugins/{$name}/": ["type:wordpress-plugin"]
+        }
+    }
+}
