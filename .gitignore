@@ -8,3 +8,4 @@ docker/minecraft2/*
 !docker/minecraft2/Readme.md
 docker/mysql/*
 !docker/mysql/.gitkeep
+dist/*
