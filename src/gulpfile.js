@@ -38,5 +38,17 @@ gulp.task( 'watch', function() {
 	gulp.watch( 'assets/sass/*.scss', [ 'sass', 'cssmin' ] );
 } );
 
+gulp.task( 'build', function() {
+	return gulp.src([
+		'*.php',
+		'*.png',
+		'*.css',
+		'LICENSE',
+		'readme.txt',
+		'assets',
+		'includes',
+		'languages',
+	]).pipe( gulp.dest( '../dist/woominecraft/trunk' ) );
+} );
+
 gulp.task( 'default', gulp.series( 'scripts', 'sass', 'cssmin' ) );
-// gulp.task( 'styles', [ 'sass', 'cssmin' ] );
