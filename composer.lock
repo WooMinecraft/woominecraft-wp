@@ -129,16 +129,16 @@
         },
         {
             "name": "woocommerce/woocommerce",
-            "version": "3.5.2",
+            "version": "3.5.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/woocommerce/woocommerce.git",
-                "reference": "5dcd8a1d5fa7b7b41463f956d23e69490a20297c"
+                "reference": "5aba07ee73b8fbd615467ae6f075291b185159ae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/woocommerce/woocommerce/zipball/5dcd8a1d5fa7b7b41463f956d23e69490a20297c",
-                "reference": "5dcd8a1d5fa7b7b41463f956d23e69490a20297c",
+                "url": "https://api.github.com/repos/woocommerce/woocommerce/zipball/5aba07ee73b8fbd615467ae6f075291b185159ae",
+                "reference": "5aba07ee73b8fbd615467ae6f075291b185159ae",
                 "shasum": ""
             },
             "require": {
@@ -169,7 +169,7 @@
             ],
             "description": "An eCommerce toolkit that helps you sell anything. Beautifully.",
             "homepage": "https://woocommerce.com/",
-            "time": "2018-11-29T16:46:52+00:00"
+            "time": "2019-01-21T18:02:01+00:00"
         },
         {
             "name": "woominecraft/woominecraft",
