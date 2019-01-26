@@ -11,4 +11,7 @@ Domain Path: /languages
 Author URI: http://plugish.com
 */
 
-require_once 'includes/legacy.php';
+namespace WooMinecraft;
+
+require_once 'legacy/legacy.php';
+

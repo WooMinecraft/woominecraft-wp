@@ -1,29 +1,6 @@
 <?php
 
 /**
- * @param $class_name
- *
- * @return bool
- */
-function wmc_autoload_classes( $class_name ) {
-	if ( 0 !== strpos( $class_name, 'WCM_' ) ) {
-		return false;
-	}
-
-	$filename = strtolower( str_ireplace(
-		array( 'WCM_', '_' ),
-		array( '', '-' ),
-		$class_name
-	) );
-
-	Woo_Minecraft::include_file( $filename );
-
-	return true;
-}
-
-spl_autoload_register( 'wmc_autoload_classes' );
-
-/**
  * Class Woo_Minecraft
  *
  * @todo: Create some way of handling orphaned orders. See Below -
