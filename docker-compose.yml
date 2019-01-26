@@ -42,7 +42,7 @@ services:
     restart: always
 
   wordpress:
-    image: wordpress:4.9-php7.1-fpm-alpine
+    image: wordpress:5-php7.1-fpm-alpine
     depends_on:
       - mysql
     volumes:

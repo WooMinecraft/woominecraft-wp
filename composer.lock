@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d034597b64d1e54e83f4db7c4f61a949",
+    "content-hash": "9ad7e2c03aa64c759027656ebb29806c",
     "packages": [],
     "packages-dev": [
         {
@@ -128,50 +128,6 @@
             "time": "2018-08-27T06:10:37+00:00"
         },
         {
-            "name": "woocommerce/woocommerce",
-            "version": "3.5.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/woocommerce/woocommerce.git",
-                "reference": "5aba07ee73b8fbd615467ae6f075291b185159ae"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/woocommerce/woocommerce/zipball/5aba07ee73b8fbd615467ae6f075291b185159ae",
-                "reference": "5aba07ee73b8fbd615467ae6f075291b185159ae",
-                "shasum": ""
-            },
-            "require": {
-                "composer/installers": "~1.2"
-            },
-            "require-dev": {
-                "apigen/apigen": "^4",
-                "dealerdirect/phpcodesniffer-composer-installer": "^0.4.3",
-                "nette/utils": "~2.3.0",
-                "phpunit/phpunit": "6.*",
-                "squizlabs/php_codesniffer": "*",
-                "wimg/php-compatibility": "^8.0",
-                "woocommerce/woocommerce-git-hooks": "*",
-                "woocommerce/woocommerce-sniffs": "*",
-                "wp-coding-standards/wpcs": "^0.14"
-            },
-            "type": "wordpress-plugin",
-            "extra": {
-                "scripts-description": {
-                    "test": "Run unit tests",
-                    "phpcs": "Analyze code against the WordPress coding standards with PHP_CodeSniffer",
-                    "phpcbf": "Fix coding standards warnings/errors automatically with PHP Code Beautifier"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-3.0-or-later"
-            ],
-            "description": "An eCommerce toolkit that helps you sell anything. Beautifully.",
-            "homepage": "https://woocommerce.com/",
-            "time": "2019-01-21T18:02:01+00:00"
-        },
-        {
             "name": "woominecraft/woominecraft",
             "version": "1.1.2",
             "dist": {
@@ -181,6 +137,26 @@
                 "shasum": null
             },
             "type": "library"
+        },
+        {
+            "name": "wpackagist-plugin/woocommerce",
+            "version": "3.5.4",
+            "source": {
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/woocommerce/",
+                "reference": "tags/3.5.4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/plugin/woocommerce.3.5.4.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "require": {
+                "composer/installers": "~1.0"
+            },
+            "type": "wordpress-plugin",
+            "homepage": "https://wordpress.org/plugins/woocommerce/"
         }
     ],
     "aliases": [],
