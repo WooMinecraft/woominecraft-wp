@@ -1,7 +1,7 @@
 {
-  "name": "minecraft_woo",
-  "version": "0.0.0",
-  "description": "![](http://i.gyazo.com/ba51b7e45aa809d514c051266d0fbe6f.png)",
+  "name": "WooMinecraft",
+  "version": "1.0.5",
+  "description": "WooMinecraft - A WordPress counterpart to the Minecraft Plugin.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
