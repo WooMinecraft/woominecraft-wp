@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Class WCM_Admin
+ *
+ * @deprecated 1.3.0 All APIs should move to using the new APIs outside of the legacy folder.
+ */
 class WCM_Admin {
 
 	/**
@@ -17,7 +22,16 @@ class WCM_Admin {
 		$this->plugin = $plugin;
 	}
 
+	/**
+	 * Handles the hooks for WordPress and WooCommerce
+     *
+	 * @deprecated 1.3.0 All APIs should move to using the new APIs outside of the legacy folder.
+	 */
 	public function hooks() {
+
+	    // Add deprecation notice.
+	    _deprecated_function( __METHOD__, '1.3.0' );
+
 		add_action( 'admin_enqueue_scripts', array( $this, 'scripts' ) );
 
 		add_action( 'woocommerce_admin_order_data_after_shipping_address', array( $this, 'display_player_name_in_order_meta' ) );

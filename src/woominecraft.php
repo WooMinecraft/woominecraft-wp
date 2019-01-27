@@ -19,4 +19,3 @@ define( 'WMC_INCLUDES', plugin_dir_path( __FILE__ ) . 'includes/' );
  * The legacy class will be removed in
  */
 require_once 'legacy/legacy.php';
-
