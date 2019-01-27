@@ -366,17 +366,7 @@ class Woo_Minecraft {
 	/**
 	 * Caches the results of the mojang API based on player ID
 	 *
-	 * @param String $player_id Minecraft Username
-	 *
-	 * Object is as follows
-	 * {
-	 *    "id": "0d252b7218b648bfb86c2ae476954d32",
-	 *    "name": "CasESensatIveUserName",
-	 *    "legacy": true,
-	 *    "demo": true
-	 * }
-	 *
-	 * @return bool|object False on failure, Object on success
+	 * @deprecated 1.3.0 All APIs should move to using the new APIs outside of the legacy folder.
 	 */
 	public function mojang_player_cache() {
 		_deprecated_function( __METHOD__, '1.3.0', '\WooMinecraft\Mojang\get_player_from_cache' );

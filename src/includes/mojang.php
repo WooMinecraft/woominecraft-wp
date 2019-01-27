@@ -10,15 +10,17 @@ function setup() {
 		return __NAMESPACE__ . '\\' . $string;
 	};
 
-	add_action( 'woocommerce_checkout_process', $n( 'check_player' ) );
+	add_action( 'woocommerce_checkout_process', $n( 'validate_is_paid_player' ) );
 }
 
 /**
  * Checks if Minecraft Username is valid.
  *
+ * @since 1.3.0
+ *
  * @todo Change Global to use the wc() function instead.
  */
-function check_player() {
+function validate_is_paid_player() {
 	global $woocommerce;
 
 	if ( ! $woocommerce instanceof \WooCommerce ) {
@@ -54,9 +56,6 @@ function check_player() {
 
 /**
  * Caches the results of the mojang API based on player ID
- *
- * @param String $player_id Minecraft Username
- *
  * Object is as follows
  * {
  *    "id": "0d252b7218b648bfb86c2ae476954d32",
@@ -65,6 +64,9 @@ function check_player() {
  *    "demo": true
  * }
  *
+ *
+ * @param String $player_id Minecraft Username
+ * @since 1.3.0
  * @return bool|object False on failure, Object on success
  */
 function get_player_from_cache( $player_id ) {
