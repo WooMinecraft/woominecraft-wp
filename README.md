@@ -5,12 +5,11 @@
 **Contributors:** [JayWood](https://github.com/JayWood), [Ethan Smith](https://github.com/TekkitCommando)   
 **Tags:** minecraft, woocommerce, donations   
 **License:** GPLv2 or later   
-**Requires at least:** 4.4.2   
-**Tested up to:** 4.9.6   
-**Stable tag:** 1.2  
+**Requires at least:** 4.9   
+**Tested up to:** 5.0.3  
+**Stable tag:** 1.3  
 
 A FREE Minecraft Donation plugin which works in conjunction with my WooMinecraft java plugin for Minecraft to provide a self-hosted donation platform.
-
 
 ## Support
 If you enjoy this plugin and want to buy me a coffee sometime [feel free](https://www.paypal.me/jaywood) to tip your neighborly programmer.
@@ -63,6 +62,10 @@ payments - [check google](http://lmgtfy.com/?q###Woocommerce+payment+gateways)
    _( Multi-server Support )_
 
 ## Changelog
+
+### 1.3.0
+* Update to utilize the Rest API instead of a generic endpoint.
+* Ensure backwards compatibility until 1.4
 
 ### 1.2
 * Fix major bug in multiple-server setups with transient keys.
