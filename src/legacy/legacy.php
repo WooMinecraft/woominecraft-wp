@@ -378,7 +378,7 @@ class Woo_Minecraft {
 	 * @deprecated 1.3.0 All APIs should move to using the new APIs outside of the legacy folder.
 	 */
 	public function check_player() {
-		_deprecated_function( __METHOD__, '1.3.0', '\WooMinecraft\Mojang\check_player' );
+		_deprecated_function( __METHOD__, '1.3.0', '\WooMinecraft\Mojang\validate_is_paid_player' );
 	}
 
 
