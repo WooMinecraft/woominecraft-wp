@@ -1,10 +1,14 @@
 <?php
 
+require_once WMC_INCLUDES . 'admin.php';
+
 /**
  * Class Woo_Minecraft
  *
  * @todo: Create some way of handling orphaned orders. See Below -
  * If an order is created which had commands tied to a specific server, and that server is later deleted, those commands cannot be re-sent at any time.
+ *
+ * @deprecated 1.3.0 All APIs should move to using the new APIs outside of the legacy folder.
  *
  * @author JayWood
  */
@@ -562,6 +566,10 @@ class Woo_Minecraft {
 	 * @return Woo_Minecraft A single instance of this class.
 	 */
 	public static function get_instance() {
+
+	    // Mark the get_instance call as deprecated.
+	    _deprecated_function( __METHOD__, '1.3.0' );
+
 		if ( null === self::$single_instance ) {
 			self::$single_instance = new self();
 		}
@@ -593,7 +601,16 @@ class Woo_Minecraft {
 	}
 }
 
+/**
+ * Load the instanced class.
+ *
+ * @deprecated 1.3.0 All APIs should move to using the new APIs outside of the legacy folder.
+ *
+ * @return Woo_Minecraft
+ */
 function woo_minecraft() {
+    _deprecated_function( __FUNCTION__, '1.3.0' );
+
 	return Woo_Minecraft::get_instance();
 }
 
@@ -601,31 +618,28 @@ add_action( 'plugins_loaded', array( woo_minecraft(), 'hooks' ) );
 add_action( 'plugins_loaded', array( woo_minecraft(), 'i18n' ) );
 
 /**
- * Has Commands
+ * Determines if any item in the cart has WMC commands attached.
  *
- * @param $data
+ * @param array $items Cart contents from WooCommerce
  *
- * @TODO: Move this to helper file
  * @return bool
  */
-function wmc_items_have_commands( $data ) {
-	if ( is_array( $data ) ) {
-		// Assume $data is cart contents
-		foreach ( $data as $item ) {
-			$post_id = $item['product_id'];
+function wmc_items_have_commands( array $items ) {
+    // Assume $data is cart contents
+    foreach ( $items as $item ) {
+        $post_id = $item['product_id'];
 
-			if ( ! empty( $item['variation_id'] ) ) {
-				$post_id = $item['variation_id'];
-			}
+        if ( ! empty( $item['variation_id'] ) ) {
+            $post_id = $item['variation_id'];
+        }
 
-			$has_command = get_post_meta( $post_id, 'wmc_commands', true );
-			if ( empty( $has_command ) ) {
-				continue;
-			} else {
-				return true;
-			}
-		}
-	}
+        $has_command = get_post_meta( $post_id, 'wmc_commands', true );
+        if ( empty( $has_command ) ) {
+            continue;
+        } else {
+            return true;
+        }
+    }
 
 	return false;
 }
