@@ -19,3 +19,14 @@ define( 'WMC_INCLUDES', plugin_dir_path( __FILE__ ) . 'includes/' );
  * The legacy class will be removed in
  */
 require_once 'legacy/legacy.php';
+
+// Require the helpers file, for use in :allthethings:
+require_once WMC_INCLUDES . 'helpers.php';
+
+// Everything to do with the Mojang API.
+require_once WMC_INCLUDES . 'mojang.php';
+Mojang\setup();
+
+// Load the REST API
+require_once WMC_INCLUDES . 'rest-api.php';
+
