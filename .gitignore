@@ -9,3 +9,4 @@ docker/minecraft2/*
 docker/mysql/*
 !docker/mysql/.gitkeep
 dist/*
+docker/wordpress
