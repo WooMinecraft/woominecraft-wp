@@ -82,6 +82,24 @@ class Woo_Minecraft {
 	}
 
 	/**
+	 * Creates or returns an instance of this class.
+	 *
+	 * @since  0.1.0
+	 * @return Woo_Minecraft A single instance of this class.
+	 */
+	public static function get_instance() {
+
+		// Mark the get_instance call as deprecated.
+		_deprecated_function( __METHOD__, '1.3.0' );
+
+		if ( null === self::$single_instance ) {
+			self::$single_instance = new self();
+		}
+
+		return self::$single_instance;
+	}
+
+	/**
 	 * Plugin Hooks
 	 *
 	 * Contains all WP hooks for the plugin
@@ -557,24 +575,6 @@ class Woo_Minecraft {
 		$url = $url ? $url : trailingslashit( plugin_dir_url( __FILE__ ) );
 
 		return $url . $path;
-	}
-
-	/**
-	 * Creates or returns an instance of this class.
-	 *
-	 * @since  0.1.0
-	 * @return Woo_Minecraft A single instance of this class.
-	 */
-	public static function get_instance() {
-
-	    // Mark the get_instance call as deprecated.
-	    _deprecated_function( __METHOD__, '1.3.0' );
-
-		if ( null === self::$single_instance ) {
-			self::$single_instance = new self();
-		}
-
-		return self::$single_instance;
 	}
 
 	/**
