@@ -14,3 +14,6 @@ function custom_woocommerce_auto_complete_order( $order_id ) {
 	$order = wc_get_order( $order_id );
 	$order->update_status( 'completed' );
 }
+
+// Stop all deprecated triggers.
+add_filter( 'deprecated_function_trigger_error', '__return_false' );
