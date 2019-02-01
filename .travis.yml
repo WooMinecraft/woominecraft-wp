@@ -17,4 +17,4 @@ install:
   - cd "src" && npm install
 script:
   - gulp
-  - composer run-script phpcs
+  - cd ../ && composer run-script phpcs
