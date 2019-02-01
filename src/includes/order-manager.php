@@ -18,7 +18,7 @@ function setup() {
  *
  * @param int $order_id A WooCommerce order ID.
  */
-public function save_commands_to_order( $order_id ) {
+function save_commands_to_order( $order_id ) {
 
 	$order_data = new \WC_Order( $order_id );
 	$items      = $order_data->get_items();

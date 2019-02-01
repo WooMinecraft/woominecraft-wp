@@ -30,3 +30,5 @@ Mojang\setup();
 // Load the REST API
 require_once WMC_INCLUDES . 'rest-api.php';
 
+require_once WMC_INCLUDES . 'order-manager.php';
+
