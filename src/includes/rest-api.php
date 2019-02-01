@@ -12,6 +12,4 @@ function setup() {
 	$n = function( $string ) {
 		return __NAMESPACE__ . '\\' . $string;
 	};
-
-
 }
