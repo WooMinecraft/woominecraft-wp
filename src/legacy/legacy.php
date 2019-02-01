@@ -157,27 +157,7 @@ class Woo_Minecraft {
 
 		if ( false === $output || isset( $_GET['delete-trans'] ) ) { // @codingStandardsIgnoreLine Not verifying because we don't need to, just checking if isset.
 
-			$delivered = '_wmc_delivered_' . $key;
-			$meta_key  = '_wmc_commands_' . $key;
-
-			$order_query = apply_filters( 'woo_minecraft_json_orders_args', array(
-				'posts_per_page' => '-1',
-				'post_status'    => 'wc-completed',
-				'post_type'      => 'shop_order',
-				'meta_query'     => array(
-					'relation' => 'AND',
-					array(
-						'key'     => $meta_key,
-						'compare' => 'EXISTS',
-					),
-					array(
-						'key'     => $delivered,
-						'compare' => 'NOT EXISTS',
-					),
-				),
-			) );
-
-			$orders = get_posts( $order_query );
+			$orders = get_posts( \WooMinecraft\Helpers\get_order_query_params( $key ) );
 
 			$output = array();
 
@@ -187,7 +167,7 @@ class Woo_Minecraft {
 						continue;
 					}
 
-					$player_id   = get_post_meta( $wc_order->ID, 'player_id', true );
+					$player_id   = \WooMinecraft\Orders\Manager\get_player_id_for_order( $wc_order );
 					$order_array = $this->generate_order_json( $wc_order, $key );
 
 					if ( ! empty( $order_array ) ) {
@@ -221,9 +201,7 @@ class Woo_Minecraft {
 			return array();
 		}
 
-		$general_commands = get_post_meta( $order_post->ID, '_wmc_commands_' . $key, true );
-
-		return $general_commands;
+		return get_post_meta( $order_post->ID, '_wmc_commands_' . $key, true );
 	}
 
 

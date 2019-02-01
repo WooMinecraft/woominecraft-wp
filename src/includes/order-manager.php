@@ -134,9 +134,77 @@ function reset_order( $order_id, $server_key ) {
 }
 
 /**
- * Gets the pending orders.
- * @return array
+ * Gets the player ID ( username ) for an order.
+ *
+ * @param int|\WP_Post $order_id
+ * @return string
  */
-function get_pending_orders() {
-	return [];
+function get_player_id_for_order( $order_id ) {
+	if ( is_object( $order_id ) && isset( $order_id->ID ) ) {
+		$order_id = intval( $order_id->ID );
+	}
+
+	return (string) get_post_meta( (int) $order_id, 'player_id', true );
+}
+
+/**
+ * Generates the order JSON data for a single order.
+ *
+ * @param \WP_Post|int $order_post
+ * @param string $key Server key to check against
+ *
+ * @author JayWood
+ * @return array|mixed
+ */
+function generate_order_json( $order_post, $key ) {
+	if ( is_object( $order_post ) && isset( $order_post->ID ) ) {
+		$order_post = intval( $order_post->ID );
+	}
+
+	return get_post_meta( (int) $order_post, '_wmc_commands_' . $key, true );
+}
+
+/**
+ * Gets all unprocessed orders for the specified server.
+ *
+ * Use this function to bypass caching as well if you need to.
+ *
+ * @since 1.3.0 Rest API implementation.
+ *
+ * @param string $server_key
+ *
+ * @return array|\WP_Error
+ */
+function get_orders_for_server( $server_key ) {
+	$args = \WooMinecraft\Helpers\get_order_query_params( $server_key );
+	if ( empty( $args ) ) {
+		return new \WP_Error( 'invalid_args', 'Request could not be completed due to malformed arguments server-side.', [ 'status' => 500 ] );
+	}
+
+	// Get the orders, and setup a variable.
+	$orders = get_posts( $args );
+	$output = [];
+
+	if ( empty( $orders ) ) {
+		return $output;
+	}
+
+	foreach ( $orders as $wc_order ) {
+		if ( ! isset( $wc_order->ID ) ) {
+			continue;
+		}
+
+		$player_id  = get_player_id_for_order( $wc_order );
+		$order_data = generate_order_json( $wc_order, $server_key );
+		if ( empty( $order_data ) ) {
+			continue;
+		}
+
+		if ( ! isset( $output[ $player_id ] ) ) {
+			$output[ $player_id ] = array();
+		}
+		$output[ $player_id ][ $wc_order->ID ] = $order_data;
+	}
+
+	return $output;
 }

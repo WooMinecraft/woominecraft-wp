@@ -2,6 +2,11 @@
 
 namespace WooMinecraft\REST;
 
+use function WooMinecraft\Orders\Cache\get_transient_key;
+use function WooMinecraft\Orders\Manager\generate_order_json;
+use function WooMinecraft\Orders\Manager\get_orders_for_server;
+use function WooMinecraft\Orders\Manager\get_player_id_for_order;
+
 /**
  * Holds the REST API endpoint information.
  */
@@ -10,7 +15,7 @@ namespace WooMinecraft\REST;
  * Sets up all the things related to REST API.
  */
 function setup() {
-	$n = function( $string ) {
+	$n = function ( $string ) {
 		return __NAMESPACE__ . '\\' . $string;
 	};
 
@@ -25,6 +30,11 @@ function register_endpoints() {
 	register_rest_route( get_rest_namespace(), '/server/(?P<server>[\S]+)', [
 		'methods'  => \WP_REST_Server::READABLE,
 		'callback' => __NAMESPACE__ . '\\get_pending_orders',
+	] );
+
+	register_rest_route( get_rest_namespace(), '/server/(?P<server>[\S]+)', [
+		'methods'  => \WP_REST_Server::CREATABLE,
+		'callback' => __NAMESPACE__ . '\\process_orders',
 	] );
 }
 
@@ -50,6 +60,26 @@ function get_pending_orders( $request ) {
 		return new \WP_Error( 'invalid_key', 'Key provided in request is invalid.', [ 'status' => 401 ] );
 	}
 
-	return $request->get_params();
+	$pending_orders = get_transient( get_transient_key() );
+	if ( false === $pending_orders ) {
+
+		$pending_orders = get_orders_for_server( $server_key );
+		if ( is_wp_error( $pending_orders ) ) {
+			return $pending_orders;
+		}
+
+		set_transient( get_transient_key(), $pending_orders, 1 * HOUR_IN_SECONDS );
+	}
+
+	return [ 'players' => $pending_orders ];
+}
+
+/**
+ * Processes orders sent to the endpoint.
+ *
+ * @param \WP_REST_Request $request
+ */
+function process_orders( $request ) {
+
 }
 
