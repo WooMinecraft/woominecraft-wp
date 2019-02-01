@@ -64,7 +64,7 @@ function get_key_pending( $server ) {
  * @return string
  */
 function get_order_query_params( $server ) {
-	return (string) apply_filters( 'woo_minecraft_json_orders_args', array(
+	return apply_filters( 'woo_minecraft_json_orders_args', array(
 		'posts_per_page' => '-1',
 		'post_status'    => 'wc-completed',
 		'post_type'      => 'shop_order',
@@ -80,4 +80,11 @@ function get_order_query_params( $server ) {
 			),
 		),
 	) );
+}
+
+/**
+ * Conditional to determine enabling debugging within the code.
+ */
+function is_debug() {
+	return ( defined( 'WMC_DEBUG' ) && WMC_DEBUG );
 }

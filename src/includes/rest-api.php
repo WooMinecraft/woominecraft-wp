@@ -2,10 +2,9 @@
 
 namespace WooMinecraft\REST;
 
+use function WooMinecraft\Helpers\is_debug;
 use function WooMinecraft\Orders\Cache\get_transient_key;
-use function WooMinecraft\Orders\Manager\generate_order_json;
 use function WooMinecraft\Orders\Manager\get_orders_for_server;
-use function WooMinecraft\Orders\Manager\get_player_id_for_order;
 
 /**
  * Holds the REST API endpoint information.
@@ -61,7 +60,7 @@ function get_pending_orders( $request ) {
 	}
 
 	$pending_orders = get_transient( get_transient_key() );
-	if ( false === $pending_orders ) {
+	if ( false === $pending_orders || is_debug() ) {
 
 		$pending_orders = get_orders_for_server( $server_key );
 		if ( is_wp_error( $pending_orders ) ) {
