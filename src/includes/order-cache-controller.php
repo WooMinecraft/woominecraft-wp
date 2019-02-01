@@ -25,7 +25,7 @@ function bust_command_cache( $post_id = 0 ) {
 		return;
 	}
 
-	$keys = $wpdb->get_col( $wpdb->prepare( "select distinct option_name from {$wpdb->options} where option_name like '%s'", '%' . $this->command_transient . '%' ) ); // @codingStandardsIgnoreLine Have to use this.
+	$keys = $wpdb->get_col( $wpdb->prepare( "select distinct option_name from {$wpdb->options} where option_name like '%s'", '%' . get_command_transient() . '%' ) ); // @codingStandardsIgnoreLine Have to use this.
 	if ( ! $keys ) {
 		return;
 	}
