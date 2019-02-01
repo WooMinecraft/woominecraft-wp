@@ -46,6 +46,8 @@ function bust_command_cache( $post_id = 0 ) {
  * @return string|false The key on success, false if no GET param can be found.
  */
 function get_transient_key( $server_key = '' ) {
+
+	// @TODO: Remove this for 2.0 - the WMC_KEY will be deprecated completely.
 	if ( empty( $server_key ) ) {
 		$server_key = isset( $_GET['wmc_key'] ) ? $_GET['wmc_key'] : '';
 	}
