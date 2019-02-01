@@ -132,3 +132,11 @@ function reset_order( $order_id, $server_key ) {
 
 	return true;
 }
+
+/**
+ * Gets the pending orders.
+ * @return array
+ */
+function get_pending_orders() {
+	return [];
+}

@@ -27,9 +27,6 @@ require_once WMC_INCLUDES . 'helpers.php';
 require_once WMC_INCLUDES . 'mojang.php';
 Mojang\setup();
 
-// Load the REST API
-require_once WMC_INCLUDES . 'rest-api.php';
-
 // Handle everything order-related.
 require_once WMC_INCLUDES . 'order-manager.php';
 Orders\Manager\setup();
@@ -38,3 +35,6 @@ Orders\Manager\setup();
 require_once WMC_INCLUDES . 'order-cache-controller.php';
 Orders\Cache\setup();
 
+// Load the REST API
+require_once WMC_INCLUDES . 'rest-api.php';
+REST\setup();
