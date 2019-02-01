@@ -49,5 +49,16 @@ function get_transient_key() {
 		return false;
 	}
 
-	return $this->command_transient . '_' . $key;
+	return get_command_transient() . '_' . $key;
+}
+
+/**
+ * The command transient base key.
+ *
+ * @since 1.3.0
+ *
+ * @return string
+ */
+function get_command_transient() {
+	return 'wmc-transient-command-feed';
 }
