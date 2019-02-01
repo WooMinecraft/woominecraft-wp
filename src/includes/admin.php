@@ -435,7 +435,6 @@ class WCM_Admin {
 	 */
 	public function admin_init() {
 		register_setting( 'woo_minecraft', $this->option_key );
-		$this->maybe_update();
 	}
 
 	/**
@@ -498,66 +497,6 @@ class WCM_Admin {
 			$meta = get_post_meta( $post_obj->ID, 'wmc_commands' );
 			update_post_meta( $post_obj->ID, '_wmc_commands_' . $old_key, $meta );
 			delete_post_meta( $post_obj->ID, 'wmc_commands' );
-		}
-	}
-
-	/**
-	 * Updates old DB data to the new layout.
-	 *
-	 * Usable for ONLY 1.0.4 to 1.0.5 update.
-	 * Will remove in 1.0.6
-	 *
-	 * @deprecated This method is used to force update database information
-	 * @internal
-	 * @author     JayWood
-	 */
-	private function maybe_update() {
-
-		$is_old_version = get_option( 'wm_db_version', false );
-		if ( $is_old_version ) {
-			global $wpdb;
-			$results = $wpdb->get_results( "SELECT orderid,delivered FROM {$wpdb->prefix}woo_minecraft" );
-			if ( empty( $results ) ) {
-				delete_option( 'wm_db_version' );
-			} else {
-				foreach ( $results as $command_object ) {
-					$order_id     = $command_object->orderid;
-					$is_delivered = (bool) $command_object->delivered;
-					if ( get_post_meta( $order_id, 'wmc_commands' ) ) {
-						continue;
-					}
-
-					$this->plugin->save_commands_to_order( $order_id );
-					if ( $is_delivered ) {
-						update_post_meta( $order_id, 'wmc_delivered', 1 );
-					}
-				}
-
-				delete_option( 'wm_db_version' );
-
-				// Drop the entire table now.
-				$query = 'DROP TABLE IF EXISTS ' . $wpdb->prefix . 'woo_minecraft';
-				$wpdb->query( $query );
-			}
-		}
-
-		// Migrate old options to new array set
-		if ( $old_key = get_option( 'wm_key' ) ) {
-
-			$old_key = esc_attr( $old_key );
-
-			$new_options = array(
-				array(
-					'name' => __( 'Main', 'woominecraft' ),
-					'key'  => $old_key,
-				),
-			);
-
-			$this->update_product_commands( $old_key );
-			$this->update_order_commands( $old_key );
-
-			update_option( $this->option_key, $new_options );
-			delete_option( 'wm_key' );
 		}
 	}
 
