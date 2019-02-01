@@ -39,17 +39,23 @@ function bust_command_cache( $post_id = 0 ) {
 /**
  * Creates a transient based on the wmc_key variable
  *
- * @since 1.2
+ * @param string $server_key
+ *
+ * @since 1.3.0 Rest API implementation.
  *
  * @return string|false The key on success, false if no GET param can be found.
  */
-function get_transient_key() {
-	$key = sanitize_text_field( $_GET['wmc_key'] ); // @codingStandardsIgnoreLine we don't care, just escape the data.
-	if ( ! $key ) {
+function get_transient_key( $server_key = '' ) {
+	if ( empty( $server_key ) ) {
+		$server_key = isset( $_GET['wmc_key'] ) ? $_GET['wmc_key'] : '';
+	}
+
+	$server_key = sanitize_text_field( $server_key );
+	if ( empty( $server_key ) ) {
 		return false;
 	}
 
-	return get_command_transient() . '_' . $key;
+	return get_command_transient() . '_' . $server_key;
 }
 
 /**

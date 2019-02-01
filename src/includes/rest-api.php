@@ -59,7 +59,7 @@ function get_pending_orders( $request ) {
 		return new \WP_Error( 'invalid_key', 'Key provided in request is invalid.', [ 'status' => 401 ] );
 	}
 
-	$pending_orders = get_transient( get_transient_key() );
+	$pending_orders = get_transient( get_transient_key( $server_key ) );
 	if ( false === $pending_orders || is_debug() ) {
 
 		$pending_orders = get_orders_for_server( $server_key );
@@ -67,7 +67,7 @@ function get_pending_orders( $request ) {
 			return $pending_orders;
 		}
 
-		set_transient( get_transient_key(), $pending_orders, 1 * HOUR_IN_SECONDS );
+		set_transient( get_transient_key( $server_key ), $pending_orders, 1 * HOUR_IN_SECONDS );
 	}
 
 	return [ 'players' => $pending_orders ];

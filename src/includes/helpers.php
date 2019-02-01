@@ -44,7 +44,7 @@ function wmc_items_have_commands( array $items ) {
  *
  * @return string
  */
-function get_key_delivered( $server ) {
+function get_meta_key_delivered( $server ) {
 	return '_wmc_delivered_' . $server;
 }
 
@@ -54,7 +54,7 @@ function get_key_delivered( $server ) {
  *
  * @return string
  */
-function get_key_pending( $server ) {
+function get_meta_key_pending( $server ) {
 	return '_wmc_commands_' . $server;
 }
 
@@ -71,11 +71,11 @@ function get_order_query_params( $server ) {
 		'meta_query'     => array(
 			'relation' => 'AND',
 			array(
-				'key'     => get_key_pending( $server ),
+				'key'     => get_meta_key_pending( $server ),
 				'compare' => 'EXISTS',
 			),
 			array(
-				'key'     => get_key_delivered( $server ),
+				'key'     => get_meta_key_delivered( $server ),
 				'compare' => 'NOT EXISTS',
 			),
 		),
