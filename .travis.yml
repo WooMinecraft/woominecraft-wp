@@ -13,6 +13,7 @@ before_install:
   - npm install -g npm
   - npm install -g gulp
   - npm install -g gulp-cli
+  - composer install
 install:
   - cd "src" && npm install
 script:
