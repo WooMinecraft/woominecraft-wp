@@ -3,6 +3,9 @@
     "description": "A minecraft donation plugin for WordPress",
     "type": "project",
     "license": "GPLv2",
+    "scripts": {
+        "phpcs": "phpcs"
+    },
     "repositories": [
         {
             "type": "package",
@@ -23,7 +26,9 @@
     "require-dev": {
         "wpackagist-plugin/woocommerce": "^3.3",
         "composer/installers": "^1.5",
-        "woominecraft/woominecraft": "1.1.2"
+        "woominecraft/woominecraft": "1.1.2",
+        "squizlabs/php_codesniffer": "3.*",
+        "wp-coding-standards/wpcs": "^2.0"
     },
     "extra": {
         "installer-paths": {
