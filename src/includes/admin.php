@@ -300,7 +300,7 @@ class WCM_Admin {
 		$server    = isset( $_POST['server'] ) ? esc_attr( $_POST['server'] ) : false;
 
 		if ( $player_id && $order_id && $server ) {
-			$result = $this->plugin->reset_order( $order_id, $server );
+			$result = \WooMinecraft\Orders\Manager\reset_order( $order_id, $server );
 			if ( $result > 0 ) {
 				wp_send_json_success();
 			}

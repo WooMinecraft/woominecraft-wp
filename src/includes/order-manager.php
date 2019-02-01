@@ -11,6 +11,8 @@ function setup() {
 	};
 
 	add_action( 'woocommerce_checkout_update_order_meta', $n( 'save_commands_to_order' ) );
+	add_action( 'woocommerce_before_checkout_billing_form', $n( 'additional_checkout_field' ) );
+	add_action( 'woocommerce_thankyou', $n( 'thanks' ) );
 }
 
 /**
@@ -68,4 +70,65 @@ function save_commands_to_order( $order_id ) {
 			update_post_meta( $order_id, '_wmc_commands_' . $server_key, $commands );
 		}
 	}
+}
+
+/**
+ * Adds a field to the checkout form, requiring the user to enter their Minecraft Name
+ *
+ * @param object $cart WooCommerce Cart Object
+ *
+ * @return bool  False on failure, true otherwise.
+ */
+function additional_checkout_field( $cart ) {
+	global $woocommerce;
+
+	$items = $woocommerce->cart->cart_contents;
+	if ( ! \WooMinecraft\Helpers\wmc_items_have_commands( $items ) || ! function_exists( 'woocommerce_form_field' ) ) {
+		return false;
+	}
+
+	?>
+	<div id="woo_minecraft">
+		<?php
+		woocommerce_form_field( 'player_id', array(
+			'type'        => 'text',
+			'class'       => array(),
+			'label'       => __( 'Player ID ( Minecraft Username ):', 'woominecraft' ),
+			'placeholder' => __( 'Required Field', 'woominecraft' ),
+		), $cart->get_value( 'player_id' ) );
+		?>
+	</div>
+	<?php
+
+	return true;
+}
+
+/**
+ * Adds the minecraft order details to the thank you page.
+ *
+ * @param int $id The order ID.
+ */
+function thanks( $id ) {
+	$player_name = get_post_meta( $id, 'player_id', true );
+	if ( ! empty( $player_name ) ) {
+		?>
+		<div class="woo_minecraft"><h4><?php esc_html_e( 'Minecraft Details', 'woominecraft' ); ?></h4>
+
+		<p><strong><?php esc_html_e( 'Username:', 'woominecraft' ); ?></strong><?php echo esc_html( $player_name ); ?></p></div><?php
+	}
+}
+
+/**
+ * Resets an order from being delivered.
+ *
+ * @param int $order_id
+ * @param string $server_key
+ *
+ * @return bool
+ */
+function reset_order( $order_id, $server_key ) {
+	delete_post_meta( $order_id, '_wmc_delivered_' . $server_key );
+	$this->bust_command_cache( $order_id );
+
+	return true;
 }

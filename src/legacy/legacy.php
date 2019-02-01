@@ -107,12 +107,8 @@ class Woo_Minecraft {
 	 * @since 0.1.0
 	 */
 	public function hooks() {
-		add_action( 'woocommerce_before_checkout_billing_form', array( $this, 'additional_checkout_field' ) );
-		add_action( 'woocommerce_thankyou', array( $this, 'thanks' ) );
 
 		add_action( 'template_redirect', array( $this, 'json_feed' ) );
-
-		add_action( 'save_post', array( $this, 'bust_command_cache' ) );
 
 		$this->admin->hooks();
 	}
@@ -125,12 +121,7 @@ class Woo_Minecraft {
 	 * @return string|false The key on success, false if no GET param can be found.
 	 */
 	private function get_transient_key() {
-		$key = sanitize_text_field( $_GET['wmc_key'] ); // @codingStandardsIgnoreLine we don't care, just escape the data.
-		if ( ! $key ) {
-			return false;
-		}
-
-		return $this->command_transient . '_' . $key;
+		_deprecated_function( __METHOD__, '1.3.0', '\WooMinecraft\Orders\Cache\get_transient_key' );
 	}
 
 	/**
@@ -162,7 +153,7 @@ class Woo_Minecraft {
 			$this->process_completed_commands( $key );
 		}
 
-		$output = get_transient( $this->get_transient_key() );
+		$output = get_transient( \WooMinecraft\Orders\Cache\get_transient_key() );
 
 		if ( false === $output || isset( $_GET['delete-trans'] ) ) { // @codingStandardsIgnoreLine Not verifying because we don't need to, just checking if isset.
 
@@ -208,7 +199,7 @@ class Woo_Minecraft {
 				}
 			}
 
-			set_transient( $this->get_transient_key(), $output, 60 * 60 ); // Stores the feed in a transient for 1 hour.
+			set_transient( \WooMinecraft\Orders\Cache\get_transient_key(), $output, 60 * 60 ); // Stores the feed in a transient for 1 hour.
 		}
 
 		wp_send_json_success( $output );
@@ -269,26 +260,10 @@ class Woo_Minecraft {
 	/**
 	 * Helper method for transient busting
 	 *
-	 * @param int $post_id
-	 *
-	 * @author JayWood
+	 * @deprecated 1.3.0 All APIs should move to using the new APIs outside of the legacy folder.
 	 */
 	public function bust_command_cache( $post_id = 0 ) {
-		global $wpdb;
-
-		if ( ! empty( $post_id ) && 'shop_order' !== get_post_type( $post_id ) ) {
-			return;
-		}
-
-		$keys = $wpdb->get_col( $wpdb->prepare( "select distinct option_name from {$wpdb->options} where option_name like '%s'", '%' . $this->command_transient . '%' ) ); // @codingStandardsIgnoreLine Have to use this.
-		if ( ! $keys ) {
-			return;
-		}
-
-		foreach ( $keys as $key ) {
-			$key = str_replace( '_transient_', '', $key );
-			delete_transient( $key );
-		}
+		_deprecated_function( __METHOD__, '', '\WooMinecraft\Orders\Cache\bust_command_cache' );
 	}
 
 	/**
@@ -311,55 +286,26 @@ class Woo_Minecraft {
 			update_post_meta( $order_id, $delivered, true );
 		}
 
-		$this->bust_command_cache();
+		\WooMinecraft\Orders\Cache\bust_command_cache();
 	}
 
 
 	/**
 	 * Adds a field to the checkout form, requiring the user to enter their Minecraft Name
 	 *
-	 * @param object $cart WooCommerce Cart Object
-	 *
-	 * @return bool  False on failure, true otherwise.
+	 * @deprecated 1.3.0 All APIs should move to using the new APIs outside of the legacy folder.
 	 */
 	public function additional_checkout_field( $cart ) {
-		global $woocommerce;
-
-		$items = $woocommerce->cart->cart_contents;
-		if ( ! wmc_items_have_commands( $items ) || ! function_exists( 'woocommerce_form_field' ) ) {
-			return false;
-		}
-
-		?>
-		<div id="woo_minecraft">
-			<?php
-			woocommerce_form_field( 'player_id', array(
-				'type'        => 'text',
-				'class'       => array(),
-				'label'       => __( 'Player ID ( Minecraft Username ):', 'woominecraft' ),
-				'placeholder' => __( 'Required Field', 'woominecraft' ),
-			), $cart->get_value( 'player_id' ) );
-			?>
-		</div>
-		<?php
-
-		return true;
+		_deprecated_function( __METHOD__, '1.3.0', '\WooMinecraft\Orders\Manager\additional_checkout_field' );
 	}
 
 	/**
 	 * Resets an order from being delivered.
 	 *
-	 * @param int $order_id
-	 * @param string $server_key
-	 *
-	 * @author JayWood
-	 * @return bool
+	 * @deprecated 1.3.0 All APIs should move to using the new APIs outside of the legacy folder.
 	 */
 	public function reset_order( $order_id, $server_key ) {
-		delete_post_meta( $order_id, '_wmc_delivered_' . $server_key );
-		$this->bust_command_cache( $order_id );
-
-		return true;
+		_deprecated_function( __METHOD__, '1.3.0', '\WooMinecraft\Orders\Manager\reset_order' );
 	}
 
 	/**
@@ -382,21 +328,18 @@ class Woo_Minecraft {
 
 	/**
 	 * Updates an order's meta data with the commands hash.
-     *
+	 *
 	 * @deprecated 1.3.0 All APIs should move to using the new APIs outside of the legacy folder.
 	 */
 	public function save_commands_to_order( $order_id ) {
-	    _deprecated_function( __METHOD__, '1.3.0', 'WooMinecraft\Orders\Manager\save_commands_to_order()' );
+		_deprecated_function( __METHOD__, '1.3.0', 'WooMinecraft\Orders\Manager\save_commands_to_order()' );
 	}
 
+	/**
+	 * @deprecated 1.3.0 All APIs should move to using the new APIs outside of the legacy folder.
+	 */
 	public function thanks( $id ) {
-		$player_name = get_post_meta( $id, 'player_id', true );
-		if ( ! empty( $player_name ) ) {
-			?>
-			<div class="woo_minecraft"><h4><?php esc_html_e( 'Minecraft Details', 'woominecraft' ); ?></h4>
-
-			<p><strong><?php esc_html_e( 'Username:', 'woominecraft' ); ?></strong><?php echo esc_html( $player_name ); ?></p></div><?php
-		}
+		_deprecated_function( __METHOD__, '1.3.0', '\WooMinecraft\Orders\Manager\thanks' );
 	}
 
 	/**
@@ -490,7 +433,7 @@ class Woo_Minecraft {
  * @return Woo_Minecraft
  */
 function woo_minecraft() {
-    _deprecated_function( __FUNCTION__, '1.3.0' );
+	_deprecated_function( __FUNCTION__, '1.3.0' );
 
 	return Woo_Minecraft::get_instance();
 }
@@ -501,26 +444,8 @@ add_action( 'plugins_loaded', array( woo_minecraft(), 'i18n' ) );
 /**
  * Determines if any item in the cart has WMC commands attached.
  *
- * @param array $items Cart contents from WooCommerce
- *
- * @return bool
+ * @deprecated 1.3.0 All APIs should move to using the new APIs outside of the legacy folder.
  */
 function wmc_items_have_commands( array $items ) {
-    // Assume $data is cart contents
-    foreach ( $items as $item ) {
-        $post_id = $item['product_id'];
-
-        if ( ! empty( $item['variation_id'] ) ) {
-            $post_id = $item['variation_id'];
-        }
-
-        $has_command = get_post_meta( $post_id, 'wmc_commands', true );
-        if ( empty( $has_command ) ) {
-            continue;
-        } else {
-            return true;
-        }
-    }
-
-	return false;
+	_deprecated_function( __FUNCTION__, '1.3.0', '\WooMinecraft\Helpers\wmc_items_have_commands' );
 }
