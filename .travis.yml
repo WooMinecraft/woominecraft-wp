@@ -18,4 +18,5 @@ install:
   - cd "src" && npm install
 script:
   - gulp
+  - ./vendor/bin/phpcs --config-set installed_paths ../../wp-coding-standards/wpcs
   - cd ../ && composer run-script phpcs
