@@ -72,7 +72,7 @@ function get_pending_orders( $request ) {
 		set_transient( get_transient_key( $server_key ), $pending_orders, 1 * HOUR_IN_SECONDS );
 	}
 
-	return [ 'players' => $pending_orders ];
+	return [ 'orders' => $pending_orders ];
 }
 
 /**

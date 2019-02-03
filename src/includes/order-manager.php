@@ -181,8 +181,6 @@ function get_orders_for_server( $server_key ) {
 		return new \WP_Error( 'invalid_args', 'Request could not be completed due to malformed arguments server-side.', [ 'status' => 500 ] );
 	}
 
-	error_log( print_r( $args, 1 ) );
-
 	// Get the orders, and setup a variable.
 	$orders = get_posts( $args );
 	$output = [];
@@ -202,10 +200,11 @@ function get_orders_for_server( $server_key ) {
 			continue;
 		}
 
-		if ( ! isset( $output[ $player_id ] ) ) {
-			$output[ $player_id ] = array();
-		}
-		$output[ $player_id ][ $wc_order->ID ] = $order_data;
+		$output[] = [
+			'player'   => $player_id,
+			'order_id' => $wc_order->ID,
+			'commands' => $order_data,
+		];
 	}
 
 	return $output;
