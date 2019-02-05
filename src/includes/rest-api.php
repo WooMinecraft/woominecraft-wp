@@ -52,13 +52,13 @@ function get_pending_orders( $request ) {
 	$server_key = esc_attr( $request->get_param( 'server' ) );
 	$servers    = get_option( 'wm_servers', [] );
 	if ( empty( $servers ) ) {
-		return new \WP_Error( 'no_servers', 'No servers setup, check WordPress config.', [ 'status' => 500 ] );
+		return new \WP_Error( 'no_servers', 'No servers setup, check WordPress config.', [ 'status' => 200 ] );
 	}
 
 	// Check key, send 401 unauthorized if necessary.
 	$keys = wp_list_pluck( $servers, 'key' );
 	if ( false === array_search( $server_key, $keys, true ) ) {
-		return new \WP_Error( 'invalid_key', 'Key provided in request is invalid.', [ 'status' => 401 ] );
+		return new \WP_Error( 'invalid_key', 'Key provided in request is invalid.', [ 'status' => 200 ] );
 	}
 
 	$pending_orders = get_transient( get_transient_key( $server_key ) );
@@ -107,17 +107,17 @@ function process_orders( $request ) {
 	$server_key = esc_attr( $request->get_param( 'server' ) );
 	$servers    = get_option( 'wm_servers', [] );
 	if ( empty( $servers ) ) {
-		return new \WP_Error( 'no_servers', 'No servers setup, check WordPress config.', [ 'status' => 500 ] );
+		return new \WP_Error( 'no_servers', 'No servers setup, check WordPress config.', [ 'status' => 200 ] );
 	}
 
 	// Check key, send 401 unauthorized if necessary.
 	$keys = wp_list_pluck( $servers, 'key' );
 	if ( false === array_search( $server_key, $keys, true ) ) {
-		return new \WP_Error( 'invalid_key', 'Key provided in request is invalid.', [ 'status' => 401 ] );
+		return new \WP_Error( 'invalid_key', 'Key provided in request is invalid.', [ 'status' => 200 ] );
 	}
 
 	$body_params = $request->get_body_params();
-	$bad_request = new \WP_Error( 'bad_request', 'Empty post data.', [ 'status' => 400 ] );
+	$bad_request = new \WP_Error( 'bad_request', 'Empty post data.', [ 'status' => 200 ] );
 	if ( empty( $body_params['processedOrders'] ) ) {
 		return $bad_request;
 	}
