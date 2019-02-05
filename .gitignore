@@ -10,3 +10,4 @@ docker/mysql/*
 !docker/mysql/.gitkeep
 dist/*
 docker/wordpress
+docker/WooMinecraft

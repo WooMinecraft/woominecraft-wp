@@ -9,17 +9,6 @@
     },
     "repositories": [
         {
-            "type": "package",
-            "package": {
-                "name": "woominecraft/woominecraft",
-                "version": "1.1.2",
-                "dist": {
-                    "type": "zip",
-                    "url": "https://github.com/WooMinecraft/WooMinecraft/releases/download/1.1.2/WooMinecraft-1.1.2.zip"
-                }
-            }
-        },
-        {
             "type":"composer",
             "url":"https://wpackagist.org"
         }
