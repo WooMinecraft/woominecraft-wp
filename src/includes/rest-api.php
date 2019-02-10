@@ -87,12 +87,14 @@ function get_pending_orders( $request ) {
  * @return int[] An array of order IDs or an empty array.
  */
 function sanitized_orders_post( $post_data ) {
-	$decoded = json_decode( stripslashes( urldecode( $post_data ) ) );
-	if ( empty( $decoded ) ) {
-		return array();
+	if ( is_string( $post_data ) ) {
+		$post_data = json_decode( stripslashes( urldecode( $post_data ) ) );
+		if ( empty( $post_data ) ) {
+			return array();
+		}
 	}
 
-	return array_map( 'intval', $decoded );
+	return array_map( 'intval', $post_data );
 }
 
 /**
@@ -116,7 +118,7 @@ function process_orders( $request ) {
 		return new \WP_Error( 'invalid_key', 'Key provided in request is invalid.', [ 'status' => 200 ] );
 	}
 
-	$body_params = $request->get_body_params();
+	$body_params = $request->get_json_params();
 	$bad_request = new \WP_Error( 'bad_request', 'Empty post data.', [ 'status' => 200 ] );
 	if ( empty( $body_params['processedOrders'] ) ) {
 		return $bad_request;
