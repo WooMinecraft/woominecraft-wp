@@ -74,6 +74,7 @@ payments - [check google](http://lmgtfy.com/?q###Woocommerce+payment+gateways)
 ### 1.3.0
 * Update to utilize the Rest API instead of a generic endpoint.
 * Ensure backwards compatibility until 1.4
+* Strip some items from the changelog pre 1.1
 
 ### 1.2
 * Fix major bug in multiple-server setups with transient keys.
@@ -94,38 +95,6 @@ payments - [check google](http://lmgtfy.com/?q###Woocommerce+payment+gateways)
 * Moved server key settings to WooCommerce->Settings ( near the bottom )
 * Resource updates for screenshots etc... 
 * **CHANGED** General command now no-longer run on-top of variation commands
-
-### 1.0.8
-* Hotfix for [#18](https://github.com/WooMinecraft/woominecraft-wp/issues/18) - Apparently WooCommerce uses the 'key' key as well...
-
-### 1.0.7
-* Better error handling for keys, instead of blindly killing over.
-
-### 1.0.6
-* Fixed [#96](https://github.com/WooMinecraft/WooMinecraft/issues/96) - Checking wrong post type for cache busting.
-
-### 1.0.5
-* Remove custom DB table requirements
-* Update plugin to use order meta instead of DB table
-* Code cleanup
-* Auto-migrates old DB pending deliveries to order meta
-
-### 1.0.4
-* Update debugging information by not escaping $_REQUEST that is sent back to java.
-* Fixed - Multiple players were getting re-sent donations, this was due to assumptions in posted data.
-
-### 1.0.3
-* Security fix - prevents sending back database stored key - Thanks to [FinlayDaG33k](https://github.com/FinlayDaG33k) [PR#15](https://github.com/WooMinecraft/woominecraft-wp/pull/15)
-
-### 1.0.2
-* Hotfix for meta data - fixed [#76](https://github.com/WooMinecraft/WooMinecraft/issues/76)
-
-### 1.0.1
-* Donations hotfix that was looping over donations infinitely
-
-### 1.0.0
-* First official release on .org
-* First clean release on Github
 
 ## Installation
 
