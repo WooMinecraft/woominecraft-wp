@@ -8,7 +8,7 @@ services:
     volumes:
       - ./docker/minecraft:/minecraft
       - ./docker/init/mc.yml:/minecraft/plugins/WooMinecraft/config.yml
-      - ./docker/WooMinecraft/target/WooMinecraft-1.2.0.jar:/minecraft/plugins/wmc.jar
+      - ./docker/WooMinecraft/target/WooMinecraft-1.2.0rc.jar:/minecraft/plugins/wmc.jar
     environment:
       EULA: 'true'
       SPIGOT_VER: '1.12.2'
@@ -22,7 +22,7 @@ services:
     volumes:
       - ./docker/minecraft2:/minecraft
       - ./docker/init/mc2.yml:/minecraft/plugins/WooMinecraft/config.yml
-      - ./docker/WooMinecraft/target/WooMinecraft-1.2.0.jar:/minecraft/plugins/wmc.jar
+      - ./docker/WooMinecraft/target/WooMinecraft-1.2.0rc.jar:/minecraft/plugins/wmc.jar
     environment:
       EULA: 'true'
       SPIGOT_VER: '1.12.2'

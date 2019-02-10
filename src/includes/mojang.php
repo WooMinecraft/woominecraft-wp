@@ -3,7 +3,7 @@
 namespace WooMinecraft\Mojang;
 
 /**
- * Sets up all the things related to Order handling.
+ * Sets up all the things related to mojang.
  */
 function setup() {
 	$n = function( $string ) {
@@ -30,7 +30,7 @@ function validate_is_paid_player() {
 	$player_id = isset( $_POST['player_id'] ) ? sanitize_text_field( $_POST['player_id'] ) : false; // @codingStandardsIgnoreLine No nonce needed.
 	$items     = $woocommerce->cart->cart_contents;
 
-	if ( ! wmc_items_have_commands( $items ) ) {
+	if ( ! \WooMinecraft\Helpers\wmc_items_have_commands( $items ) ) {
 		return;
 	}
 
