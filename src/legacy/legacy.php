@@ -90,7 +90,7 @@ class Woo_Minecraft {
 	public static function get_instance() {
 
 		// Mark the get_instance call as deprecated.
-		_deprecated_function( __METHOD__, '1.3.0' );
+		// _deprecated_function( __METHOD__, '1.3.0' );
 
 		if ( null === self::$single_instance ) {
 			self::$single_instance = new self();
@@ -117,8 +117,6 @@ class Woo_Minecraft {
 	 * Creates a transient based on the wmc_key variable
 	 *
 	 * @since 1.2
-	 *
-	 * @return string|false The key on success, false if no GET param can be found.
 	 */
 	private function get_transient_key() {
 		_deprecated_function( __METHOD__, '1.3.0', '\WooMinecraft\Orders\Cache\get_transient_key' );
@@ -128,6 +126,7 @@ class Woo_Minecraft {
 	 * Produces the JSON Feed for Orders Pending Delivery
 	 */
 	public function json_feed() {
+		if ( empty( $_GET['wmc_key'] ) ) { return; }
 
 		$key = sanitize_text_field( $_GET['wmc_key'] ); // @codingStandardsIgnoreLine Just sanitize, no nonce needed.
 
@@ -411,7 +410,7 @@ class Woo_Minecraft {
  * @return Woo_Minecraft
  */
 function woo_minecraft() {
-	_deprecated_function( __FUNCTION__, '1.3.0' );
+	// _deprecated_function( __FUNCTION__, '1.3.0' );
 
 	return Woo_Minecraft::get_instance();
 }

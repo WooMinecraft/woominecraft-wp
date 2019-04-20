@@ -30,7 +30,7 @@ class WCM_Admin {
 	public function hooks() {
 
 	    // Add deprecation notice.
-	    _deprecated_function( __METHOD__, '1.3.0' );
+		// _deprecated_function( __METHOD__, '1.3.0' );
 
 		add_action( 'admin_enqueue_scripts', array( $this, 'scripts' ) );
 
