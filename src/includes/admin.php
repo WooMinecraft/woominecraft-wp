@@ -2,7 +2,6 @@
 
 /**
  * Class WCM_Admin
- *
  * @deprecated 1.3.0 All APIs should move to using the new APIs outside of the legacy folder.
  */
 class WCM_Admin {
@@ -24,12 +23,11 @@ class WCM_Admin {
 
 	/**
 	 * Handles the hooks for WordPress and WooCommerce
-     *
 	 * @deprecated 1.3.0 All APIs should move to using the new APIs outside of the legacy folder.
 	 */
 	public function hooks() {
 
-	    // Add deprecation notice.
+		// Add deprecation notice.
 		// _deprecated_function( __METHOD__, '1.3.0' );
 
 		add_action( 'admin_enqueue_scripts', array( $this, 'scripts' ) );
@@ -73,7 +71,6 @@ class WCM_Admin {
 			$wp_query->set( 'orderby', 'meta_value' );
 		}
 
-
 		$player_name = isset( $_GET['wmc-player-name'] ) ? esc_attr( $_GET['wmc-player-name'] ) : false;
 		if ( ! empty( $player_name ) ) {
 			$wp_query->set( 'meta_key', 'player_id' );
@@ -86,8 +83,8 @@ class WCM_Admin {
 	 *
 	 * @param array $columns
 	 *
-	 * @author JayWood
 	 * @return mixed
+	 * @author JayWood
 	 */
 	public function make_player_sortable( $columns ) {
 		$columns['wmc-player'] = 'wmc-player';
@@ -100,16 +97,16 @@ class WCM_Admin {
 	 *
 	 * @param $columns
 	 *
-	 * @author JayWood
 	 * @return array
+	 * @author JayWood
 	 */
 	public function add_user_and_deliveries_header( $columns ) {
 		$out = array();
-		foreach( $columns as $key => $value ) {
+		foreach ( $columns as $key => $value ) {
 			$out[ $key ] = $value;
 			if ( 'order_status' == $key ) {
 				$out['wmc-delivered'] = __( 'Delivered', 'woominecraft-wp' ) . wc_help_tip( __( 'How many servers delivered versus how many still to be delivered.', 'woominecraft-wp' ) );
-				$out['wmc-player'] = __( 'Player', 'woominecraft-wp' );
+				$out['wmc-player']    = __( 'Player', 'woominecraft-wp' );
 			}
 		}
 
@@ -130,11 +127,11 @@ class WCM_Admin {
 				printf( '<span class="wmc-orders-delivered">%s</span>', $this->get_delivered_col_output( $post_id ) );
 				break;
 			case 'wmc-player':
-				$player_id   = get_post_meta( $post_id, 'player_id', true );
-				$href = add_query_arg( 'wmc-player-name', $player_id );
+				$player_id = get_post_meta( $post_id, 'player_id', true );
+				$href      = add_query_arg( 'wmc-player-name', $player_id );
 				printf( '<a class="wmc-player-name" href="%2$s">%1$s</a>', $player_id ? $player_id : ' - ', $href );
 				break;
-				// Ni Hijan
+			// Ni Hijan
 		}
 
 		return;
@@ -150,30 +147,29 @@ class WCM_Admin {
 	/**
 	 * Pretty much a wrapper for doing multiple get_post_meta() calls
 	 *
-	 * @param int    $order_id
+	 * @param int $order_id
 	 * @param string $type
 	 *
-	 * @author JayWood
 	 * @return array|null|object
+	 * @author JayWood
 	 */
 	private function get_count( $order_id, $type = false ) {
 		global $wpdb;
 
 		$statement = "select * from {$wpdb->postmeta}";
 		if ( 'delivered' == $type ) {
-			$statement .= $wpdb->prepare( " where meta_key like %s", '%' . $wpdb->esc_like( '_wmc_delivered' ) . '%' );
+			$statement .= $wpdb->prepare( ' where meta_key like %s', '%' . $wpdb->esc_like( '_wmc_delivered' ) . '%' );
 		} else {
-			$statement .= $wpdb->prepare( " where meta_key like %s", '%' . $wpdb->esc_like( '_wmc_commands' ) . '%' );
+			$statement .= $wpdb->prepare( ' where meta_key like %s', '%' . $wpdb->esc_like( '_wmc_commands' ) . '%' );
 		}
 
-		$statement .= $wpdb->prepare( " and post_id = %d", intval( $order_id ) );
+		$statement .= $wpdb->prepare( ' and post_id = %d', intval( $order_id ) );
 
-		return $wpdb->get_results( $statement );
+		return $wpdb->get_results( $statement ); // @codingStandardsIgnoreLine Already prepared.
 	}
 
 	/**
 	 * Saves server keys
-	 *
 	 * @author JayWood
 	 */
 	public function save_servers() {
@@ -182,7 +178,7 @@ class WCM_Admin {
 		}
 
 		$servers = (array) $_POST['wmc_servers'];
-		$output  = [ ];
+		$output  = [];
 		foreach ( $servers as $server ) {
 			$name = array_key_exists( 'name', $server ) && ! empty( $server['name'] ) ? esc_attr( $server['name'] ) : false;
 			$key  = array_key_exists( 'key', $server ) && ! empty( $server['key'] ) ? esc_attr( $server['key'] ) : false;
@@ -211,7 +207,6 @@ class WCM_Admin {
 	 * @param $values
 	 *
 	 * @since  1.0.7
-	 *
 	 * @author JayWood
 	 */
 	public function render_servers_section( $values ) {
@@ -223,9 +218,9 @@ class WCM_Admin {
 	 *
 	 * @param array $settings
 	 *
-	 * @since  1.0.7
-	 * @author JayWood
 	 * @return array
+	 * @author JayWood
+	 * @since  1.0.7
 	 */
 	public function wmc_settings( $settings ) {
 
@@ -249,10 +244,9 @@ class WCM_Admin {
 
 	/**
 	 * Gets all servers and sanitizes their output.
-	 *
-	 * @since  1.7.0
-	 * @author JayWood
 	 * @return array
+	 * @author JayWood
+	 * @since  1.7.0
 	 */
 	public function get_servers() {
 
@@ -290,7 +284,6 @@ class WCM_Admin {
 
 	/**
 	 * Re-sends orders to players based on player ID and order ID
-	 *
 	 * @author JayWood
 	 */
 	public function ajax_handler() {
@@ -319,17 +312,17 @@ class WCM_Admin {
 			return;
 		}
 
-		$commands = get_post_meta( $post->ID, 'wmc_commands', true );
+		$commands    = get_post_meta( $post->ID, 'wmc_commands', true );
 		$command_key = 'simple';
-		$post_id = $post->ID;
+		$post_id     = $post->ID;
 		include_once 'views/commands.php';
 	}
 
 	/**
 	 * Fires for each variation section, in-turn this creates a set of 'command rows' for each variation.
 	 *
-	 * @param int     $loop
-	 * @param array   $variation_data
+	 * @param int $loop
+	 * @param array $variation_data
 	 * @param WP_Post $post
 	 */
 	public function add_variation_field( $loop, $variation_data, $post ) {
@@ -338,9 +331,9 @@ class WCM_Admin {
 			return;
 		}
 
-		$commands = get_post_meta( $post->ID, 'wmc_commands', true );
+		$commands    = get_post_meta( $post->ID, 'wmc_commands', true );
 		$command_key = 'variable';
-		$post_id = $post->ID;
+		$post_id     = $post->ID;
 		include 'views/commands.php';
 	}
 
@@ -447,7 +440,7 @@ class WCM_Admin {
 	 */
 	private function update_product_commands( $old_key ) {
 
-		$posts = get_posts( array(
+		$commands_query = array(
 			'post_type'   => array( 'product', 'product_variation' ),
 			'post_status' => 'any',
 			'meta_query'  => array(
@@ -455,8 +448,10 @@ class WCM_Admin {
 					'key'     => 'minecraft_woo',
 					'compare' => 'EXISTS',
 				),
-			)
-		) );
+			),
+		);
+
+		$posts = get_posts( $commands_query );
 
 		if ( empty( $posts ) ) {
 			return;
@@ -475,14 +470,13 @@ class WCM_Admin {
 	/**
 	 * Updates all orders to the new order command structure.
 	 *
-	 * @deprecated
-	 *
 	 * @param string $old_key
 	 *
+	 * @deprecated
 	 * @author JayWood
 	 */
 	private function update_order_commands( $old_key ) {
-		$posts = get_posts( array(
+		$order_commands_query = array(
 			'post_type'   => 'shop_order',
 			'post_status' => 'any',
 			'meta_query'  => array(
@@ -491,7 +485,9 @@ class WCM_Admin {
 					'compare' => 'EXISTS',
 				),
 			),
-		) );
+		);
+
+		$posts = get_posts( $order_commands_query );
 
 		foreach ( $posts as $post_obj ) {
 			$meta = get_post_meta( $post_obj->ID, 'wmc_commands' );
@@ -542,7 +538,7 @@ class WCM_Admin {
 			return;
 		}
 
-		$meta       = array();
+		$meta = array();
 		foreach ( $command_set as $commands ) {
 			// Key commands by key.
 			$key     = $commands['server'];
