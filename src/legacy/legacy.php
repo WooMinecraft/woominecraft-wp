@@ -4,19 +4,15 @@ require_once WMC_INCLUDES . 'admin.php';
 
 /**
  * Class Woo_Minecraft
- *
  * @todo: Create some way of handling orphaned orders. See Below -
  * If an order is created which had commands tied to a specific server, and that server is later deleted, those commands cannot be re-sent at any time.
- *
  * @deprecated 1.3.0 All APIs should move to using the new APIs outside of the legacy folder.
- *
  * @author JayWood
  */
 class Woo_Minecraft {
 
 	/**
 	 * Current version
-	 *
 	 * @var  string
 	 * @since  0.1.0
 	 */
@@ -24,7 +20,6 @@ class Woo_Minecraft {
 
 	/**
 	 * URL of plugin directory
-	 *
 	 * @var string
 	 * @since  0.1.0
 	 */
@@ -32,7 +27,6 @@ class Woo_Minecraft {
 
 	/**
 	 * Path of plugin directory
-	 *
 	 * @var string
 	 * @since  0.1.0
 	 */
@@ -40,7 +34,6 @@ class Woo_Minecraft {
 
 	/**
 	 * Plugin basename
-	 *
 	 * @var string
 	 * @since  0.1.0
 	 */
@@ -48,7 +41,6 @@ class Woo_Minecraft {
 
 	/**
 	 * Singleton instance of plugin
-	 *
 	 * @var Woo_Minecraft
 	 * @since  0.1.0
 	 */
@@ -56,7 +48,6 @@ class Woo_Minecraft {
 
 	/**
 	 * Instance of the WCM_Admin class
-	 *
 	 * @var WCM_Admin
 	 * @since 0.1.0
 	 */
@@ -70,7 +61,6 @@ class Woo_Minecraft {
 
 	/**
 	 * Sets up our plugin
-	 *
 	 * @since  0.1.0
 	 */
 	protected function __construct() {
@@ -83,9 +73,8 @@ class Woo_Minecraft {
 
 	/**
 	 * Creates or returns an instance of this class.
-	 *
-	 * @since  0.1.0
 	 * @return Woo_Minecraft A single instance of this class.
+	 * @since  0.1.0
 	 */
 	public static function get_instance() {
 
@@ -101,9 +90,7 @@ class Woo_Minecraft {
 
 	/**
 	 * Plugin Hooks
-	 *
 	 * Contains all WP hooks for the plugin
-	 *
 	 * @since 0.1.0
 	 */
 	public function hooks() {
@@ -115,7 +102,6 @@ class Woo_Minecraft {
 
 	/**
 	 * Creates a transient based on the wmc_key variable
-	 *
 	 * @since 1.2
 	 */
 	private function get_transient_key() {
@@ -126,7 +112,9 @@ class Woo_Minecraft {
 	 * Produces the JSON Feed for Orders Pending Delivery
 	 */
 	public function json_feed() {
-		if ( empty( $_GET['wmc_key'] ) ) { return; }
+		if ( empty( $_GET['wmc_key'] ) ) {
+			return;
+		}
 
 		$key = sanitize_text_field( $_GET['wmc_key'] ); // @codingStandardsIgnoreLine Just sanitize, no nonce needed.
 
@@ -191,8 +179,8 @@ class Woo_Minecraft {
 	 * @param WP_Post $order_post
 	 * @param string $key Server key to check against
 	 *
-	 * @author JayWood
 	 * @return array|mixed
+	 * @author JayWood
 	 */
 	private function generate_order_json( $order_post, $key ) {
 
@@ -206,9 +194,8 @@ class Woo_Minecraft {
 
 	/**
 	 * Setup Localization
-	 *
-	 * @since  0.1.0
 	 * @return void
+	 * @since  0.1.0
 	 */
 	public function i18n() {
 		load_plugin_textdomain( 'woominecraft', false, dirname( $this->basename ) . '/languages/' );
@@ -216,14 +203,13 @@ class Woo_Minecraft {
 
 	/**
 	 * Take special care to sanitize the incoming post data.
-	 *
 	 * While not as simple as running esc_attr, this is still necessary since the JSON
 	 * from the Java code comes in escaped, so we need some custom sanitization.
 	 *
 	 * @param $post_data
 	 *
-	 * @author JayWood
 	 * @return array
+	 * @author JayWood
 	 */
 	private function sanitized_orders_post( $post_data ) {
 		$decoded = json_decode( stripslashes( urldecode( $post_data ) ) );
@@ -236,7 +222,6 @@ class Woo_Minecraft {
 
 	/**
 	 * Helper method for transient busting
-	 *
 	 * @deprecated 1.3.0 All APIs should move to using the new APIs outside of the legacy folder.
 	 */
 	public function bust_command_cache( $post_id = 0 ) {
@@ -246,9 +231,9 @@ class Woo_Minecraft {
 	/**
 	 * Processes all completed commands.
 	 *
-	 * @author JayWood
-	 *
 	 * @param string $key
+	 *
+	 * @author JayWood
 	 */
 	private function process_completed_commands( $key = '' ) {
 		$delivered = '_wmc_delivered_' . $key;
@@ -269,7 +254,6 @@ class Woo_Minecraft {
 
 	/**
 	 * Adds a field to the checkout form, requiring the user to enter their Minecraft Name
-	 *
 	 * @deprecated 1.3.0 All APIs should move to using the new APIs outside of the legacy folder.
 	 */
 	public function additional_checkout_field( $cart ) {
@@ -278,7 +262,6 @@ class Woo_Minecraft {
 
 	/**
 	 * Resets an order from being delivered.
-	 *
 	 * @deprecated 1.3.0 All APIs should move to using the new APIs outside of the legacy folder.
 	 */
 	public function reset_order( $order_id, $server_key ) {
@@ -287,7 +270,6 @@ class Woo_Minecraft {
 
 	/**
 	 * Caches the results of the mojang API based on player ID
-	 *
 	 * @deprecated 1.3.0 All APIs should move to using the new APIs outside of the legacy folder.
 	 */
 	public function mojang_player_cache() {
@@ -296,7 +278,6 @@ class Woo_Minecraft {
 
 	/**
 	 * Checks if Minecraft Username is valid
-	 *
 	 * @deprecated 1.3.0 All APIs should move to using the new APIs outside of the legacy folder.
 	 */
 	public function check_player() {
@@ -305,7 +286,6 @@ class Woo_Minecraft {
 
 	/**
 	 * Updates an order's meta data with the commands hash.
-	 *
 	 * @deprecated 1.3.0 All APIs should move to using the new APIs outside of the legacy folder.
 	 */
 	public function save_commands_to_order( $order_id ) {
@@ -321,7 +301,6 @@ class Woo_Minecraft {
 
 	/**
 	 * Plugin classes
-	 *
 	 * @since 0.1.0
 	 */
 	public function plugin_classes() {
@@ -331,11 +310,10 @@ class Woo_Minecraft {
 	/**
 	 * Include a file from the includes directory
 	 *
-	 * @since  0.1.0
-	 *
-	 * @param  string $filename Name of the file to be included
+	 * @param string $filename Name of the file to be included
 	 *
 	 * @return bool    Result of include call.
+	 * @since  0.1.0
 	 */
 	public static function include_file( $filename ) {
 		$file = self::dir( 'includes/' . $filename . '.php' );
@@ -349,11 +327,10 @@ class Woo_Minecraft {
 	/**
 	 * This plugin's directory
 	 *
-	 * @since  0.1.0
-	 *
-	 * @param  string $path (optional) appended path
+	 * @param string $path (optional) appended path
 	 *
 	 * @return string       Directory and path
+	 * @since  0.1.0
 	 */
 	public static function dir( $path = '' ) {
 		static $dir;
@@ -365,11 +342,10 @@ class Woo_Minecraft {
 	/**
 	 * This plugin's url
 	 *
-	 * @since  0.1.0
-	 *
-	 * @param  string $path (optional) appended path
+	 * @param string $path (optional) appended path
 	 *
 	 * @return string       URL and path
+	 * @since  0.1.0
 	 */
 	public static function url( $path = '' ) {
 		static $url;
@@ -381,12 +357,11 @@ class Woo_Minecraft {
 	/**
 	 * Magic getter for our object.
 	 *
-	 * @since  0.1.0
-	 *
 	 * @param string $field
 	 *
-	 * @throws Exception Throws an exception if the field is invalid.
 	 * @return mixed
+	 * @throws Exception Throws an exception if the field is invalid.
+	 * @since  0.1.0
 	 */
 	public function __get( $field ) {
 		switch ( $field ) {
@@ -404,10 +379,8 @@ class Woo_Minecraft {
 
 /**
  * Load the instanced class.
- *
- * @deprecated 1.3.0 All APIs should move to using the new APIs outside of the legacy folder.
- *
  * @return Woo_Minecraft
+ * @deprecated 1.3.0 All APIs should move to using the new APIs outside of the legacy folder.
  */
 function woo_minecraft() {
 	// _deprecated_function( __FUNCTION__, '1.3.0' );
@@ -420,7 +393,6 @@ add_action( 'plugins_loaded', array( woo_minecraft(), 'i18n' ) );
 
 /**
  * Determines if any item in the cart has WMC commands attached.
- *
  * @deprecated 1.3.0 All APIs should move to using the new APIs outside of the legacy folder.
  */
 function wmc_items_have_commands( array $items ) {
