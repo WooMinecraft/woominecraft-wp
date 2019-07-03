@@ -20,7 +20,10 @@
 					<td class="wmc_key"><input type="text" name="wmc_servers[<?php echo (int) $count; ?>][key]" value="<?php echo esc_attr( $server['key'] ); ?>" class="widefat" /></td>
 					<td><input type="button" class="button button-secondary wmc_delete_server" value="<?php esc_html_e( 'Remove Server', 'woominecraft' ); ?>" /> </td>
 				</tr>
-			<?php $count++; endforeach; ?>
+			<?php
+				$count++;
+				endforeach; // Endforeach.
+			?>
 			</tbody>
 		</table>
 	</td>

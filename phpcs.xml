@@ -47,6 +47,7 @@
     <rule ref="./vendor/wp-coding-standards/wpcs/WordPress-Core">
         <exclude name="WordPress.WP.I18n.MissingTranslatorsComment" />
         <exclude name="Generic.WhiteSpace.ScopeIndent.Incorrect" />
+        <exclude name="Squiz.PHP.EmbeddedPhp.ContentBeforeOpen" />
     </rule>
 
     <!--

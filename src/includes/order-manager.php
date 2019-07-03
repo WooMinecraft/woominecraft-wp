@@ -90,12 +90,16 @@ function additional_checkout_field( $cart ) {
 	?>
 	<div id="woo_minecraft">
 		<?php
-		woocommerce_form_field( 'player_id', array(
-			'type'        => 'text',
-			'class'       => array(),
-			'label'       => __( 'Player ID ( Minecraft Username ):', 'woominecraft' ),
-			'placeholder' => __( 'Required Field', 'woominecraft' ),
-		), $cart->get_value( 'player_id' ) );
+		woocommerce_form_field(
+			'player_id',
+			array(
+				'type'        => 'text',
+				'class'       => array(),
+				'label'       => __( 'Player ID ( Minecraft Username ):', 'woominecraft' ),
+				'placeholder' => __( 'Required Field', 'woominecraft' ),
+			),
+			$cart->get_value( 'player_id' )
+		);
 		?>
 	</div>
 	<?php

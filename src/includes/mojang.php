@@ -76,11 +76,14 @@ function get_player_from_cache( $player_id ) {
 
 	if ( false == $mc_json ) { // @codingStandardsIgnoreLine Lose compare is fine here.
 
-		$post_config = apply_filters( 'mojang_profile_api_post_args', array(
-			'body'    => json_encode( array( rawurlencode( $player_id ) ) ), // @codingStandardsIgnoreLine Nope, need this.
-			'method'  => 'POST',
-			'headers' => array( 'content-type' => 'application/json' ),
-		) );
+		$post_config = apply_filters(
+			'mojang_profile_api_post_args',
+			array(
+				'body'    => json_encode( array( rawurlencode( $player_id ) ) ), // @codingStandardsIgnoreLine Nope, need this.
+				'method'  => 'POST',
+				'headers' => array( 'content-type' => 'application/json' ),
+			)
+		);
 
 		$minecraft_account = wp_remote_post( 'https://api.mojang.com/profiles/minecraft', $post_config );
 

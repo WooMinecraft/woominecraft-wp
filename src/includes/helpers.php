@@ -61,25 +61,30 @@ function get_meta_key_pending( $server ) {
 /**
  * Gets the query parameters to grab order data.
  *
+ * @param string $server The server.
+ *
  * @return string
  */
 function get_order_query_params( $server ) {
-	return apply_filters( 'woo_minecraft_json_orders_args', array(
-		'posts_per_page' => '-1',
-		'post_status'    => 'wc-completed',
-		'post_type'      => 'shop_order',
-		'meta_query'     => array(
-			'relation' => 'AND',
-			array(
-				'key'     => get_meta_key_pending( $server ),
-				'compare' => 'EXISTS',
+	return apply_filters(
+		'woo_minecraft_json_orders_args',
+		array(
+			'posts_per_page' => '-1',
+			'post_status'    => 'wc-completed',
+			'post_type'      => 'shop_order',
+			'meta_query'     => array(
+				'relation' => 'AND',
+				array(
+					'key'     => get_meta_key_pending( $server ),
+					'compare' => 'EXISTS',
+				),
+				array(
+					'key'     => get_meta_key_delivered( $server ),
+					'compare' => 'NOT EXISTS',
+				),
 			),
-			array(
-				'key'     => get_meta_key_delivered( $server ),
-				'compare' => 'NOT EXISTS',
-			),
-		),
-	) );
+		)
+	);
 }
 
 /**
