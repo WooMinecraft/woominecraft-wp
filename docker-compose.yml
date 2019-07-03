@@ -1,34 +1,6 @@
 version: '2'
 
 services:
-  minecraft:
-    image: nimmis/spigot
-    ports:
-      - 25565:25565
-    volumes:
-      - ./docker/minecraft:/minecraft
-      - ./docker/init/mc.yml:/minecraft/plugins/WooMinecraft/config.yml
-      - ./docker/WooMinecraft/target/WooMinecraft-1.2.0-1.12.2rc.jar:/minecraft/plugins/wmc.jar
-    environment:
-      EULA: 'true'
-      SPIGOT_VER: '1.12.2'
-      MC_MAXMEM: '2g'
-      MC_MINMEM: '512m'
-
-  minecraft2:
-    image: nimmis/spigot
-    ports:
-      - 25566:25565
-    volumes:
-      - ./docker/minecraft2:/minecraft
-      - ./docker/init/mc2.yml:/minecraft/plugins/WooMinecraft/config.yml
-      - ./docker/WooMinecraft/target/WooMinecraft-1.2.0-1.12.2rc.jar:/minecraft/plugins/wmc.jar
-    environment:
-      EULA: 'true'
-      SPIGOT_VER: '1.12.2'
-      MC_MAXMEM: '2g'
-      MC_MINMEM: '512m'
-
   nginx:
     image: nginx:stable-alpine
     depends_on:
@@ -58,12 +30,9 @@ services:
 
   mysql:
     image: mysql:5.7
-    ports:
-      - 3306:3306
     restart: always
     volumes:
       - ./docker/mysql:/var/lib/mysql
-      - ./docker/init/setup.sql:/docker-entrypoint-initdb.d/setup.sql
     environment:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: wordpress
