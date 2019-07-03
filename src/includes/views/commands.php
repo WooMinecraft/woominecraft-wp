@@ -53,7 +53,10 @@ $servers = woo_minecraft()->admin->get_servers();
 						</td>
 						<td><input type="button" class="button button-small wmc_delete_server" value="<?php esc_html_e( 'Delete Command', 'woominecraft' ); ?>" /></td>
 					</tr>
-					<?php $offset++; endforeach; ?>
+					<?php
+						$offset++;
+						endforeach; // END Foreach
+					?>
 				<?php endforeach; ?>
 			<?php endif; ?>
 		</tbody>

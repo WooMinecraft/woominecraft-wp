@@ -44,7 +44,10 @@
        Make sure the reference starts with ./ or ../ so PHP_CodeSniffer
        knows it is a relative path.
     -->
-    <rule ref="./vendor/wp-coding-standards/wpcs/WordPress-Core"/>
+    <rule ref="./vendor/wp-coding-standards/wpcs/WordPress-Core">
+        <exclude name="WordPress.WP.I18n.MissingTranslatorsComment" />
+        <exclude name="Generic.WhiteSpace.ScopeIndent.Incorrect" />
+    </rule>
 
     <!--
        If you are including sniffs that are not installed, you can
