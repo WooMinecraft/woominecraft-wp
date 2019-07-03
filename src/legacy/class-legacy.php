@@ -1,6 +1,6 @@
 <?php
 
-require_once WMC_INCLUDES . 'admin.php';
+require_once WMC_INCLUDES . 'class-admin.php';
 
 /**
  * Class Woo_Minecraft
