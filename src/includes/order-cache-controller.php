@@ -6,7 +6,7 @@ namespace WooMinecraft\Orders\Cache;
  * Sets up all the things related to Order cache handling.
  */
 function setup() {
-	$n = function( $string ) {
+	$n = function ( $string ) {
 		return __NAMESPACE__ . '\\' . $string;
 	};
 
@@ -41,9 +41,8 @@ function bust_command_cache( $post_id = 0 ) {
  *
  * @param string $server_key
  *
- * @since 1.3.0 Rest API implementation.
- *
  * @return string|false The key on success, false if no GET param can be found.
+ * @since 1.3.0 Rest API implementation.
  */
 function get_transient_key( $server_key = '' ) {
 
@@ -62,10 +61,8 @@ function get_transient_key( $server_key = '' ) {
 
 /**
  * The command transient base key.
- *
- * @since 1.3.0
- *
  * @return string
+ * @since 1.3.0
  */
 function get_command_transient() {
 	return 'wmc-transient-command-feed';
