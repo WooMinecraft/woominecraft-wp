@@ -97,6 +97,7 @@ function additional_checkout_field( $cart ) {
 				'class'       => array(),
 				'label'       => __( 'Player ID ( Minecraft Username ):', 'woominecraft' ),
 				'placeholder' => __( 'Required Field', 'woominecraft' ),
+				'required'    => true,
 			),
 			$cart->get_value( 'player_id' )
 		);
