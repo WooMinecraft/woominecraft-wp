@@ -19,3 +19,6 @@ install:
 script:
   - gulp
   - composer run-script phpcs
+branches:
+  only:
+    - master
