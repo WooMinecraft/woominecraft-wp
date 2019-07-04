@@ -5,7 +5,7 @@
     "license": "GPLv2",
     "scripts": {
         "phpcs": "phpcs",
-        "post-install-cmd": "phpcs --config-set installed_paths ../../wp-coding-standards/wpcs"
+        "post-install-cmd": "pwd && phpcs --config-set installed_paths ../wp-coding-standards/wpcs"
     },
     "repositories": [
         {
