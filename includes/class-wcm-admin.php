@@ -30,7 +30,7 @@ class WCM_Admin {
 		// Add deprecation notice.
 		// _deprecated_function( __METHOD__, '1.3.0' );
 
-		add_action( 'admin_enqueue_scripts', array( $this, 'scripts' ) );
+//		add_action( 'admin_enqueue_scripts', array( $this, 'scripts' ) );
 
 		add_action( 'woocommerce_admin_order_data_after_shipping_address', array( $this, 'display_player_name_in_order_meta' ) );
 		add_action( 'woocommerce_product_options_general_product_data', array( $this, 'add_group_field' ) );
