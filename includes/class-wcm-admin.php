@@ -153,7 +153,7 @@ class WCM_Admin {
 	 * @return array|null|object
 	 * @author JayWood
 	 */
-	private function get_count( $order_id, $type = false ) {
+	private function get_count( $order_id, $type = '' ) {
 		global $wpdb;
 
 		$statement = "select * from {$wpdb->postmeta}";
@@ -214,7 +214,7 @@ class WCM_Admin {
 	}
 
 	/**
-	 * Add settings section to woocommerce general settings page
+	 * Add settings section to WooCommerce general settings page
 	 *
 	 * @param array $settings
 	 *

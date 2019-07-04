@@ -2,6 +2,8 @@
 
 namespace WooMinecraft\Orders\Manager;
 
+use function WooMinecraft\Orders\Cache\bust_command_cache;
+
 /**
  * Sets up all the things related to Order handling.
  */
@@ -80,9 +82,7 @@ function save_commands_to_order( $order_id ) {
  * @return bool  False on failure, true otherwise.
  */
 function additional_checkout_field( $cart ) {
-	global $woocommerce;
-
-	$items = $woocommerce->cart->cart_contents;
+	$items = WC()->cart->cart_contents;
 	if ( ! \WooMinecraft\Helpers\wmc_items_have_commands( $items ) || ! function_exists( 'woocommerce_form_field' ) ) {
 		return false;
 	}
@@ -133,8 +133,7 @@ function thanks( $id ) {
  */
 function reset_order( $order_id, $server_key ) {
 	delete_post_meta( $order_id, '_wmc_delivered_' . $server_key );
-	$this->bust_command_cache( $order_id );
-
+	bust_command_cache( $order_id );
 	return true;
 }
 
