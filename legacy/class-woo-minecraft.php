@@ -1,5 +1,10 @@
 <?php
 
+use function WooMinecraft\Helpers\get_order_query_params;
+use function WooMinecraft\Orders\Cache\bust_command_cache;
+use function WooMinecraft\Orders\Cache\get_transient_key;
+use function WooMinecraft\Orders\Manager\get_player_id_for_order;
+
 require_once WMC_INCLUDES . 'class-wcm-admin.php';
 
 /**
@@ -140,11 +145,11 @@ class Woo_Minecraft {
 			$this->process_completed_commands( $key );
 		}
 
-		$output = get_transient( \WooMinecraft\Orders\Cache\get_transient_key() );
+		$output = get_transient( get_transient_key() );
 
 		if ( false === $output || isset( $_GET['delete-trans'] ) ) { // @codingStandardsIgnoreLine Not verifying because we don't need to, just checking if isset.
 
-			$orders = get_posts( \WooMinecraft\Helpers\get_order_query_params( $key ) );
+			$orders = get_posts( get_order_query_params( $key ) );
 
 			$output = array();
 
@@ -154,7 +159,7 @@ class Woo_Minecraft {
 						continue;
 					}
 
-					$player_id   = \WooMinecraft\Orders\Manager\get_player_id_for_order( $wc_order );
+					$player_id   = get_player_id_for_order( $wc_order );
 					$order_array = $this->generate_order_json( $wc_order, $key );
 
 					if ( ! empty( $order_array ) ) {
@@ -166,7 +171,7 @@ class Woo_Minecraft {
 				}
 			}
 
-			set_transient( \WooMinecraft\Orders\Cache\get_transient_key(), $output, 60 * 60 ); // Stores the feed in a transient for 1 hour.
+			set_transient( get_transient_key(), $output, 60 * 60 ); // Stores the feed in a transient for 1 hour.
 		}
 
 		wp_send_json_success( $output );
@@ -248,7 +253,7 @@ class Woo_Minecraft {
 			update_post_meta( $order_id, $delivered, true );
 		}
 
-		\WooMinecraft\Orders\Cache\bust_command_cache();
+		bust_command_cache();
 	}
 
 
