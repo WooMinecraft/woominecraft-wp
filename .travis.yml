@@ -15,7 +15,7 @@ before_install:
   - npm install -g gulp-cli
   - composer install
 install:
-  - cd "src" && npm install
+  - npm install
 script:
   - gulp
-  - cd ../ && composer run-script phpcs
+  - composer run-script phpcs
