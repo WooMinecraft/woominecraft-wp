@@ -17,10 +17,13 @@
         relative to the ruleset's location, and that specifying any file or
         directory path on the command line will ignore all file tags.
      -->
-    <file>./</file>
+    <file>includes/</file>
+    <file>legacy/</file>
+    <file>woominecraft.php</file>
 
     <exclude-pattern>*/tests/*</exclude-pattern>
     <exclude-pattern>*/data/*</exclude-pattern>
+    <exclude-pattern>*/vendor/*</exclude-pattern>
     <exclude-pattern>*\.(inc|css|js)</exclude-pattern>
 
     <!--
