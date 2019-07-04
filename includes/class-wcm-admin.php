@@ -66,7 +66,7 @@ class WCM_Admin {
 		}
 
 		$orderby = $wp_query->get( 'orderby' );
-		if ( 'wmc-player' == $orderby ) {
+		if ( 'wmc-player' === $orderby ) {
 			$wp_query->set( 'meta_key', 'player_id' );
 			$wp_query->set( 'orderby', 'meta_value' );
 		}
@@ -104,7 +104,7 @@ class WCM_Admin {
 		$out = array();
 		foreach ( $columns as $key => $value ) {
 			$out[ $key ] = $value;
-			if ( 'order_status' == $key ) {
+			if ( 'order_status' === $key ) {
 				$out['wmc-delivered'] = __( 'Delivered', 'woominecraft-wp' ) . wc_help_tip( __( 'How many servers delivered versus how many still to be delivered.', 'woominecraft-wp' ) );
 				$out['wmc-player']    = __( 'Player', 'woominecraft-wp' );
 			}
@@ -157,7 +157,7 @@ class WCM_Admin {
 		global $wpdb;
 
 		$statement = "select * from {$wpdb->postmeta}";
-		if ( 'delivered' == $type ) {
+		if ( 'delivered' === $type ) {
 			$statement .= $wpdb->prepare( ' where meta_key like %s', '%' . $wpdb->esc_like( '_wmc_delivered' ) . '%' );
 		} else {
 			$statement .= $wpdb->prepare( ' where meta_key like %s', '%' . $wpdb->esc_like( '_wmc_commands' ) . '%' );
@@ -359,7 +359,7 @@ class WCM_Admin {
 				$server_key                = substr( $key, 14, strlen( $key ) );
 				$option_set[ $server_key ] = __( 'Deleted', 'woominecraft' ) . ' ( ' . $server_key . ' )';
 				foreach ( $servers as $server ) {
-					if ( $server_key == $server['key'] ) {
+					if ( $server_key === $server['key'] ) {
 						$option_set[ $server_key ] = $server['name'];
 						break;
 					}
@@ -409,7 +409,7 @@ class WCM_Admin {
 			'please_wait'      => __( 'Please wait...', 'woominecraft' ),
 		);
 
-		if ( 'post.php' == $hook ) {
+		if ( 'post.php' === $hook ) {
 			global $post;
 			if ( isset( $post->ID ) ) {
 				$script_data['order_id']  = $post->ID;
