@@ -5,8 +5,6 @@ use function WooMinecraft\Orders\Cache\bust_command_cache;
 use function WooMinecraft\Orders\Cache\get_transient_key;
 use function WooMinecraft\Orders\Manager\get_player_id_for_order;
 
-require_once WMC_INCLUDES . 'class-wcm-admin.php';
-
 /**
  * Class Woo_Minecraft
  * @todo: Create some way of handling orphaned orders. See Below -
@@ -72,8 +70,6 @@ class Woo_Minecraft {
 		$this->basename = plugin_basename( __FILE__ );
 		$this->url      = plugin_dir_url( __FILE__ );
 		$this->path     = plugin_dir_path( __FILE__ );
-
-		$this->plugin_classes();
 	}
 
 	/**

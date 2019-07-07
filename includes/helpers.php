@@ -2,7 +2,7 @@
 
 namespace WooMinecraft\Helpers;
 
-const WM_SERVERS = 'wm_servers';
+const WM_SERVERS22 = 'wm_servers';
 
 /**
  * Sets up all the things related to Order handling.
@@ -11,6 +11,17 @@ function setup() {
 	$n = function( $string ) {
 		return __NAMESPACE__ . '\\' . $string;
 	};
+
+	add_action( 'template_redirect', $n( 'deprecate_json_feed' ) );
+}
+
+/**
+ * Sends an error to the user.
+ *
+ * The error lets the user know that the MC version of the plugin is out of date.
+ */
+function deprecate_json_feed() {
+	wp_send_json_error( [ 'msg' => esc_html__( 'You are using an older version, please update your Minecraft plugin.', 'woominecraft' ) ] );
 }
 
 /**

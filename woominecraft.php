@@ -17,11 +17,6 @@ define( 'WMC_INCLUDES', plugin_dir_path( __FILE__ ) . 'includes/' );
 define( 'WMC_URL', plugin_dir_url( __FILE__ ) );
 define( 'WMC_VERSION', '1.3.0' );
 
-/**
- * The legacy class will be removed in
- */
-require_once 'legacy/class-woo-minecraft.php';
-
 // Require the helpers file, for use in :allthethings:
 require_once WMC_INCLUDES . 'helpers.php';
 
