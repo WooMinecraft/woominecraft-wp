@@ -19,6 +19,7 @@ define( 'WMC_VERSION', '1.3.0' );
 
 // Require the helpers file, for use in :allthethings:
 require_once WMC_INCLUDES . 'helpers.php';
+Helpers\setup();
 
 // Everything to do with the Mojang API.
 require_once WMC_INCLUDES . 'mojang.php';
