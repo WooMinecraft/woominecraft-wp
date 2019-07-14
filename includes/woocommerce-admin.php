@@ -12,12 +12,10 @@ function setup() {
 		return __NAMESPACE__ . "\\$function";
 	};
 
-
 	add_action( 'woocommerce_admin_order_data_after_shipping_address', $n( 'do_resend_donations_field' ) );
 	add_action( 'admin_enqueue_scripts', $n( 'admin_scripts' ) );
 	add_action( 'woocommerce_product_options_general_product_data', $n( 'add_group_field' ) );
 	add_action( 'woocommerce_process_product_meta_simple', $n( 'save_simple_commands' ) );
-
 
 	add_action( 'woocommerce_product_after_variable_attributes', $n( 'add_variation_field' ), 10, 3 );
 	add_action( 'woocommerce_update_product_variation', $n( 'save_variable_commands' ), 10 );
@@ -489,9 +487,7 @@ function do_resend_donations_field( $order ) {
 			</select>
 		</p>
 		<p>
-			<input type="button" class="button button-primary" id="resendDonations"
-			       value="<?php _e( 'Resend Donations', 'woominecraft' ); ?>" data-id="<?php echo $player_id; ?>"
-			       data-orderid="<?php echo $order->get_id(); ?>"/>
+			<input type="button" class="button button-primary" id="resendDonations" value="<?php _e( 'Resend Donations', 'woominecraft' ); ?>" data-id="<?php echo $player_id; ?>" data-orderid="<?php echo $order->get_id(); ?>"/>
 		</p>
 	</div>
 	<?php
