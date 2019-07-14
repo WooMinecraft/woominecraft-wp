@@ -21,6 +21,9 @@ function setup() {
  * The error lets the user know that the MC version of the plugin is out of date.
  */
 function deprecate_json_feed() {
+	if ( ! isset( $_GET['wmc_key'] ) ) {
+		return;
+	}
 	wp_send_json_error( [ 'msg' => esc_html__( 'You are using an older version, please update your Minecraft plugin.', 'woominecraft' ) ] );
 }
 
