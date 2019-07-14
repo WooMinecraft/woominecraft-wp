@@ -35,12 +35,12 @@ function setup() {
 	add_filter( 'manage_edit-shop_order_sortable_columns', $n( 'make_player_sortable' ) );
 	add_action( 'pre_get_posts', $n( 'sort_by_player_name' ) );
 }
+
 /**
  * Sorts by player name, if query arg is present.
  *
  * @param \WP_Query $wp_query
  *
- * @author JayWood
  */
 function sort_by_player_name( $wp_query ) {
 	if ( ! is_admin() ) {
@@ -66,7 +66,6 @@ function sort_by_player_name( $wp_query ) {
  * @param array $columns
  *
  * @return mixed
- * @author JayWood
  */
 function make_player_sortable( $columns ) {
 	$columns['wmc-player'] = 'wmc-player';
@@ -80,7 +79,6 @@ function make_player_sortable( $columns ) {
  * @param $columns
  *
  * @return array
- * @author JayWood
  */
 function add_user_and_deliveries_header( $columns ) {
 	$out = array();
@@ -100,8 +98,6 @@ function add_user_and_deliveries_header( $columns ) {
  *
  * @param $column
  * @param $post_id
- *
- * @author JayWood
  */
 function add_users_and_deliveries( $column, $post_id ) {
 	switch ( $column ) {
@@ -129,11 +125,10 @@ function get_delivered_col_output( $post_id ) {
 /**
  * Pretty much a wrapper for doing multiple get_post_meta() calls
  *
- * @param int $order_id
+ * @param int    $order_id
  * @param string $type
  *
- * @return array|null|object
- * @author JayWood
+ * @return array|null
  */
 function get_count( $order_id, $type = '' ) {
 	global $wpdb;
@@ -151,8 +146,7 @@ function get_count( $order_id, $type = '' ) {
 }
 
 /**
- * Saves server keys
- * @author JayWood
+ * Saves server ke
  */
 function save_servers() {
 	if ( ! isset( $_POST['wmc_servers'] ) ) {
@@ -189,7 +183,6 @@ function save_servers() {
  * @param $values
  *
  * @since  1.0.7
- * @author JayWood
  */
 function render_servers_section( $values ) {
 	require_once 'views/server-section.php';
@@ -201,7 +194,6 @@ function render_servers_section( $values ) {
  * @param array $settings
  *
  * @return array
- * @author JayWood
  * @since  1.0.7
  */
 function wmc_settings( $settings ) {
@@ -227,7 +219,6 @@ function wmc_settings( $settings ) {
 /**
  * Gets all servers and sanitizes their output.
  * @return array
- * @author JayWood
  * @since  1.7.0
  */
 function get_servers() {
@@ -265,8 +256,7 @@ function get_servers() {
 }
 
 /**
- * Re-sends orders to players based on player ID and order ID
- * @author JayWood
+ * Re-sends orders
  */
 function ajax_handler() {
 
@@ -287,8 +277,8 @@ function ajax_handler() {
 /**
  * Fires for each variation section, in-turn this creates a set of 'command rows' for each variation.
  *
- * @param int $loop
- * @param array $variation_data
+ * @param int      $loop
+ * @param array    $variation_data
  * @param \WP_Post $post
  */
 function add_variation_field( $loop, $variation_data, $post ) {
@@ -316,7 +306,6 @@ function admin_init() {
  * @param mixed $old_key
  *
  * @deprecated
- * @author JayWood
  */
 function update_product_commands( $old_key ) {
 
@@ -351,9 +340,6 @@ function update_product_commands( $old_key ) {
  * Updates all orders to the new order command structure.
  *
  * @param string $old_key
- *
- * @deprecated
- * @author JayWood
  */
 function update_order_commands( $old_key ) {
 	$order_commands_query = array(
@@ -381,7 +367,6 @@ function update_order_commands( $old_key ) {
  *
  * @param int $post_id
  *
- * @author JayWood
  */
 function save_simple_commands( $post_id = 0 ) {
 	if ( empty( $post_id ) ) {
@@ -395,8 +380,6 @@ function save_simple_commands( $post_id = 0 ) {
  * Saves variable-based commands
  *
  * @param int $post_id
- *
- * @author JayWood
  */
 function save_variable_commands( $post_id = 0 ) {
 	if ( empty( $post_id ) ) {
@@ -409,7 +392,7 @@ function save_variable_commands( $post_id = 0 ) {
 /**
  * Saves the general commands to post meta data.
  *
- * @param int $post_id The post ID to save commands against
+ * @param int   $post_id The post ID to save commands against
  * @param array $command_set A linear array of commands to be saved
  */
 function _save_product_commands( $post_id = 0, $command_set = array() ) {
@@ -442,10 +425,9 @@ function _save_product_commands( $post_id = 0, $command_set = array() ) {
 }
 
 /**
- * @param int $post_id
+ * @param int    $post_id
  * @param string $type
  *
- * @author JayWood
  */
 function _save_commands( $post_id, $type ) {
 	if ( ! isset( $_POST['wmc_commands'] ) || ! isset( $_POST['wmc_commands'][ $type ] ) ) {
@@ -507,7 +489,9 @@ function do_resend_donations_field( $order ) {
 			</select>
 		</p>
 		<p>
-			<input type="button" class="button button-primary" id="resendDonations" value="<?php _e( 'Resend Donations', 'woominecraft' ); ?>" data-id="<?php echo $player_id; ?>" data-orderid="<?php echo $order->get_id(); ?>"/>
+			<input type="button" class="button button-primary" id="resendDonations"
+			       value="<?php _e( 'Resend Donations', 'woominecraft' ); ?>" data-id="<?php echo $player_id; ?>"
+			       data-orderid="<?php echo $order->get_id(); ?>"/>
 		</p>
 	</div>
 	<?php

@@ -2,7 +2,7 @@
 
 namespace WooMinecraft\Helpers;
 
-const WM_SERVERS22 = 'wm_servers';
+const WM_SERVERS = 'wm_servers';
 
 /**
  * Sets up all the things related to Order handling.
