@@ -18,7 +18,6 @@
         directory path on the command line will ignore all file tags.
      -->
     <file>includes/</file>
-    <file>legacy/</file>
     <file>woominecraft.php</file>
 
     <exclude-pattern>*/tests/*</exclude-pattern>
