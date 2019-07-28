@@ -39,3 +39,6 @@ REST\setup();
 
 require_once WMC_INCLUDES . 'woocommerce-admin.php';
 WooCommerce\setup();
+
+// Fire an action after all is done.
+do_action( 'woominecraft_setup' );
