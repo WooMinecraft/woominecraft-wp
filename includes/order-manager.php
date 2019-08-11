@@ -56,12 +56,8 @@ function save_commands_to_order( $order_id ) {
 					$tmp_array[ $server_key ] = array();
 				}
 
-				if ( is_array( $command ) ) {
-					foreach ( $command as $c ) {
-						$tmp_array[ $server_key ][] = sprintf( $c, $player_name );
-					}
-				} else {
-					$tmp_array[ $server_key ][] = sprintf( $command, $player_name );
+				foreach ( (array) $command as $c ) {
+					$tmp_array[ $server_key ][] = sprintf( $c, $player_name );
 				}
 			}
 		}
