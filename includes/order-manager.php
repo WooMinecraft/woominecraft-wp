@@ -57,7 +57,7 @@ function save_commands_to_order( $order_id ) {
 				}
 
 				foreach ( (array) $command as $c ) {
-					$tmp_array[ $server_key ][] = apply_filters( 'woominecraft_order_command', sprintf( $c, $player_name ), $c, $player_name );
+					$tmp_array[ $server_key ][] = apply_filters( 'woominecraft_order_command', str_replace( '%s', $player_name, $c ), $c, $player_name );
 				}
 			}
 		}
