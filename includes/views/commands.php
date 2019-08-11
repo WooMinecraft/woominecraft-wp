@@ -4,7 +4,7 @@
  * @global string $command_key
  * @global int $post_id
  */
-$servers = woo_minecraft()->admin->get_servers();
+$servers = \WooMinecraft\WooCommerce\get_servers();
 ?>
 <div class="woo_minecraft">
 	<p class="title"><?php esc_html_e( 'WooMinecraft Commands', 'woominecraft' ); ?></p>
