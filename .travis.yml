@@ -12,6 +12,7 @@ before_install:
   - npm install -g npm gulp gulp-cli
 install:
   - npm install
+script: "Building jobs."
 jobs:
   include:
     - stage: build
