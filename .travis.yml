@@ -29,3 +29,6 @@ jobs:
         - npm install -g npm gulp gulp-cli
         - npm install
         - gulp
+        - mkdir -p build
+        - zip -r bulid/{$TRAVIS_BUILD_NUMBER}.zip . -x@build-excludes.txt
+        - ls build/
