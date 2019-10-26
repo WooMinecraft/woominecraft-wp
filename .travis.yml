@@ -1,6 +1,5 @@
 language: php
 php:
-  - '5.6'
   - '7.1'
   - '7.2'
 before_script:
@@ -10,15 +9,23 @@ cache:
     - vendor
     - src/node_modules
 before_install:
-  - npm install -g npm
-  - npm install -g gulp
-  - npm install -g gulp-cli
-  - composer install
+  - npm install -g npm gulp gulp-cli
 install:
   - npm install
-script:
-  - gulp
-  - composer run-script phpcs
-branches:
-  only:
-    - master
+jobs:
+  include:
+    - stage: build
+      if: |
+        branch = master OR \
+        branch =~ /^release\/.*$/
+      script:
+        - gulp
+    - stage: test
+      if: |
+        branch = master OR \
+        branch =~ /^release\/.*$/
+      script:
+        - composer run-script phpcs
+    - stage: deploy
+      if: branch =~ /^release\/.*$/
+      script: "We made it dora..."
