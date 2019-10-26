@@ -4,8 +4,6 @@
 ../phpcs.xml
 *node_modules*
 ../vendor*
-../.github
-../.gitattributes
-../.gitignore
+../.git*
 ../.travis.yml
 ../build
