@@ -63,7 +63,6 @@ function save_commands_to_order( $order_id ) {
 				// Filter out any empty values.
 				$tmp_array[ $server_key ] = array_filter( $tmp_array[ $server_key ] );
 			}
-
 		}
 	}
 
