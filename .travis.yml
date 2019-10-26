@@ -20,7 +20,7 @@ jobs:
         branch =~ /^release\/.*$/
       script:
         - gulp
-    - stage: test
+    - stage: phplint
       if: |
         branch = master OR \
         branch =~ /^release\/.*$/
