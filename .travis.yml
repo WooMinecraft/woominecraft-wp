@@ -30,6 +30,6 @@ jobs:
         - npm install
         - gulp
         - mkdir -p build && pushd build
-        - zip -r $TRAVIS_BUILD_NUMBER.zip ../ -x@build-excludes.txt
+        - zip -r $TRAVIS_BUILD_NUMBER.zip ../ -x@../build-excludes.txt
         - popd
         - ls build/
