@@ -8,27 +8,24 @@ cache:
   directories:
     - vendor
     - src/node_modules
-before_install:
-  - npm install -g npm gulp gulp-cli
-install:
-  - npm install
 script:
-  - echo "Building jobs."
+  - echo "Testing build process"
+  - npm install -g npm gulp gulp-cli
+  - npm install
+  - gulp
 jobs:
   include:
-    - stage: build
-      if: |
-        branch = master OR \
-        branch =~ /^release\/.*$/
-      script:
-        - gulp
     - stage: phplint
       if: |
         branch = master OR \
         branch =~ /^release\/.*$/
       script:
+        - composer install
         - composer run-script phpcs
     - stage: deploy
       if: branch =~ /^release\/.*$/
       script:
         - echo "We made it dora..."
+        - npm install -g npm gulp gulp-cli
+        - npm install
+        - gulp
