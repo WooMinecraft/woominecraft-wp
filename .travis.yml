@@ -12,7 +12,8 @@ before_install:
   - npm install -g npm gulp gulp-cli
 install:
   - npm install
-script: "Building jobs."
+script:
+  - echo "Building jobs."
 jobs:
   include:
     - stage: build
@@ -29,4 +30,5 @@ jobs:
         - composer run-script phpcs
     - stage: deploy
       if: branch =~ /^release\/.*$/
-      script: "We made it dora..."
+      script:
+        - echo "We made it dora..."
