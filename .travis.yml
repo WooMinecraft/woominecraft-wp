@@ -2,6 +2,8 @@ language: php
 php:
   - '7.1'
   - '7.2'
+env:
+  - $RELEASE_PREFIX="woominecraft-prerelease-b"
 before_script:
   - phpenv config-rm xdebug.ini
 cache:
@@ -29,15 +31,15 @@ jobs:
         - npm install
         - gulp
         - mkdir -p build && pushd build
-        - zip -r $TRAVIS_BUILD_NUMBER.zip ../ -x@../build-excludes.txt
+        - zip -r $RELEASE_PREFIX$TRAVIS_BUILD_NUMBER.zip ../ -x@../build-excludes.txt
         - popd
         - ls build/
       deploy:
         provider: releases
         api_key: $API_KEY
-        file: build/$TRAVIS_BUILD_NUMBER.zip
+        file: build/$RELEASE_PREFIX$TRAVIS_BUILD_NUMBER.zip
         skip_cleanup: true
         draft: true
         on:
           all_branches: true
-          condition: ${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH} =~ ^release\/.*$
+          condition: $TRAVIS_BRANCH =~ ^release\/.*$
