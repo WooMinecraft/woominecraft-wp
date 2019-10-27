@@ -31,8 +31,10 @@ jobs:
         - npm install
         - gulp
         - gulp build
-        - tar -cvzf $RELEASE_PREFIX$TRAVIS_BUILD_NUMBER.tar.gz -X build-excludes.txt dist/
-        - ls -alh dist/
+        - pushd dist
+        - ls -alh .
+        - tar -cvzf ../$RELEASE_PREFIX$TRAVIS_BUILD_NUMBER.tar.gz ./
+        - popd
         - ls -alh ./
       deploy:
         provider: releases
