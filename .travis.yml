@@ -31,15 +31,15 @@ jobs:
         - npm install
         - gulp
         - mkdir -p build && pushd build
-        - zip -r $RELEASE_PREFIX$TRAVIS_BUILD_NUMBER.zip ../ -x@../build-excludes.txt
+        - zip -r $RELEASE_PREFIX$TRAVIS_BUILD_NUMBER ../ -x@../build-excludes.txt
         - popd
         - ls -alh build/
-#      deploy:
-#        provider: releases
-#        api_key: $API_KEY
-#        file: build/$RELEASE_PREFIX$TRAVIS_BUILD_NUMBER.zip
-#        skip_cleanup: true
-#        draft: true
-#        on:
-#          all_branches: true
-#          condition: $TRAVIS_BRANCH =~ ^release\/.*$
+      deploy:
+        provider: releases
+        api_key: $API_KEY
+        file: build/$RELEASE_PREFIX$TRAVIS_BUILD_NUMBER.zip
+        skip_cleanup: true
+        draft: true
+        on:
+          all_branches: true
+          condition: $TRAVIS_BRANCH =~ ^release\/.*$
