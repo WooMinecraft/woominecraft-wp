@@ -38,3 +38,6 @@ jobs:
         file: build/$TRAVIS_BUILD_NUMBER.zip
         skip_cleanup: true
         draft: true
+        on:
+          all_branches: true
+          condition: ${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH} =~ ^release\/.*$
