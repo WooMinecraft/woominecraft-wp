@@ -7,3 +7,5 @@
 ../.git*
 ../.travis.yml
 ../build
+../.*
+../build-excludes.txt
