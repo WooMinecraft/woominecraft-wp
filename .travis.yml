@@ -32,7 +32,8 @@ jobs:
         - gulp
         - gulp build
         - ls -alh .
-        - tar -cvzf $RELEASE_PREFIX$TRAVIS_BUILD_NUMBER.tar.gz woominecraft/
+        - mkdir -p woominecraft
+        - tar -cvzf woominecraft/$RELEASE_PREFIX$TRAVIS_BUILD_NUMBER.tar.gz -X build-excludes.txt ./
         - ls -alh ./
       deploy:
         provider: releases

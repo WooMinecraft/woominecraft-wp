@@ -45,10 +45,10 @@ gulp.task( 'build', function() {
 		'*.css',
 		'LICENSE',
 		'readme.txt',
-		'assets',
-		'includes',
-		'languages',
-	]).pipe( gulp.dest( 'woominecraft' ) );
+		'assets/**/*',
+		'includes/**/*',
+		'languages/**/*',
+	], { base: "." } ).pipe( gulp.dest( 'woominecraft' ) );
 } );
 
 gulp.task( 'default', gulp.series( 'scripts', 'sass', 'cssmin' ) );

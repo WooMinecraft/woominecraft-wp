@@ -12,3 +12,4 @@ dist/*
 docker/wordpress
 docker/WooMinecraft
 docker-compose.override.yml
+/woominecraft
