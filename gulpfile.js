@@ -48,7 +48,7 @@ gulp.task( 'build', function() {
 		'assets',
 		'includes',
 		'languages',
-	]).pipe( gulp.dest( '../dist/woominecraft/trunk' ) );
+	]).pipe( gulp.dest( 'dist' ) );
 } );
 
 gulp.task( 'default', gulp.series( 'scripts', 'sass', 'cssmin' ) );
