@@ -25,7 +25,6 @@ jobs:
     - stage: deploy
       if: branch =~ /^release\/.*$/
       script:
-        - echo "We made it dora..."
         - npm install -g npm gulp gulp-cli
         - npm install
         - gulp
@@ -33,3 +32,9 @@ jobs:
         - zip -r $TRAVIS_BUILD_NUMBER.zip ../ -x@../build-excludes.txt
         - popd
         - ls build/
+      deploy:
+        provider: releases
+        api_key: $API_KEY
+        file: build/$TRAVIS_BUILD_NUMBER.zip
+        skip_cleanup: true
+        draft: true
