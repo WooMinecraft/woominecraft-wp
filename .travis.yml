@@ -3,7 +3,7 @@ php:
   - '7.1'
   - '7.2'
 env:
-  - $RELEASE_PREFIX="woominecraft-prerelease-b"
+  - RELEASE_PREFIX="woominecraft-prerelease-b"
 before_script:
   - phpenv config-rm xdebug.ini
 cache:
