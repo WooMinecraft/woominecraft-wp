@@ -37,5 +37,6 @@ jobs:
         skip_cleanup: true
         draft: true
         on:
+          tags: true
           all_branches: true
           condition: $TRAVIS_BRANCH =~ ^release\/.*$
