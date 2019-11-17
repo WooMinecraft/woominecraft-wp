@@ -8,7 +8,8 @@ table.woominecraft.commands{
 		text-align: left;
 
 		&.buttons{
-			width: 200px;
+			width: 100px;
+			padding: 0;
 		}
 	}
 
@@ -17,7 +18,18 @@ table.woominecraft.commands{
 	}
 
 	td select{
-		width: 100%;
+		margin: 0;
+		display: block;
+		font-size: 14px;
+		padding: 4px;
+		color: #555;
+		line-height: 2;
+	}
+
+	.wmc_delete_server{
+		line-height: 2;
+		font-size: 1.1em;
+		padding: 4px;
 	}
 }
 
