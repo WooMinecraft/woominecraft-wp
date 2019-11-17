@@ -67,6 +67,7 @@ payments - [check google](http://lmgtfy.com/?q###Woocommerce+payment+gateways)
 * Update to utilize the Rest API instead of a generic endpoint.
 * Ensure backwards compatibility until 1.4
 * Strip some items from the changelog pre 1.1
+* Update some admin styles to match latest WooCommerce.
 
 ### 1.2
 * Fix major bug in multiple-server setups with transient keys.
