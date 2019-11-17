@@ -6,21 +6,13 @@
 **Tags:** minecraft, woocommerce, donations   
 **License:** GPLv2 or later   
 **Requires at least:** 4.9   
-**Tested up to:** 5.0.3  
+**Tested up to:** 5.3 
 **Stable tag:** 1.3  
 
 A FREE Minecraft Donation plugin which works in conjunction with my WooMinecraft java plugin for Minecraft to provide a self-hosted donation platform.
 
 ## Support
 If you enjoy this plugin and want to buy me a coffee sometime [feel free](https://www.paypal.me/jaywood) to tip your neighborly programmer.
-
-## Upgrade Notice
-For version `1.3.0` deprecation notices were added. If you would like to stop them from showing in your local dev environment
-place the following code in your theme or as an mu-plugin:
-```
-// Stop all deprecated triggers.
-add_filter( 'deprecated_function_trigger_error', '__return_false' );
-```
 
 ## Description
 
