@@ -8,8 +8,7 @@ table.woominecraft.commands th {
 }
 
 table.woominecraft.commands th.buttons {
-  width: 100px;
-  padding: 0;
+  width: 200px;
 }
 
 table.woominecraft.commands .widefat {
@@ -17,6 +16,15 @@ table.woominecraft.commands .widefat {
 }
 
 table.woominecraft.commands td select {
+  width: 100%;
+}
+
+.woocommerce_variable_attributes table.woominecraft.commands th.buttons {
+  width: 100px;
+  padding: 0;
+}
+
+.woocommerce_variable_attributes table.woominecraft.commands td select {
   margin: 0;
   display: block;
   font-size: 14px;
@@ -25,10 +33,11 @@ table.woominecraft.commands td select {
   line-height: 2;
 }
 
-table.woominecraft.commands .wmc_delete_server {
+.woocommerce_variable_attributes table.woominecraft.commands .wmc_delete_server {
   line-height: 2;
   font-size: 1.1em;
   padding: 4px;
+  font-weight: bold;
 }
 
 .wp-list-table #wmc-delivered {
