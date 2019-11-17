@@ -9,3 +9,7 @@ docker/minecraft2/*
 docker/mysql/*
 !docker/mysql/.gitkeep
 dist/*
+docker/wordpress
+docker/WooMinecraft
+docker-compose.override.yml
+/woominecraft
