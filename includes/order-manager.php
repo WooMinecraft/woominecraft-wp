@@ -118,7 +118,7 @@ function thanks( $id ) {
 		?>
 		<div class="woo_minecraft"><h4><?php esc_html_e( 'Minecraft Details', 'woominecraft' ); ?></h4>
 
-		<p><strong><?php esc_html_e( 'Username:', 'woominecraft' ); ?></strong><?php echo esc_html( $player_name ); ?></p></div><?php
+		<p><strong><?php esc_html_e( 'Username:', 'woominecraft' ); ?></strong> <?php echo esc_html( $player_name ); ?></p></div><?php
 	}
 }
 
