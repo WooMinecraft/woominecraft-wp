@@ -13,7 +13,7 @@
 			</tr>
 			</thead>
 			<tbody>
-			<?php $count = 0; foreach ( woo_minecraft()->admin->get_servers() as $server ) : ?>
+			<?php $count = 0; foreach ( \WooMinecraft\WooCommerce\get_servers() as $server ) : ?>
 				<tr class="row">
 					<td width="1%" class="sort"></td>
 					<td class="wmc_name"><input type="text" name="wmc_servers[<?php echo (int) $count; ?>][name]" value="<?php echo esc_attr( $server['name'] ); ?>" /></td>
