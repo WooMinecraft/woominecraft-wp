@@ -132,7 +132,7 @@ function thanks( $id ) {
  */
 function reset_order( $order_id, $server_key ) {
 	delete_post_meta( $order_id, '_wmc_delivered_' . $server_key );
-	bust_command_cache( $order_id );
+	bust_command_cache( $server_key );
 	return true;
 }
 

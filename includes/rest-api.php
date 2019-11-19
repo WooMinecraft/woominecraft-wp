@@ -3,9 +3,7 @@
 namespace WooMinecraft\REST;
 
 use function WooMinecraft\Helpers\get_meta_key_delivered;
-use function WooMinecraft\Helpers\is_debug;
 use function WooMinecraft\Orders\Cache\bust_command_cache;
-use function WooMinecraft\Orders\Cache\get_transient_key;
 use function WooMinecraft\Orders\Manager\get_orders_for_server;
 
 /**
@@ -56,9 +54,9 @@ function register_endpoints() {
  */
 function get_pending_orders( $request ) {
 
-	// Get and validate the server key.
-	$server_key = esc_attr( $request->get_param( 'server' ) );
-	$servers    = get_option( 'wm_servers', [] );
+	$server_key     = esc_attr( $request->get_param( 'server' ) );
+	$servers        = get_option( 'wm_servers', [] );
+	$pending_orders = [];
 	if ( empty( $servers ) ) {
 		return new \WP_Error( 'no_servers', 'No servers setup, check WordPress config.', [ 'status' => 200 ] );
 	}
@@ -69,15 +67,14 @@ function get_pending_orders( $request ) {
 		return new \WP_Error( 'invalid_key', 'Key provided in request is invalid.', [ 'status' => 200 ] );
 	}
 
-	$pending_orders = get_transient( get_transient_key( $server_key ) );
-	if ( false === $pending_orders || is_debug() ) {
-
+	$cached = wp_cache_get( 'commands', $server_key );
+	if ( false === $cached ) {
 		$pending_orders = get_orders_for_server( $server_key );
 		if ( is_wp_error( $pending_orders ) ) {
 			return $pending_orders;
 		}
 
-		set_transient( get_transient_key( $server_key ), $pending_orders, 1 * HOUR_IN_SECONDS );
+		wp_cache_set( 'commands', $pending_orders, $server_key, 1 * HOUR_IN_SECONDS );
 	}
 
 	return [ 'orders' => $pending_orders ];
@@ -142,7 +139,7 @@ function process_orders( $request ) {
 		update_post_meta( $order_id, get_meta_key_delivered( $server_key ), true );
 	}
 
-	bust_command_cache();
+	bust_command_cache( $server_key );
 
 	return [ 'status' => 'ok' ];
 }
