@@ -83,9 +83,7 @@ function get_pending_orders( $request ) {
  * While not as simple as running esc_attr, this is still necessary since the JSON
  * from the Java code comes in escaped, so we need some custom sanitization.
  *
- * @param $post_data
- *
- * @author JayWood
+ * @param string|array $post_data The post data.
  * @return int[] An array of order IDs or an empty array.
  */
 function sanitized_orders_post( $post_data ) {
