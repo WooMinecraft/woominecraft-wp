@@ -1,18 +1,16 @@
 # WooMinecraft - WordPress Plugin
 
 [![Twitter Follow](https://img.shields.io/twitter/follow/plugish.svg?style=for-the-badge&logo=twitter&label=Follow)](https://twitter.com/plugish) ![WordPress](https://img.shields.io/wordpress/v/woominecraft.svg?style=for-the-badge) ![WordPress plugin downloads](https://img.shields.io/wordpress/plugin/dt/woominecraft.svg?style=for-the-badge) ![WordPress plugin version](https://img.shields.io/wordpress/plugin/v/woominecraft.svg?style=for-the-badge) ![](https://img.shields.io/travis/com/WooMinecraft/woominecraft-wp/master?style=for-the-badge)
-
-**Contributors:** [JayWood](https://github.com/JayWood), [Ethan Smith](https://github.com/TekkitCommando)   
-**Tags:** minecraft, woocommerce, donations   
+ 
 **License:** GPLv2 or later   
 **Requires at least:** 4.9   
 **Tested up to:** 5.3   
 **Stable tag:** 1.3  
 
-A FREE Minecraft Donation plugin which works in conjunction with my WooMinecraft java plugin for Minecraft to provide a self-hosted donation platform.
+A FREE Minecraft Donation plugin which works in conjunction with my [WooMinecraft java plugin](https://github.com/woominecraft/woominecraft) for Minecraft to provide a self-hosted donation platform.
 
 ## Support
-If you enjoy this plugin and want to buy me a coffee sometime [feel free](https://www.paypal.me/jaywood) to tip your neighborly programmer.
+[Sponsorships](https://github.com/sponsors/JayWood) are always nice and will help me towards buying a new MacBook pro.
 
 ## Description
 
