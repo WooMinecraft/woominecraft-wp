@@ -6,7 +6,7 @@
 **Tags:** minecraft, woocommerce, donations   
 **License:** GPLv2 or later   
 **Requires at least:** 4.9   
-**Tested up to:** 5.3 
+**Tested up to:** 5.3   
 **Stable tag:** 1.3  
 
 A FREE Minecraft Donation plugin which works in conjunction with my WooMinecraft java plugin for Minecraft to provide a self-hosted donation platform.
