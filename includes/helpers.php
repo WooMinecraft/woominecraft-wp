@@ -101,10 +101,3 @@ function get_order_query_params( $server ) {
 		)
 	);
 }
-
-/**
- * Conditional to determine enabling debugging within the code.
- */
-function is_debug() {
-	return ( defined( 'WMC_DEBUG' ) && WMC_DEBUG );
-}
