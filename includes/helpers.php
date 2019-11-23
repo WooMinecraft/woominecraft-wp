@@ -43,8 +43,7 @@ function wmc_items_have_commands( array $items ) {
 			$post_id = $item['variation_id'];
 		}
 
-		$has_command = get_post_meta( $post_id, 'wmc_commands', true );
-		if ( empty( $has_command ) ) {
+		if ( empty( get_post_meta( $post_id, 'wmc_commands', true ) ) ) {
 			continue;
 		} else {
 			return true;
