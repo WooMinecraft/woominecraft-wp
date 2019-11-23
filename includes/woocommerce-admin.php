@@ -3,6 +3,7 @@
 namespace WooMinecraft\WooCommerce;
 
 use const WooMinecraft\Helpers\WM_SERVERS;
+use function WooMinecraft\Orders\Cache\bust_command_cache;
 
 /**
  * Sets things up.
@@ -265,6 +266,7 @@ function ajax_handler() {
 	if ( $player_id && $order_id && $server ) {
 		$result = \WooMinecraft\Orders\Manager\reset_order( $order_id, $server );
 		if ( $result > 0 ) {
+			bust_command_cache( $server );
 			wp_send_json_success();
 		}
 	}
