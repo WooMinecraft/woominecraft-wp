@@ -185,7 +185,7 @@ function get_orders_for_server( $server_key ) {
 	}
 
 	// Get the orders, and setup a variable.
-	$orders = get_posts( $args );
+	$orders = wc_get_orders( $args );
 	$output = [];
 
 	if ( empty( $orders ) ) {
@@ -193,19 +193,19 @@ function get_orders_for_server( $server_key ) {
 	}
 
 	foreach ( $orders as $wc_order ) {
-		if ( ! isset( $wc_order->ID ) ) {
+		if ( ! $wc_order->get_id() ) {
 			continue;
 		}
 
-		$player_id  = get_player_id_for_order( $wc_order );
-		$order_data = generate_order_json( $wc_order, $server_key );
+		$player_id  = get_player_id_for_order( $wc_order->get_id() );
+		$order_data = generate_order_json( $wc_order->get_id(), $server_key );
 		if ( empty( $order_data ) ) {
 			continue;
 		}
 
 		$output[] = [
 			'player'   => $player_id,
-			'order_id' => $wc_order->ID,
+			'order_id' => $wc_order->get_id(),
 			'commands' => $order_data,
 		];
 	}

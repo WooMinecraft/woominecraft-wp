@@ -79,15 +79,14 @@ function get_meta_key_pending( $server ) {
  *
  * @param string $server The server.
  *
- * @return string
+ * @return array
  */
 function get_order_query_params( $server ) {
 	return apply_filters(
 		'woo_minecraft_json_orders_args',
 		array(
-			'posts_per_page' => '-1',
-			'post_status'    => 'wc-completed',
-			'post_type'      => 'shop_order',
+			'limit' => '-1',
+			'status'    => 'completed',
 			'meta_query'     => array(
 				'relation' => 'AND',
 				array(
