@@ -67,14 +67,13 @@ function get_pending_orders( $request ) {
 		return new \WP_Error( 'invalid_key', 'Key provided in request is invalid.', [ 'status' => 200 ] );
 	}
 
-	$cached = wp_cache_get( 'commands', $server_key );
-	if ( false === $cached ) {
+	$pending_orders = wp_cache_get( $server_key, 'wmc_commands' );
+	if ( false === $pending_orders ) {
 		$pending_orders = get_orders_for_server( $server_key );
 		if ( is_wp_error( $pending_orders ) ) {
 			return $pending_orders;
 		}
-
-		wp_cache_set( 'commands', $pending_orders, $server_key, 1 * HOUR_IN_SECONDS );
+		wp_cache_set( $server_key, $pending_orders, 'wmc_commands', 1 * HOUR_IN_SECONDS );
 	}
 
 	return [ 'orders' => $pending_orders ];
