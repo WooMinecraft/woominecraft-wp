@@ -13,6 +13,22 @@ function setup() {
 	};
 
 	add_action( 'template_redirect', $n( 'deprecate_json_feed' ) );
+	add_filter( 'woocommerce_get_wp_query_args', $n( 'filter_query' ), 10, 2 );
+}
+
+/**
+ * Adds meta query capability to the WooCommerce order method.
+ * @param $wp_query_args
+ * @param $query_vars
+ *
+ * @return mixed
+ */
+function filter_query( $wp_query_args, $query_vars ){
+	if ( isset( $query_vars['meta_query'] ) ) {
+		$meta_query = isset( $wp_query_args['meta_query'] ) ? $wp_query_args['meta_query'] : [];
+		$wp_query_args['meta_query'] = array_merge( $meta_query, $query_vars['meta_query'] );
+	}
+	return $wp_query_args;
 }
 
 /**
