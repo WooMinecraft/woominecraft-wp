@@ -23,9 +23,9 @@ function setup() {
  *
  * @return mixed
  */
-function filter_query( $wp_query_args, $query_vars ){
+function filter_query( $wp_query_args, $query_vars ) {
 	if ( isset( $query_vars['meta_query'] ) ) {
-		$meta_query = isset( $wp_query_args['meta_query'] ) ? $wp_query_args['meta_query'] : [];
+		$meta_query                  = isset( $wp_query_args['meta_query'] ) ? $wp_query_args['meta_query'] : [];
 		$wp_query_args['meta_query'] = array_merge( $meta_query, $query_vars['meta_query'] );
 	}
 	return $wp_query_args;
@@ -99,9 +99,9 @@ function get_order_query_params( $server ) {
 	return apply_filters(
 		'woo_minecraft_json_orders_args',
 		array(
-			'limit' => '-1',
-			'status'    => 'completed',
-			'meta_query'     => array(
+			'limit'      => '-1',
+			'status'     => 'completed',
+			'meta_query' => array(
 				'relation' => 'AND',
 				array(
 					'key'     => get_meta_key_pending( $server ),
