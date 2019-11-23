@@ -35,7 +35,6 @@ function deprecate_json_feed() {
  * @return bool
  */
 function wmc_items_have_commands( array $items ) {
-	// Assume $data is cart contents
 	foreach ( $items as $item ) {
 		$post_id = $item['product_id'];
 
