@@ -53,10 +53,8 @@ function register_endpoints() {
  * @return \WP_Error|array Error on failure, orders on success.
  */
 function get_pending_orders( $request ) {
-
-	$server_key     = esc_attr( $request->get_param( 'server' ) );
-	$servers        = get_option( 'wm_servers', [] );
-	$pending_orders = [];
+	$server_key = esc_attr( $request->get_param( 'server' ) );
+	$servers    = get_option( 'wm_servers', [] );
 	if ( empty( $servers ) ) {
 		return new \WP_Error( 'no_servers', 'No servers setup, check WordPress config.', [ 'status' => 200 ] );
 	}
