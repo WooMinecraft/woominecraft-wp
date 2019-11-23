@@ -19,5 +19,5 @@ function setup() {
  * @param string $server_key
  */
 function bust_command_cache( $server_key ) {
-	wp_cache_delete( 'commands', $server_key );
+	wp_cache_delete( $server_key, 'wmc_commands' );
 }
