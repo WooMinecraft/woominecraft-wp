@@ -12,7 +12,8 @@ cache:
     - src/node_modules
 script:
   - echo "Testing build process"
-  - npm install -g npm gulp gulp-cli
+  - npm install npm@latest -g
+  - npm install -g gulp gulp-cli
   - npm install
   - gulp
 jobs:
