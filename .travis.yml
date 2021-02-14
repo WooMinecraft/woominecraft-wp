@@ -9,7 +9,6 @@ before_script:
 cache:
   directories:
     - vendor
-    - src/node_modules
 script:
   - echo "Testing build process"
   - npm install -g npm gulp gulp-cli
