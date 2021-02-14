@@ -3,7 +3,7 @@ Contributors: phyrax
 Tags: minecraft, woocommerce, donations
 License: GPLv2 or later
 Requires at least: 4.4.2
-Tested up to: 5.3
+Tested up to: 5.6.1
 Stable tag: 1.3.0
 
 A FREE Minecraft Donation plugin which works in conjunction with my WooMinecraft java plugin for Minecraft to provide a self-hosted donation platform.
@@ -52,6 +52,9 @@ Yea sure, we've all use to BuyCraft, but well, it doesn't have the flexibility o
 3. Adding servers.
 
 == Changelog ==
+
+= 1.4.0 =
+* Removes Mojang API requirements.
 
 = 1.3.0 =
 * Update to utilize the Rest API instead of a generic endpoint.

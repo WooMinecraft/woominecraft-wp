@@ -4,20 +4,20 @@ Plugin Name: Minecraft WooCommerce
 Plugin URI: http://woominecraft.com
 Description: To be used in conjunction with the WooMinecraft Bukkit plugin.  If you do not have it you can get it on the repository at <a href="https://github.com/JayWood/WooMinecraft">Github</a>.  Please be sure and fork the repository and make pull requests.
 Author: Jerry Wood
-Version: 1.3.0
+Version: 1.4.0-pre
 License: GPLv2
 Text Domain: woominecraft
 Domain Path: /languages
 Author URI: http://plugish.com
 WC requires at least: 3.0
-WC tested up to: 3.8
+WC tested up to: 5.0.0
 */
 
 namespace WooMinecraft;
 
 define( 'WMC_INCLUDES', plugin_dir_path( __FILE__ ) . 'includes/' );
 define( 'WMC_URL', plugin_dir_url( __FILE__ ) );
-define( 'WMC_VERSION', '1.3.0' );
+define( 'WMC_VERSION', '1.4.0-pre' );
 
 // Require the helpers file, for use in :allthethings:
 require_once WMC_INCLUDES . 'helpers.php';
