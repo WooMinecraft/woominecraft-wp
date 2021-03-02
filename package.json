@@ -32,9 +32,7 @@
     "@emotion/react": "^11.1.5",
     "@wordpress/api-fetch": "^3.21.5",
     "@wordpress/components": "^12.0.7",
-    "@wordpress/core-data": "^2.25.8"
-  },
-  "dependencies": {
+    "@wordpress/core-data": "^2.25.8",
     "@wordpress/scripts": "^13.0.3"
   }
 }
