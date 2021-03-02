@@ -1,28 +1,35 @@
-language: php
-php:
-  - '7.0'
 env:
   - RELEASE_PREFIX="woominecraft-prerelease-b"
 before_script:
   - phpenv config-rm xdebug.ini
-before_install:
-  - npm i -g npm@7.5.3
 cache:
   npm: false
   directories:
     - vendor
-jobs:
+matrix:
   include:
-    - stage: phplint
-      script:
+    - language: php
+      php: 7.0
+      before_script:
         - composer install
-        - composer run-script phpcs
-    - stage: build
       script:
+        - composer run-script phpcs
+    - language: node_js
+      node_js: 12
+      before_script:
         - npm install
-        - node -v
-        - npm -v
+      script:
         - npm run build
+#jobs:
+#  include:
+#    - stage: phplint
+#      script:
+#        - composer install
+#        - composer run-script phpcs
+#    - stage: build
+#      script:
+#        - npm install
+#        - npm run build
 #    - stage: deploy
 #      if: branch =~ /^release\/.*$/
 #      script:
