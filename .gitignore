@@ -1,4 +1,5 @@
 node_modules
+/build
 .sass_cache
 .idea
 /vendor/
