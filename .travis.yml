@@ -20,6 +20,8 @@ matrix:
         - npm install
       script:
         - npm run build
+
+# @TODO: Remove this and actually build packages when tags are created.
 #jobs:
 #  include:
 #    - stage: phplint
