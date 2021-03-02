@@ -8,6 +8,10 @@ before_script:
 cache:
   directories:
     - vendor
+script:
+  - echo "Testing build process"
+  - npm install
+  - npm run build
 jobs:
   include:
     - stage: phplint
