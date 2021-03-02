@@ -8,30 +8,27 @@ before_script:
 cache:
   directories:
     - vendor
-script:
-  - echo "Testing build process"
-  - npm install
-  - npm run build
+    - node_modules
 jobs:
   include:
     - stage: phplint
-      if: |
-        branch = master OR \
-        branch =~ /^release\/.*$/
       script:
         - composer install
         - composer run-script phpcs
-    - stage: deploy
-      if: branch =~ /^release\/.*$/
+    - stage: build
       script:
-        - npm install -g npm gulp gulp-cli && npm install
-        - gulp && gulp build
-        - tar -cvzf $RELEASE_PREFIX$TRAVIS_BUILD_NUMBER.tar.gz -X build-excludes.txt woominecraft/
-      deploy:
-        provider: releases
-        api_key: $API_KEY
-        file: $RELEASE_PREFIX$TRAVIS_BUILD_NUMBER.tar.gz
-        skip_cleanup: true
-        draft: true
-        on:
-          tags: true
+        - npm install
+        - npm run build
+#    - stage: deploy
+#      if: branch =~ /^release\/.*$/
+#      script:
+#        - npm install && npm run build
+#        - tar -cvzf $RELEASE_PREFIX$TRAVIS_BUILD_NUMBER.tar.gz -X build-excludes.txt woominecraft/
+#      deploy:
+#        provider: releases
+#        api_key: $API_KEY
+#        file: $RELEASE_PREFIX$TRAVIS_BUILD_NUMBER.tar.gz
+#        skip_cleanup: true
+#        draft: true
+#        on:
+#          tags: true
