@@ -8,12 +8,6 @@ before_script:
 cache:
   directories:
     - vendor
-script:
-  - echo "Testing build process"
-  - node -v
-  - npm -v
-  - npm install
-  - npm run build
 jobs:
   include:
     - stage: phplint
@@ -23,6 +17,8 @@ jobs:
     - stage: build
       script:
         - npm install
+        - node -v
+        - npm -v
         - npm run build
 #    - stage: deploy
 #      if: branch =~ /^release\/.*$/
