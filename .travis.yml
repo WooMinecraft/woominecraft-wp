@@ -5,7 +5,10 @@ env:
   - RELEASE_PREFIX="woominecraft-prerelease-b"
 before_script:
   - phpenv config-rm xdebug.ini
+before_install:
+  - npm i -g npm@7.5.3
 cache:
+  npm: false
   directories:
     - vendor
 jobs:
