@@ -10,6 +10,8 @@ cache:
     - vendor
 script:
   - echo "Testing build process"
+  - node -v
+  - npm -v
   - npm install
   - npm run build
 jobs:
