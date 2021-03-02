@@ -305,12 +305,6 @@ function sanitize_settings( $settings ) {
  * Registers the setting key.
  */
 function register_settings() {
-	register_setting( 'woo_minecraft', 'quest_map_api_key', [
-		'type'              => 'string',
-		'sanitize_callback' => 'esc_html',
-		'show_in_rest'      => 'true',
-	] );
-
 	register_setting(
 		'woo_minecraft',
 		WM_SERVERS,
