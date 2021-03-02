@@ -8,7 +8,6 @@ before_script:
 cache:
   directories:
     - vendor
-    - node_modules
 jobs:
   include:
     - stage: phplint
