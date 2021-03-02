@@ -1,7 +1,6 @@
 language: php
 php:
-  - '7.1'
-  - '7.2'
+  - '7.0'
 env:
   - RELEASE_PREFIX="woominecraft-prerelease-b"
 before_script:
@@ -11,9 +10,8 @@ cache:
     - vendor
 script:
   - echo "Testing build process"
-  - npm install -g npm gulp gulp-cli
   - npm install
-  - gulp
+  - npm run build
 jobs:
   include:
     - stage: phplint
