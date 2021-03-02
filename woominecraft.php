@@ -15,7 +15,8 @@ WC tested up to: 5.0.0
 
 namespace WooMinecraft;
 
-define( 'WMC_INCLUDES', plugin_dir_path( __FILE__ ) . 'includes/' );
+define( 'WMC_PATH', plugin_dir_path( __FILE__ ) );
+define( 'WMC_INCLUDES', WMC_PATH . 'includes/' );
 define( 'WMC_URL', plugin_dir_url( __FILE__ ) );
 define( 'WMC_VERSION', '1.4.0-pre' );
 

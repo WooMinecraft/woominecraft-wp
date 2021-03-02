@@ -4,6 +4,7 @@
  
 **License:** GPLv2 or later   
 **Requires at least:** 4.9   
+**Requires PHP:** 7.0
 **Tested up to:** 5.6.1   
 **Stable tag:** 1.3  
 
@@ -63,6 +64,10 @@ payments - [check google](http://lmgtfy.com/?q###Woocommerce+payment+gateways)
 
 ## 1.4.0
 * Removes Mojang API requirements.
+* Move settings to React components.
+* Remove ability to sort servers in settings ( for now ).
+* Require servers to use PHP 7 minimum.
+* Add pattern validations ( requirements ) to server names and keys.
 
 ### 1.3.0
 * Update to utilize the Rest API instead of a generic endpoint.
