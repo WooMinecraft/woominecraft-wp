@@ -3,6 +3,7 @@ composer.lock
 gulpfile.js
 phpcs.xml
 *node_modules*
+/src*
 /vendor*
 /.git*
 /.travis.yml
