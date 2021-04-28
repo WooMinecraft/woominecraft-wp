@@ -26,7 +26,6 @@ Supports the following:
 * Multiple commands per product
 * Multiple commands per product variation
 * Multiple Servers
-* MC Username verification ( we only support paid legit accounts via the Mojang API )
 * Resend Donations per-order ( should you need to wipe your server ).
 * More to come?!
 
