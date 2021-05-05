@@ -75,27 +75,16 @@ function get_player_from_cache( $player_id ) {
 	$mc_json = wp_cache_get( $key, 'woominecraft' );
 
 	if ( false == $mc_json ) { // @codingStandardsIgnoreLine Lose compare is fine here.
+		$minecraft_account = wp_remote_get("https://api.mojang.com/users/profiles/minecraft/" . urlencode($player_id));
 
-		$post_config = apply_filters(
-			'mojang_profile_api_post_args',
-			array(
-				'body'    => json_encode( array( rawurlencode( $player_id ) ) ), // @codingStandardsIgnoreLine Nope, need this.
-				'method'  => 'POST',
-				'headers' => array( 'content-type' => 'application/json' ),
-			)
-		);
-
-		$minecraft_account = wp_remote_post( 'https://api.mojang.com/profiles/minecraft', $post_config );
-
-		if ( 200 !== wp_remote_retrieve_response_code( $minecraft_account ) ) {
+		$response_code = wp_remote_retrieve_response_code( $minecraft_account );
+		if ( 200 !== $response_code ) {
 			return false;
 		}
 
 		$mc_json = json_decode( wp_remote_retrieve_body( $minecraft_account ) );
-		if ( ! isset( $mc_json[0] ) ) {
+		if ( ! isset( $mc_json ) ) {
 			return false;
-		} else {
-			$mc_json = $mc_json[0];
 		}
 
 		wp_cache_set( $key, $mc_json, 'wcm', 1 * HOUR_IN_SECONDS );
