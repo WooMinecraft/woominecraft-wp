@@ -1,6 +1,6 @@
 # WooMinecraft - WordPress Plugin
 
-[![Twitter Follow](https://img.shields.io/twitter/follow/plugish.svg?style=for-the-badge&logo=twitter&label=Follow)](https://twitter.com/plugish) ![WordPress](https://img.shields.io/wordpress/v/woominecraft.svg?style=for-the-badge) ![WordPress plugin downloads](https://img.shields.io/wordpress/plugin/dt/woominecraft.svg?style=for-the-badge) ![WordPress plugin version](https://img.shields.io/wordpress/plugin/v/woominecraft.svg?style=for-the-badge) ![](https://img.shields.io/travis/com/WooMinecraft/woominecraft-wp/master?style=for-the-badge)
+[![Twitter Follow](https://img.shields.io/twitter/follow/plugish.svg?style=for-the-badge&logo=twitter&label=Follow)](https://twitter.com/plugish) ![WordPress](https://img.shields.io/wordpress/v/woominecraft.svg?style=for-the-badge) ![WordPress plugin downloads](https://img.shields.io/wordpress/plugin/dt/woominecraft.svg?style=for-the-badge) ![WordPress plugin version](https://img.shields.io/wordpress/plugin/v/woominecraft.svg?style=for-the-badge) ![](https://img.shields.io/travis/com/WooMinecraft/woominecraft-wp/main?style=for-the-badge)
  
 **License:** GPLv2 or later   
 **Requires at least:** 4.9   
