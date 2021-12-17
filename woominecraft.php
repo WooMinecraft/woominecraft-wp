@@ -23,10 +23,6 @@ define( 'WMC_VERSION', '1.4.0-pre' );
 require_once WMC_INCLUDES . 'helpers.php';
 Helpers\setup();
 
-// Everything to do with the Mojang API.
-require_once WMC_INCLUDES . 'mojang.php';
-Mojang\setup();
-
 // Handle everything order-related.
 require_once WMC_INCLUDES . 'order-manager.php';
 Orders\Manager\setup();
