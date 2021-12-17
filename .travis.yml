@@ -4,15 +4,9 @@ php:
   - '8.0'
 before_script:
   - phpenv config-rm xdebug.ini
+script:
+  - composer install
+  - composer run-script phpcs
 cache:
   directories:
     - vendor
-jobs:
-  include:
-    - stage: phplint
-      if: |
-        branch = main OR \
-        branch =~ /^release\/.*$/
-      script:
-        - composer install
-        - composer run-script phpcs
