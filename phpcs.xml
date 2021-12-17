@@ -52,6 +52,10 @@
         <exclude name="Squiz.PHP.EmbeddedPhp.ContentBeforeOpen" />
     </rule>
 
+    <rule ref="./vendor/wp-coding-standards/wpcs/WordPress-Extra" >
+        <exclude name="WordPress.Arrays.DisallowShortArraySyntax" />
+    </rule>
+
     <!--
        If you are including sniffs that are not installed, you can
        reference the sniff class using an absolute or relative path
