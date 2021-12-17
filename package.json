@@ -17,12 +17,5 @@
     "url": "https://github.com/WooMinecraft/woominecraft-wp/issues"
   },
   "homepage": "https://github.com/WooMinecraft/woominecraft-wp",
-  "devDependencies": {
-    "gulp": "^4.0.0",
-    "gulp-cssmin": "^0.2.0",
-    "gulp-rename": "^1.2.2",
-    "gulp-sass": "^4.0.2",
-    "gulp-uglify": "^1.5.1",
-    "node-sass": "^5.0.0"
-  }
+  "devDependencies": {}
 }
