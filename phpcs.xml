@@ -50,6 +50,7 @@
         <exclude name="WordPress.WP.I18n.MissingTranslatorsComment" />
         <exclude name="Generic.WhiteSpace.ScopeIndent.Incorrect" />
         <exclude name="Squiz.PHP.EmbeddedPhp.ContentBeforeOpen" />
+        <exclude name="Generic.Arrays.DisallowShortArraySyntax" />
     </rule>
 
     <!--
