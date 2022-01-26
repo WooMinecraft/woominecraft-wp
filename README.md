@@ -50,13 +50,13 @@ payments - [check google](http://lmgtfy.com/?q###Woocommerce+payment+gateways)
 
 ## Screenshots
 
-![Adding/removing multiple commands for general products.](https://raw.githubusercontent.com/WooMinecraft/woominecraft-wp/dev/screenshot-1.png)
+![Adding/removing multiple commands for general products.](https://raw.githubusercontent.com/WooMinecraft/woominecraft-wp/main/.wordpress-org/screenshot-1.png)
    _( General Product Commands )_
    
-![Adding commands to single variations.](https://raw.githubusercontent.com/WooMinecraft/woominecraft-wp/dev/screenshot-2.png)
+![Adding commands to single variations.](https://raw.githubusercontent.com/WooMinecraft/woominecraft-wp/main/.wordpress-org/screenshot-2.png)
    _( Variable Product Commands )_
    
-![Adding Servers](https://raw.githubusercontent.com/WooMinecraft/woominecraft-wp/dev/screenshot-3.png)
+![Adding Servers](https://raw.githubusercontent.com/WooMinecraft/woominecraft-wp/main/.wordpress-org/screenshot-3.png)
    _( Multi-server Support )_
 
 ## Changelog
