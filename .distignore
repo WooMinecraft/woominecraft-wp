@@ -1,0 +1,14 @@
+/.wordpress-org
+/.git
+/.github
+/node_modules
+/package.json
+/package-lock.json
+/composer.json
+/composer.lock
+/README.md
+
+.distignore
+.gitignore
+phpcs.xml
+travis.yml
