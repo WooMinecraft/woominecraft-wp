@@ -28,7 +28,7 @@ fs.readFile( "readme.md", 'utf8', function (err,data) {
 });
 
 // Replace in plugin file.
-fs.readFile( "plugin.php", 'utf8', function (err,data) {
+fs.readFile( "woominecraft.php", 'utf8', function (err,data) {
     if (err) {
         throw err;
     }
