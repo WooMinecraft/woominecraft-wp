@@ -1,10 +1,12 @@
 === WooMinecraft-WP ===
-Contributors: phyrax
+Contributors: jaycodez
 Tags: minecraft, woocommerce, donations
-License: GPLv2 or later
 Requires at least: 4.4.2
 Tested up to: 5.8.2
 Stable tag: 1.3.0
+Requires PHP: 7.4
+License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 A FREE Minecraft Donation plugin which works in conjunction with my WooMinecraft java plugin for Minecraft to provide a self-hosted donation platform.
 
