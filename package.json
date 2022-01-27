@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "version": "node .github/scripts/version.js",
-    "postversion": "composer install && npm install"
+    "postversion": "composer update && npm install"
   },
   "repository": {
     "type": "git",
