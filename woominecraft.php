@@ -4,7 +4,7 @@ Plugin Name: WooMinecraft
 Plugin URI: http://woominecraft.com
 Description: A WooCommerce plugin which allows donations and commands to be sent to your Minecraft server.
 Author: Jerry Wood
-Version: 1.3.0
+Version: 1.4.2
 License: GPLv2
 Text Domain: woominecraft
 Domain Path: /languages

@@ -1,6 +1,6 @@
 {
   "name": "woominecraft",
-  "version": "1.4.2",
+  "version": "1.4.1",
   "description": "WooMinecraft - A WordPress counterpart to the Minecraft Plugin.",
   "main": "index.js",
   "scripts": {

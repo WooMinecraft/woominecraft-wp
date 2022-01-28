@@ -34,8 +34,8 @@ fs.readFile( "woominecraft.php", 'utf8', function (err,data) {
     }
 
     // Has issues with double asterisks so sticking with \W{2} instead
-    let result = data.replace(/Version: ([0-9\.])+/gi, 'Version: ' + version );
-    result = data.replace(/WMC_VERSION', '([0-9\.]+)'/gi, `WMC_VERSION', '${version}'` );
+    const result = data.replace(/WMC_VERSION', '([0-9\.]+)'/gi, `WMC_VERSION', '${version}'` )
+        .replace(/Version: ([0-9\.])+/gi, 'Version: ' + version );
     fs.writeFile( "woominecraft.php", result, 'utf8', function (err) {
         if (err) throw err;
     });
