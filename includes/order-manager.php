@@ -2,6 +2,7 @@
 
 namespace WooMinecraft\Orders\Manager;
 
+use function WooMinecraft\Helpers\wmc_items_have_commands;
 use function WooMinecraft\Orders\Cache\bust_command_cache;
 
 /**
@@ -15,6 +16,29 @@ function setup() {
 	add_action( 'woocommerce_checkout_update_order_meta', $n( 'save_commands_to_order' ) );
 	add_action( 'woocommerce_before_checkout_billing_form', $n( 'additional_checkout_field' ) );
 	add_action( 'woocommerce_thankyou', $n( 'thanks' ) );
+	add_action( 'woocommerce_checkout_process', $n( 'require_fields' ) );
+}
+
+/**
+ * Makes sure some fields are set up properly.
+ */
+function require_fields() {
+	global $woocommerce;
+
+	if ( ! $woocommerce instanceof \WooCommerce ) {
+		return;
+	}
+
+	$items = $woocommerce->cart->cart_contents;
+	if ( ! wmc_items_have_commands( $items ) ) {
+		return;
+	}
+
+	$player_id = isset( $_POST['player_id'] ) ? sanitize_text_field( $_POST['player_id'] ) : false; // @codingStandardsIgnoreLine No nonce needed.
+	if ( ! $player_id ) {
+		wc_add_notice( __( 'You MUST provide a Minecraft username.', 'woominecraft' ), 'error' );
+		return;
+	}
 }
 
 /**
@@ -82,7 +106,7 @@ function save_commands_to_order( $order_id ) {
  */
 function additional_checkout_field( $cart ) {
 	$items = WC()->cart->cart_contents;
-	if ( ! \WooMinecraft\Helpers\wmc_items_have_commands( $items ) || ! function_exists( 'woocommerce_form_field' ) ) {
+	if ( ! wmc_items_have_commands( $items ) || ! function_exists( 'woocommerce_form_field' ) ) {
 		return false;
 	}
 
