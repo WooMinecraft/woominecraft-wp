@@ -55,6 +55,10 @@ Yea sure, we've all use to BuyCraft, but well, it doesn't have the flexibility o
 
 == Changelog ==
 
+= 1.4.3 =
+* Deployment changes ( dev-related )
+* Adds a check in the checkout sequence for when suer leaves Player field blank.
+
 = 1.4.1 =
 * Removes Mojang API requirements.
 * Removes CSS and JS build processes in prep for wp-scripts
