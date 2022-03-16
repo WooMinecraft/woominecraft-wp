@@ -1,19 +1,16 @@
 {
-    "name": "jaywood/woominecraft-wp",
-    "description": "A minecraft donation plugin for WordPress",
-    "type": "project",
-    "license": "GPLv2",
-    "scripts": {
-        "phpcs": "phpcs --extensions=php",
-        "post-install-cmd": "phpcs --config-set installed_paths ../../wp-coding-standards/wpcs"
-    },
-    "repositories": [
-        {
-            "type":"composer",
-            "url":"https://wpackagist.org"
-        }
-    ],
-    "require-dev": {
-        "wp-coding-standards/wpcs": "^2.0"
+  "name": "jaywood/woominecraft-wp",
+  "description": "A minecraft donation plugin for WordPress",
+  "version": "1.4.3",
+  "type": "wordpress-plugin",
+  "license": "GPLv2",
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://wpackagist.org"
     }
+  ],
+  "require-dev": {
+    "wp-coding-standards/wpcs": "^2.0"
+  }
 }

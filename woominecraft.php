@@ -1,16 +1,16 @@
 <?php
 /*
-Plugin Name: Minecraft WooCommerce
+Plugin Name: WooMinecraft
 Plugin URI: http://woominecraft.com
-Description: To be used in conjunction with the WooMinecraft Bukkit plugin.  If you do not have it you can get it on the repository at <a href="https://github.com/JayWood/WooMinecraft">Github</a>.  Please be sure and fork the repository and make pull requests.
+Description: A WooCommerce plugin which allows donations and commands to be sent to your Minecraft server.
 Author: Jerry Wood
-Version: 1.4.0-pre
+Version: 1.4.3
 License: GPLv2
 Text Domain: woominecraft
 Domain Path: /languages
 Author URI: http://plugish.com
 WC requires at least: 3.0
-WC tested up to: 5.0.0
+WC tested up to: 6.0.0
 */
 
 namespace WooMinecraft;
@@ -18,15 +18,11 @@ namespace WooMinecraft;
 define( 'WMC_PATH', plugin_dir_path( __FILE__ ) );
 define( 'WMC_INCLUDES', WMC_PATH . 'includes/' );
 define( 'WMC_URL', plugin_dir_url( __FILE__ ) );
-define( 'WMC_VERSION', '1.4.0-pre' );
+define( 'WMC_VERSION', '1.4.3' );
 
 // Require the helpers file, for use in :allthethings:
 require_once WMC_INCLUDES . 'helpers.php';
 Helpers\setup();
-
-// Everything to do with the Mojang API.
-require_once WMC_INCLUDES . 'mojang.php';
-Mojang\setup();
 
 // Handle everything order-related.
 require_once WMC_INCLUDES . 'order-manager.php';

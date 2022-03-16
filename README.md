@@ -1,12 +1,11 @@
 # WooMinecraft - WordPress Plugin
 
-[![Twitter Follow](https://img.shields.io/twitter/follow/plugish.svg?style=for-the-badge&logo=twitter&label=Follow)](https://twitter.com/plugish) ![WordPress](https://img.shields.io/wordpress/v/woominecraft.svg?style=for-the-badge) ![WordPress plugin downloads](https://img.shields.io/wordpress/plugin/dt/woominecraft.svg?style=for-the-badge) ![WordPress plugin version](https://img.shields.io/wordpress/plugin/v/woominecraft.svg?style=for-the-badge) ![](https://img.shields.io/travis/com/WooMinecraft/woominecraft-wp/master?style=for-the-badge)
+[![Twitter Follow](https://img.shields.io/twitter/follow/plugish.svg?style=for-the-badge&logo=twitter&label=Follow)](https://twitter.com/plugish) ![WordPress](https://img.shields.io/wordpress/v/woominecraft.svg?style=for-the-badge) ![WordPress plugin downloads](https://img.shields.io/wordpress/plugin/dt/woominecraft.svg?style=for-the-badge) ![WordPress plugin version](https://img.shields.io/wordpress/plugin/v/woominecraft.svg?style=for-the-badge) ![](https://img.shields.io/travis/com/WooMinecraft/woominecraft-wp/main?style=for-the-badge)
  
 **License:** GPLv2 or later   
 **Requires at least:** 4.9   
-**Requires PHP:** 7.0
-**Tested up to:** 5.6.1   
-**Stable tag:** 1.3  
+**Tested up to:** 5.8.2   
+**Stable tag:** 1.4.3  
 
 A FREE Minecraft Donation plugin which works in conjunction with my [WooMinecraft java plugin](https://github.com/woominecraft/woominecraft) for Minecraft to provide a self-hosted donation platform.
 
@@ -51,23 +50,24 @@ payments - [check google](http://lmgtfy.com/?q###Woocommerce+payment+gateways)
 
 ## Screenshots
 
-![Adding/removing multiple commands for general products.](https://raw.githubusercontent.com/WooMinecraft/woominecraft-wp/dev/screenshot-1.png)
+![Adding/removing multiple commands for general products.](https://raw.githubusercontent.com/WooMinecraft/woominecraft-wp/main/.wordpress-org/screenshot-1.png)
    _( General Product Commands )_
    
-![Adding commands to single variations.](https://raw.githubusercontent.com/WooMinecraft/woominecraft-wp/dev/screenshot-2.png)
+![Adding commands to single variations.](https://raw.githubusercontent.com/WooMinecraft/woominecraft-wp/main/.wordpress-org/screenshot-2.png)
    _( Variable Product Commands )_
    
-![Adding Servers](https://raw.githubusercontent.com/WooMinecraft/woominecraft-wp/dev/screenshot-3.png)
+![Adding Servers](https://raw.githubusercontent.com/WooMinecraft/woominecraft-wp/main/.wordpress-org/screenshot-3.png)
    _( Multi-server Support )_
 
 ## Changelog
 
-## 1.4.0
+### 1.4.3
+* Deployment changes ( dev-related )
+* Adds a check in the checkout sequence for when suer leaves Player field blank.
+
+### 1.4.1
 * Removes Mojang API requirements.
-* Move settings to React components.
-* Remove ability to sort servers in settings ( for now ).
-* Require servers to use PHP 7 minimum.
-* Add pattern validations ( requirements ) to server names and keys.
+* Removes CSS and JS build processes in prep for wp-scripts
 
 ### 1.3.0
 * Update to utilize the Rest API instead of a generic endpoint.
