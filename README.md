@@ -61,6 +61,9 @@ payments - [check google](http://lmgtfy.com/?q###Woocommerce+payment+gateways)
 
 ## Changelog
 
+### 1.4.4
+* Fix warning in REST API registration (#101)[https://github.com/WooMinecraft/woominecraft-wp/issues/101]
+
 ### 1.4.3
 * Deployment changes ( dev-related )
 * Adds a check in the checkout sequence for when suer leaves Player field blank.

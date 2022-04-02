@@ -30,8 +30,9 @@ function register_endpoints() {
 		get_rest_namespace(),
 		'/server/(?P<server>[\S]+)',
 		[
-			'methods'  => \WP_REST_Server::READABLE,
-			'callback' => __NAMESPACE__ . '\\get_pending_orders',
+			'methods'             => \WP_REST_Server::READABLE,
+			'callback'            => __NAMESPACE__ . '\\get_pending_orders',
+			'permission_callback' => '__return_true',
 		]
 	);
 
@@ -39,8 +40,9 @@ function register_endpoints() {
 		get_rest_namespace(),
 		'/server/(?P<server>[\S]+)',
 		[
-			'methods'  => \WP_REST_Server::CREATABLE,
-			'callback' => __NAMESPACE__ . '\\process_orders',
+			'methods'             => \WP_REST_Server::CREATABLE,
+			'callback'            => __NAMESPACE__ . '\\process_orders',
+			'permission_callback' => '__return_true',
 		]
 	);
 }
