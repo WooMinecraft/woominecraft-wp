@@ -4,7 +4,7 @@ Plugin Name: WooMinecraft
 Plugin URI: http://woominecraft.com
 Description: A WooCommerce plugin which allows donations and commands to be sent to your Minecraft server.
 Author: Jerry Wood
-Version: 1.4.3
+Version: 1.4.4
 License: GPLv2
 Text Domain: woominecraft
 Domain Path: /languages
@@ -17,7 +17,7 @@ namespace WooMinecraft;
 
 define( 'WMC_INCLUDES', plugin_dir_path( __FILE__ ) . 'includes/' );
 define( 'WMC_URL', plugin_dir_url( __FILE__ ) );
-define( 'WMC_VERSION', '1.4.3' );
+define( 'WMC_VERSION', '1.4.4' );
 
 // Require the helpers file, for use in :allthethings:
 require_once WMC_INCLUDES . 'helpers.php';
