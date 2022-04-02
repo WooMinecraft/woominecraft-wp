@@ -61,6 +61,9 @@ payments - [check google](http://lmgtfy.com/?q###Woocommerce+payment+gateways)
 
 ## Changelog
 
+### 1.4.5
+* Small readme fixes in automation processes.
+
 ### 1.4.4
 * Fix warning in REST API registration (#101)[https://github.com/WooMinecraft/woominecraft-wp/issues/101]
 

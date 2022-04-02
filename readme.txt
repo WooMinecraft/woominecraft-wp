@@ -55,6 +55,12 @@ Yea sure, we've all use to BuyCraft, but well, it doesn't have the flexibility o
 
 == Changelog ==
 
+= 1.4.5 =
+* Small readme fixes in automation processes.
+
+= 1.4.4 =
+* Fix warning in REST API registration (#101)[https://github.com/WooMinecraft/woominecraft-wp/issues/101]
+
 = 1.4.3 =
 * Deployment changes ( dev-related )
 * Adds a check in the checkout sequence for when suer leaves Player field blank.
