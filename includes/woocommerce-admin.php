@@ -23,7 +23,8 @@ function setup() {
 
 	add_action( 'wp_ajax_wmc_resend_donations', $n( 'ajax_handler' ) );
 
-	add_action( 'admin_init', $n( 'admin_init' ) );
+	add_action( 'admin_init', $n( 'register_settings' ) );
+	add_action( 'rest_api_init', $n( 'register_settings' ) );
 
 	add_filter( 'woocommerce_get_settings_general', $n( 'wmc_settings' ) );
 	add_action( 'woocommerce_admin_field_wmc_servers', $n( 'render_servers_section' ) );
@@ -154,15 +155,18 @@ function save_servers() {
 
 	$servers = (array) $_POST['wmc_servers'];
 	$output  = [];
+
 	foreach ( $servers as $server ) {
-		$name = array_key_exists( 'name', $server ) && ! empty( $server['name'] ) ? esc_attr( $server['name'] ) : false;
-		$key  = array_key_exists( 'key', $server ) && ! empty( $server['key'] ) ? esc_attr( $server['key'] ) : false;
+		$name = $server['name'] ?? '';
+		$key  = $server['key'] ?? '';
+
 		if ( ! $name || ! $key ) {
 			continue;
 		}
+
 		$output[] = array(
-			'name' => $name,
-			'key'  => $key,
+			'name' => esc_html( $name ),
+			'key'  => esc_html( $key ),
 		);
 	}
 
@@ -293,11 +297,37 @@ function add_variation_field( $loop, $variation_data, $post ) {
 	include 'views/commands.php';
 }
 
+function sanitize_settings( $settings ) {
+	return $settings;
+}
+
 /**
- * Registers the setting key, and installs the database.
+ * Registers the setting key.
  */
-function admin_init() {
-	register_setting( 'woo_minecraft', WM_SERVERS );
+function register_settings() {
+	register_setting(
+		'woo_minecraft',
+		WM_SERVERS,
+		[
+			'type'              => 'array',
+			'sanitize_callback' => __NAMESPACE__ . '\\sanitize_settings',
+			'show_in_rest'      => [
+				'schema' => [
+					'items' => [
+						'type'       => 'object',
+						'properties' => [
+							'name' => [
+								'type' => 'string',
+							],
+							'key'  => [
+								'type' => 'string',
+							],
+						],
+					],
+				],
+			],
+		]
+	);
 }
 
 /**
@@ -502,7 +532,12 @@ function do_resend_donations_field( $order ) {
  */
 function admin_scripts( $hook = '' ) {
 	$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
-	wp_register_script( 'woo_minecraft_js', WMC_URL . "/assets/js/jquery.woo{$min}.js", array( 'jquery' ), WMC_VERSION, true );
+
+	// TODO - Only load on settings page.
+	$asset_file = include( WMC_PATH . 'build/settings.asset.php' );
+	wp_register_script( 'wmc-react', WMC_URL . '/build/settings.js', $asset_file['dependencies'], $asset_file['version'], true );
+
+	wp_register_script( 'woo_minecraft_js', WMC_URL . "/assets/js/jquery.woo{$min}.js", array( 'jquery', 'wmc-react' ), WMC_VERSION, true );
 	wp_register_style( 'woo_minecraft_css', WMC_URL . "/style{$min}.css", array( 'woocommerce_admin_styles' ), WMC_VERSION );
 
 	$script_data = array(

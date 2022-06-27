@@ -1,4 +1,6 @@
 node_modules
+/build
+.DS_Store
 .sass_cache
 .idea
 /vendor/
